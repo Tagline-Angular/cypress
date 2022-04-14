@@ -1,0 +1,21 @@
+<p>edit-user works!</p>
+<div class="row  g-3 py-2">
+    <form [formGroup]="editProductForm" >
+        <div class="mb-3">
+            <label for="name" class="form-label">Username</label>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name"
+                placeholder="Add UserName" />
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" formControlName="email"
+            placeholder="Add email" />
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Password</label>
+            <input type="text" class="form-control" id="password" name="password" formControlName="password"
+            placeholder="Add password" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>

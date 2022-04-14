@@ -1,0 +1,62 @@
+<div class="row g-3 py-2">
+    <form [formGroup]="Botuserform" (ngSubmit)="onSubmit()">
+        <div class=" mb-3">
+            <label for="name" class="form-label">Username</label>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name"
+                placeholder="Add UserName" />
+            <div *ngIf="!Botuserform.get('name')?.valid && Botuserform.get('name')?.touched">
+                <small class="text-danger">Please enter the Username</small>
+            </div>
+         </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" formControlName="email"
+                placeholder="Add email" />
+            <div *ngIf="!Botuserform.get('email')?.valid && Botuserform.get('email')?.touched">
+                <small class="text-danger">Please enter valid email</small>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Password</label>
+            <input type="text" class="form-control" id="password" name="password" formControlName="password"
+                placeholder="Add password" />
+            <div *ngIf="!Botuserform.get('password')?.valid && Botuserform.get('password')?.touched">
+                <small class="text-danger">Please enter the password</small>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+     </form>
+    <!-- <router-outlet></router-outlet> -->
+</div>
+
+<div class="col-12">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table bg-light text-dark my-4">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr *ngFor="let item of users; let i =index;">
+                        <th scope="row">{{i+1}}</th>
+                        <th scope="row">{{item._id}}</th>
+                        <td>{{item.name}}</td>
+                        <td>{{item.email }}</td>
+                      
+                        <td><button class="btn btn-success" (click)="updateProduct(item)">Edit</button></td>
+                        <td><button class="btn btn-danger" (click)="deleteUser(item._id)">delete</button></td>
+                    </tr>
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+</div>
