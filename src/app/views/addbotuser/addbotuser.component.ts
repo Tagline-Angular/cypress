@@ -30,17 +30,14 @@ export class AddbotuserComponent implements OnInit {
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),
-        Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-z]).{6,32}$'),
       ])
     });
     this.getUserData();
   }
 
   onSubmit() {
-    this.userservice.addUser(this.Botuserform.value).then((res: any) => {
-
-    })
-
+    this.userservice.addUser(this.Botuserform.value).then((res: any) => { })
+    this.Botuserform.reset()
   }
 
   public getUserData(): void {
@@ -48,18 +45,22 @@ export class AddbotuserComponent implements OnInit {
       console.log('res :>> ', res);
       this.users = res;
     })
+   
   }
 
   public deleteUser(id): void {
     console.log('id :>> ', id)
-     this.userservice.remove(id);
+     this.userservice.remove("kdhOuovjYfb0AnUz2wdS");
      this.getUserData()
   }
 
   
-  // public updateProduct(user: any): void {
-  //   localStorage.setItem('updateProductDetail', JSON.stringify(user));
-  //   this.route.navigate(['/dashboard/user']);
-  // }
+  public updateProduct(user: any): void {
+    // localStorage.setItem('updateProductDetail', JSON.stringify(user));
+    // this.route.navigate(['/dashboard/user']);
+    this.userservice.updateUser("WTYvnr15FO9fiQJrNCcK","hello","hello.demo@gmailcom")
+  }
+
+  
 
 }
