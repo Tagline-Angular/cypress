@@ -1,6 +1,6 @@
 <p>edit-user works!</p>
 <div class="row  g-3 py-2">
-    <form [formGroup]="editProductForm" >
+    <form [formGroup]="editProductForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
             <label for="name" class="form-label">Username</label>
             <input type="text" class="form-control" id="name" name="name" formControlName="name"

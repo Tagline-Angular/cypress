@@ -44,9 +44,10 @@ export class EditUserComponent implements OnInit {
     })
   }
   
-  // public onSubmit(){
-  //   this.userservice.userUpdate(this.editobj._id,this.editProductForm.value).then((res:any)=>{
-  //     console.log('update res :>> ', res);
-  //   })
-  // }
+  public onSubmit(){
+    // this.userservice.userUpdate(this.editobj._id,this.editProductForm.value).then((res:any)=>{
+    //   console.log('update res :>> ', res);
+    // })
+    // this.userservice.updateUser("WTYvnr15FO9fiQJrNCcK","hello","hello.demo@gmailcom")
+  }
 }
