@@ -26,15 +26,18 @@ export class AddbotuserComponent implements OnInit {
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),
-        Validators.pattern("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-z]).{6,32}$"),
-      ]),
+      ])
     });
     this.getUserData();
   }
 
   onSubmit() {
     if (this.Botuserform.valid) {
-      this.userservice.addUser(this.Botuserform.value).then((res: any) => {});
+      this.userservice.addUser(this.Botuserform.value).then((res: any) => {
+        if(res){
+          this.Botuserform.reset()
+        }
+      });
     }
   }
 
