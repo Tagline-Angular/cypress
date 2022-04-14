@@ -11,21 +11,21 @@
         <div class="mb-3">
             <label for="name" class="form-label">Email</label>
             <input type="text" class="form-control" id="email" name="email" formControlName="email"
-                placeholder="Add email" />
+                placeholder="Add email" autocomplete="" />
             <div *ngIf="!Botuserform.get('email')?.valid && Botuserform.get('email')?.touched">
                 <small class="text-danger">Please enter valid email</small>
             </div>
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Password</label>
-            <input type="text" class="form-control" id="password" name="password" formControlName="password"
+            <input type="password" class="form-control" id="password" name="password" formControlName="password"
                 placeholder="Add password" />
             <div *ngIf="!Botuserform.get('password')?.valid && Botuserform.get('password')?.touched">
                 <small class="text-danger">Please enter the password</small>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid">Add</button>
      </form>
     <!-- <router-outlet></router-outlet> -->
 </div>
@@ -44,17 +44,16 @@
                     </tr>
                 </thead>
                 <tbody>
-    
                     <tr *ngFor="let item of users; let i =index;">
                         <th scope="row">{{i+1}}</th>
                         <th scope="row">{{item._id}}</th>
                         <td>{{item.name}}</td>
-                        <td>{{item.email }}</td>
+                        <td>{{item.email}}</td>
                       
                         <td><button class="btn btn-success" (click)="updateProduct(item)">Edit</button></td>
                         <td><button class="btn btn-danger" (click)="deleteUser(item._id)">delete</button></td>
                     </tr>
-                </tbody>
+                </tbody>    
                 
             </table>
         </div>
