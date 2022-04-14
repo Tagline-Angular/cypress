@@ -16,16 +16,13 @@ const routes: Routes = [
   {
     path: 'user',
     component: AddbotuserComponent,
-    children: [{
-
-      path: 'user-detail',
-      component: ViewbotuserComponent
-    },
-    {
-      path: 'edit-user',
-      component: EditUserComponent
-    },
+    children: [
+    
     ]
+  },
+  {
+    path: 'edit-user',
+    component: EditUserComponent
   },
   {
     path: 'real-user',

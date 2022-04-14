@@ -1,0 +1,15 @@
+.user-box{
+    background: #fff;
+    margin: 0 15px 16px;
+    border-radius: 5px;
+    padding: 12px 0px 6px;  
+}
+.add-btn{
+    margin-top: 28px;
+}
+.user-box .table th, .table td{
+    vertical-align: middle;
+}
+.user-box h4{
+    text-transform: capitalize;
+}

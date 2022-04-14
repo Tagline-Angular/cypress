@@ -12,8 +12,10 @@ import { UserService } from "../../shared/service/user.service";
 export class AddbotuserComponent implements OnInit {
   public Botuserform!: FormGroup;
   public users: any = [];
-  public itsUpdate:boolean =true
-  constructor(private userservice: UserService, private route: Router) {}
+  public itsUpdate: boolean = true;
+  public buttonName = "Add"
+  public h4="Add Bot User"
+  constructor(private userservice: UserService, private route: Router) { }
 
   ngOnInit(): void {
     this.Botuserform = new FormGroup({
@@ -29,16 +31,25 @@ export class AddbotuserComponent implements OnInit {
       ])
     });
     this.getUserData();
-  }
+    this.itsUpdate = false
+  } 
 
-  onSubmit() {
-    if (this.Botuserform.valid) {
-      this.userservice.addUser(this.Botuserform.value).then((res: any) => {
-        if(res){
-          this.Botuserform.reset()
+  
+
+  onSubmit(operation: string) {
+    console.log('operation :>> ', operation);
+      if (this.buttonName === 'Add') {
+        if (this.Botuserform.valid) {
+          this.userservice.addUser(this.Botuserform.value).then((res: any) => {
+            if (res) {
+              this.Botuserform.reset()
+            }
+          });
         }
-      });
-    }
+      } else {
+        this.updateUser(this.Botuserform.value)
+      }
+
   }
 
   public getUserData(): void {
@@ -50,26 +61,20 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public deleteUser(id): void {
-    if(confirm('are you sure you want to delete'))
-    {
+    if (confirm('are you sure you want to delete')) {
       this.userservice.remove(id);
     }
     this.getUserData();
   }
 
-  // public updateUser(item: any): void {
-  //    this.Botuserform.patchValue(item);
-  //    this.userservice.updateuser(item)
-  // }
+  onEdit(item) {
+    this.Botuserform.patchValue(item);
+    this.h4="Update Bot User"
+    this.buttonName="Update";
+  }
 
-  // public thirdfun(){
-  //   if(this.itsUpdate)
-  //   {
-  //     this.updateUser("item")
-      
-  //   }
-  //   else{
-  //     this.onSubmit()
-  //   }
-  // }
+  public updateUser(item): void {
+    this.userservice.updateuser(item).then(res => console.log('res :>> ', res)).catch(err => console.log('err :>> ', err))
+  }
+
 }

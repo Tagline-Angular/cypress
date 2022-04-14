@@ -24,54 +24,7 @@ export class UserService {
     });
   }
 
-  // public getUser() {
-  //   return new Promise((resolve, reject) => {
-  //     // this.firestore.collection('botuser').valueChanges().subscribe((res:any)=>{
-  //     //   console.log('res :>> ', res);
-  //     //   res.map(e =>{
-  //     //     console.log('e.payload.doc.id :>> ', e.payload.doc.id);
-  //     //   })
-  //     //  resolve(res)
-  //     // })
-  //     let botUserCollection = this.firestore.collection('botuser');
-
-  //     botUserCollection
-  //       .snapshotChanges()
-  //       .pipe(
-  //         map((actions) => {
-  //           console.log('actions :>> ', actions);
-  //           actions.map((a) => {
-  //             console.log("a :>> ", a);
-  //             resolve({ id: a.payload.doc.id });
-  //           });
-  //         })
-  //       );
-  //   });
-
-  // let botUsersCollection: AngularFirestoreCollection<any>;
-  // return botUsersCollection.snapshotChanges().map(actions => {
-  //   return actions.map(a => {
-  //     const data = a.payload.doc.data() as any;
-  //     data.id = a.payload.doc.id;
-  //     return data;
-  //   });
-  // });
-  // }
-
-  // public getupdate() {}
-
-  // public remove(id: any): Promise<void> {
-  //   console.log("id :>> ", id);
-  //   return this.firestore.doc(`user/${id}`).delete();
-  // }
-
   public getUser() {
-    // return new Promise((resolve) => {
-    //   this.firestore.collection('botuser').valueChanges().subscribe((res: any) => {
-    //     // console.log('res :>> ', res);
-    //     resolve(res)
-    //   })
-    // })
     return this.firestore.collection('botuser').snapshotChanges();
   }
 
@@ -80,8 +33,13 @@ export class UserService {
     basePath.ref.delete()
     console.log('this.basepath :>> ', this.basepath);
   }
-  
-  // public updateuser(user:any){
-  //   this.firestore.collection('botuser').doc(user.id)?.update(user.id)
-  // }
+
+  public updateuser(user: any) {
+    console.log('user :>> ', user);
+    // const basepath = this.firestore.collection('/botuser').doc(user.id)
+    return this.firestore.collection('/botuser').doc(user.id).update(user);
+    // basepath.id.update(user).then(res => console.log('res :>> ', res)).catch(err => console.log("error", err))
+  }
 }
+
+
