@@ -12,7 +12,7 @@ import { UserService } from "../../shared/service/user.service";
 export class AddbotuserComponent implements OnInit {
   public Botuserform!: FormGroup;
   public users: any = [];
-  item: any;
+  public itsUpdate:boolean =true
   constructor(private userservice: UserService, private route: Router) {}
 
   ngOnInit(): void {
@@ -50,13 +50,26 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public deleteUser(id): void {
-    console.log("id :>> ", id);
-    this.userservice.remove(id);
+    if(confirm('are you sure you want to delete'))
+    {
+      this.userservice.remove(id);
+    }
     this.getUserData();
   }
 
-  // public updateProduct(user: any): void {
-  //   localStorage.setItem('updateProductDetail', JSON.stringify(user));
-  //   this.route.navigate(['/dashboard/user']);
+  // public updateUser(item: any): void {
+  //    this.Botuserform.patchValue(item);
+  //    this.userservice.updateuser(item)
+  // }
+
+  // public thirdfun(){
+  //   if(this.itsUpdate)
+  //   {
+  //     this.updateUser("item")
+      
+  //   }
+  //   else{
+  //     this.onSubmit()
+  //   }
   // }
 }

@@ -75,42 +75,13 @@ export class UserService {
     return this.firestore.collection('botuser').snapshotChanges();
   }
 
-  // public remove(id: any): Promise<void> {
-  //     console.log("id :>> ", id);
-  //     return this.firestore.doc(`botuser/${id}`).delete();
-  //     return this.firestore.doc('botuser').delete();
-  //    }
-
-  // public remove(id:any){
-  //   const basepath = this.firestore.doc( `botuser/${id}`)
-  //   basepath.delete();  
-  // }
-
-
-  //  remove(id:any){
-  //   console.log('id :>> ', id);
-  //    this.firestore.collection('botuser').doc(`${id}`).delete();
-  // }
-
   public remove(id: any) {
     const basePath = this.firestore.collection('botuser').doc(id);
     basePath.ref.delete()
     console.log('this.basepath :>> ', this.basepath);
   }
-  // public remove(id: string): any {
-  //   return new Promise((resolve, reject) => {
-  //     const basepath = this.firestore.doc('/botuser/' + id);
-  //     console.log('basepath :>> ', basepath);
-  //     basepath.delete()
-  //     resolve(true);
-  //   });
-  // }
-
-  // public userUpdate(id: string, data:any): any {
-  //   return new Promise((resolve, reject)=>{
-  //     const basepath = this.firestore.doc('/botuser/' + id)
-  //     basepath.update(data)
-  //     resolve(true);
-  //   });
+  
+  // public updateuser(user:any){
+  //   this.firestore.collection('botuser').doc(user.id)?.update(user.id)
   // }
 }
