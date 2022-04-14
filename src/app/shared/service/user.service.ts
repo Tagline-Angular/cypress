@@ -66,12 +66,13 @@ export class UserService {
   // }
 
   public getUser() {
-    return new Promise((resolve) => {
-      this.firestore.collection('botuser').valueChanges().subscribe((res: any) => {
-        // console.log('res :>> ', res);
-        resolve(res)
-      })
-    })
+    // return new Promise((resolve) => {
+    //   this.firestore.collection('botuser').valueChanges().subscribe((res: any) => {
+    //     // console.log('res :>> ', res);
+    //     resolve(res)
+    //   })
+    // })
+    return this.firestore.collection('botuser').snapshotChanges();
   }
 
   // public remove(id: any): Promise<void> {
