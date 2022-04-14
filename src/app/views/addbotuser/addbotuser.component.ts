@@ -13,7 +13,7 @@ export class AddbotuserComponent implements OnInit {
   public users: any = []
   item: any;
   constructor(private userservice: UserService, private route: Router) {
-
+    
   }
 
   ngOnInit(): void {
@@ -36,8 +36,12 @@ export class AddbotuserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userservice.addUser(this.Botuserform.value).then((res: any) => { })
+    this.userservice.addUser(this.Botuserform.value).then((res: any) => {
+      // this.users =res
+     })
     this.Botuserform.reset()
+    // window.location.reload();
+   
   }
 
   public getUserData(): void {
@@ -45,7 +49,6 @@ export class AddbotuserComponent implements OnInit {
       console.log('res :>> ', res);
       this.users = res;
     })
-   
   }
 
   public deleteUser(id): void {
@@ -55,11 +58,11 @@ export class AddbotuserComponent implements OnInit {
   }
 
   
-  public updateProduct(user: any): void {
-    // localStorage.setItem('updateProductDetail', JSON.stringify(user));
-    // this.route.navigate(['/dashboard/user']);
-    this.userservice.updateUser("WTYvnr15FO9fiQJrNCcK","hello","hello.demo@gmailcom")
-  }
+  // public updateProduct(user: any): void {
+  //   // localStorage.setItem('updateProductDetail', JSON.stringify(user));
+  //   // this.route.navigate(['/dashboard/user']);
+  //   this.userservice.updateUser("WTYvnr15FO9fiQJrNCcK","hello","hello.demo@gmailcom")
+  // }
 
   
 
