@@ -1,25 +1,22 @@
 <form class="row g-3 py-2">
-  <div class="col-auto">
-    <input
-      type="text"
-      name="txtSearch"
-      class="form-control"
-      id="txtSearch"
-      placeholder="Search with username"
-      [(ngModel)]="selectedtitle"
-    />
-  </div>
-  <div>
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-coreui-toggle="modal"
-      data-coreui-target="#exampleModalScrollable"
-      (click)="searchByUserName()"
-    >
-      Search
-    </button>
-  </div>
+    <div class="col-auto">
+            <form [formGroup]="realUserList">
+            <div class="row">
+                <div class="col-12 mb-2">
+                        <select id="botUserDrropdown" formControlName="selectRealUser" class="dropdown-toggle form-control">
+                            <ng-container *ngFor="let bot of users">
+                                <option [value]="bot?.name" >{{bot?.name}}</option>
+                            </ng-container>
+                        </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div>
+        
+        <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
+            data-coreui-target="#exampleModalScrollable" (click)="searchByUserName()">Search</button>
+    </div>
 </form>
 
 <div class="user-box my-0 py-0">
