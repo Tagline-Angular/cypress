@@ -28,12 +28,10 @@ export class RealuserComponent implements OnInit {
   }
 
   public searchByUserName(): void {
-    // cuurentUserId 
-    console.log(`this.filterUserList`, this.filterUserList)
     this.filterUserList = this.users.filter(
       (item) => item.name === this.realUserList.value.selectRealUser
     );
-    console.log("this.filterUserList :>> ", this.filterUserList);
+    this.selectedtitle = this.realUserList.value.selectRealUser;
   }
 
   public createFormForBotList() {
@@ -49,7 +47,7 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submit(id: string) {
+  public submitComment() {
     this.userservice.getAllUser().subscribe((data) => {
       const commentCount = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
@@ -71,8 +69,6 @@ export class RealuserComponent implements OnInit {
       botUserId: this.currentPostId,
     };
     this.botUserInfoListForm.reset();
-    // console.log(`this.botUserInfoListForm.value.selectBot.id`, this.botUserInfoListForm.value.selectBot.id)
-    // console.log(`====>botCommentObj<====`, botCommentObj);
   }
 
   public getBotUserList() {
@@ -91,19 +87,25 @@ export class RealuserComponent implements OnInit {
     });
   }
 
+  public userLike(): void {
+    this.userservice.getUser().subscribe((data) => {
+      this.users = data.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+    });
+  }
+
+  public submitLike() {}
+
+  //  handle like modal
+  public handleLikeModal(id: string) {
+    this.currentPostId = id;
+  }
+
   // handle comment modal
-  handleCommentModal(id: string) {
+  public handleCommentModal(id: string) {
     this.currentPostId = id;
     console.log(`id`, id);
   }
 
-  // //update comment count
-  // updateCommetCount() {
-  //   this.userservice.getAllUser().subscribe((data) => {
-  //     const users = data.map((e) => {
-  //       return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
-  //     });
-  //     console.log(`==== users`, users);
-  //   });
-  // }
 }
