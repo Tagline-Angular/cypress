@@ -3,21 +3,25 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { User } from "../../models/user.model";
 import { UserService } from "../../shared/service/user.service";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from "ngx-toastr";
 @Component({
   selector: "app-addbotuser",
   templateUrl: "./addbotuser.component.html",
-  styleUrls: ["./addbotuser.component.css"]
+  styleUrls: ["./addbotuser.component.css"],
 })
 export class AddbotuserComponent implements OnInit {
   public Botuserform!: FormGroup;
   public users: any = [];
-  public submit = 'Submit';
-  public currentUserId:string = '';
+  public submit = "Submit";
+  public currentUserId: string = "";
   public itsUpdate: boolean = true;
-  public buttonName = "Add"
-  public h4="Add Bot User"
-  constructor(private userservice: UserService, private route: Router, private toastr: ToastrService) { }
+  public buttonName = "Add";
+  public h4 = "Add Bot User";
+  constructor(
+    private userservice: UserService,
+    private route: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.Botuserform = new FormGroup({
@@ -30,30 +34,26 @@ export class AddbotuserComponent implements OnInit {
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),
-      ])
+      ]),
     });
     this.getUserData();
-    this.itsUpdate = false
-  } 
-
-  
+    this.itsUpdate = false;
+  }
 
   onSubmit(operation: string) {
-    console.log('operation :>> ', operation);
-      if (this.currentUserId === '') {
-        if (this.Botuserform.valid) {
-          this.userservice.addUser(this.Botuserform.value).then((res: any) => {
-            if (res) {
-              this.toastr.success('User Data Added!');
-              this.Botuserform.reset()
-            }
-          });
-        }
-      } 
-      else {
-        this.updateUser(this.Botuserform.value);
+    console.log("operation :>> ", operation);
+    if (this.currentUserId === "") {
+      if (this.Botuserform.valid) {
+        this.userservice.addUser(this.Botuserform.value).then((res: any) => {
+          if (res) {
+            this.toastr.success("User Data Added!");
+            this.Botuserform.reset();
+          }
+        });
       }
-
+    } else {
+      this.updateUser(this.Botuserform.value);
+    }
   }
 
   public getUserData(): void {
@@ -65,29 +65,36 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public deleteUser(id): void {
-    if (confirm('are you sure you want to delete')) {
-      this.userservice.remove(id);
-      this.toastr.error('User Data Deleted!');
-    }
+    // if (false) {
+    this.userservice.remove(id);
+    this.toastr.error("User Data Deleted!");
+    // }
     this.getUserData();
   }
 
-  onEdit(item,id) {
+  onEdit(item, id) {
     this.currentUserId = id;
     this.Botuserform.patchValue(item);
-    this.h4="Update Bot User";
+    this.h4 = "Update Bot User";
     window.scroll({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }
 
   public updateUser(item): void {
-    console.log(`===>item`, item.id)
-    this.userservice.updateuser(item,this.currentUserId).then(res => console.log('res :>> ', res)).catch(err => console.log('err :>> ', err));
-    this.toastr.success('User Data Update!');
+    console.log(`===>item`, item.id);
+    this.userservice
+      .updateuser(item, this.currentUserId)
+      .then((res) => {
+        console.log("res :>> ", res);
+        this.toastr.success("User Data Update!");
+      })
+      .catch((err) => {
+        console.log("err :>> ", err);
+        this.toastr.error("Something went wrong");
+      });
     this.Botuserform.reset();
-    this.h4 = 'Add Bot User';
+    this.h4 = "Add Bot User";
   }
-
 }
