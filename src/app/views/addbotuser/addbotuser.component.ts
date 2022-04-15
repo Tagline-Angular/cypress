@@ -40,19 +40,18 @@ export class AddbotuserComponent implements OnInit {
     this.itsUpdate = false;
   }
 
-  onSubmit(operation: string) {
-    console.log("operation :>> ", operation);
-    if (this.currentUserId === "") {
-      if (this.Botuserform.valid) {
+  onSubmit() {
+    if (this.Botuserform.valid) {
+      if (this.currentUserId) {
+        this.updateUser(this.Botuserform.value);
+      } else {
         this.userservice.addUser(this.Botuserform.value).then((res: any) => {
           if (res) {
-            this.toastr.success("User Data Added!");
+            this.toastr.success("User added!");
             this.Botuserform.reset();
           }
         });
       }
-    } else {
-      this.updateUser(this.Botuserform.value);
     }
   }
 
@@ -67,7 +66,7 @@ export class AddbotuserComponent implements OnInit {
   public deleteUser(id): void {
     // if (false) {
     this.userservice.remove(id);
-    this.toastr.error("User Data Deleted!");
+    this.toastr.success("User deleted!");
     // }
     this.getUserData();
   }
@@ -88,13 +87,14 @@ export class AddbotuserComponent implements OnInit {
       .updateuser(item, this.currentUserId)
       .then((res) => {
         console.log("res :>> ", res);
-        this.toastr.success("User Data Update!");
+        this.toastr.success("User updated!");
       })
       .catch((err) => {
         console.log("err :>> ", err);
         this.toastr.error("Something went wrong");
       });
     this.Botuserform.reset();
+    this.currentUserId = '';
     this.h4 = "Add Bot User";
   }
 }
