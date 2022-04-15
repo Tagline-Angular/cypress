@@ -11,8 +11,10 @@ export class RealuserComponent implements OnInit {
   public selectedtitle: string = "";
   public users: any = [];
   public botLists: any = [];
+  public cuurentUserId:string = '';
   public currentPostId: string = "";
   public botUserInfoListForm!: FormGroup;
+  public realUserList!: FormGroup;
   public filterUserList: any = [];
 
   public search: boolean = false;
@@ -20,13 +22,16 @@ export class RealuserComponent implements OnInit {
 
   ngOnInit(): void {
     this.createFormForBotList();
+    this.createFormForRealUserList();
     this.getAllUserList();
     this.getBotUserList();
   }
 
   public searchByUserName(): void {
+    // cuurentUserId 
+    console.log(`this.filterUserList`, this.filterUserList)
     this.filterUserList = this.users.filter(
-      (item) => item.name === this.selectedtitle
+      (item) => item.name === this.realUserList.value.selectRealUser
     );
     console.log("this.filterUserList :>> ", this.filterUserList);
   }
@@ -38,26 +43,28 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submit(id: string) {
-    this.filterUserList = this.users.filter((ele:any) => {
-      console.log(`ele`, ele)
+  public createFormForRealUserList() {
+    this.realUserList = new FormGroup({
+      selectRealUser: new FormControl(""),
     });
+  }
 
-    // this.userservice.getAllUser().subscribe((data) => {
-    //   const commentCount = data.map((e) => {
-    //     return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
-    //   });
-    //   commentCount.forEach((ele:any) => {
-    //     if(ele?.uid === this.currentPostId){
-    //       console.log(`this.currentPostId`, this.currentPostId)
-    //       console.log(`ele`, ele)
-    //     } else {
-    //       console.log(`this.currentPostId`, this.currentPostId)
-    //       console.log(" ====>object")
-    //     }
-    //   })
-    //   // console.log(`commentCount`, commentCount);
-    // });
+  public submit(id: string) {
+    this.userservice.getAllUser().subscribe((data) => {
+      const commentCount = data.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      commentCount.forEach((ele:any) => {
+        if(ele?.uid === this.currentPostId){
+          console.log(`this.currentPostId`, this.currentPostId)
+          console.log(`ele`, ele)
+        } else {
+          console.log(`this.currentPostId`, this.currentPostId)
+          console.log(" ====>object")
+        }
+      })
+      // console.log(`commentCount`, commentCount);
+    });
     const botCommentObj = {
       name: this.botUserInfoListForm.value.selectBot,
       comment: this.botUserInfoListForm.value.comment,
