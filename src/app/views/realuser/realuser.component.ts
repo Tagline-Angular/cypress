@@ -43,6 +43,12 @@ export class RealuserComponent implements OnInit {
     });
   }
 
+  public createFormForRealUserList() {
+    this.realUserList = new FormGroup({
+      selectRealUser: new FormControl(""),
+    });
+  }
+
   public submit(id: string) {
     this.userservice.getAllUser().subscribe((data) => {
       const commentCount = data.map((e) => {
@@ -66,7 +72,7 @@ export class RealuserComponent implements OnInit {
     };
     this.botUserInfoListForm.reset();
   }
-  
+
   public getBotUserList() {
     this.userservice.getUser().subscribe((data) => {
       this.botLists = data.map((e) => {
