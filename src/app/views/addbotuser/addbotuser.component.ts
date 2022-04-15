@@ -21,7 +21,7 @@ export class AddbotuserComponent implements OnInit {
     private userservice: UserService,
     private route: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.Botuserform = new FormGroup({
@@ -64,10 +64,8 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public deleteUser(id): void {
-    // if (false) {
     this.userservice.remove(id);
     this.toastr.success("User deleted!");
-    // }
     this.getUserData();
   }
 

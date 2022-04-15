@@ -13,10 +13,7 @@ export class EditUserComponent implements OnInit {
   constructor(private userservice:UserService) { }
 
   ngOnInit(): void {
-    const editDetail: any = localStorage.getItem('updateProductDetail');
-    this.editobj = JSON.parse(editDetail)
-    localStorage.getItem('updateProductDetail');
-    this.editProductForm = new FormGroup({
+   this.editProductForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
       
@@ -32,17 +29,15 @@ export class EditUserComponent implements OnInit {
      
     });
     if(this.editobj){
-      this.setuserValue()
+      // this.setuserValue()
     }
   }
-
-  public setuserValue(): void {
-    this.editProductForm.setValue({
-      name: this.editobj.name,
-      email: this.editobj.email,
-      password:this.editobj.password
-    })
-  }
+  // updateUser(item){
+  //   this.editProductForm.value
+  //   this.userservice.updateuser(item)
+  //   console.log('item :>> ', item);
+  // }
+  
   
   public onSubmit(){
     // this.userservice.userUpdate(this.editobj._id,this.editProductForm.value).then((res:any)=>{

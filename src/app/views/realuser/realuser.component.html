@@ -1,45 +1,115 @@
 <form class="row g-3 py-2">
-    <div class="col-auto">
-        <input type="text" name="txtSearch" class="form-control" id="txtSearch" placeholder="Search with username"
-            [(ngModel)]="selectedtitle">
-    </div>
-    <div>
-        
-        <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
-            data-coreui-target="#exampleModalScrollable" (click)="searchByUserName()">Search</button>
-    </div>
+  <div class="col-auto">
+    <input
+      type="text"
+      name="txtSearch"
+      class="form-control"
+      id="txtSearch"
+      placeholder="Search with username"
+      [(ngModel)]="selectedtitle"
+    />
+  </div>
+  <div>
+    <button
+      class="btn btn-primary"
+      type="button"
+      data-coreui-toggle="modal"
+      data-coreui-target="#exampleModalScrollable"
+      (click)="searchByUserName()"
+    >
+      Search
+    </button>
+  </div>
 </form>
 
 <div class="user-box my-0 py-0">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table text-dark" *ngIf="filterUserList?.length">
-                    <thead>
-                        <tr>
-                            <th class="border-0" scope="col">No</th>
-                            <th class="border-0" scope="col">Name</th>
-                            <th class="border-0" scope="col">Content</th>
-                            <th class="border-0" scope="col">Likes</th>
-                            <th class="border-0" scope="col">Comments</th>
-                            <th class="border-0" scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of filterUserList; let i =index;">
-                            <td scope="row">{{i + 1}}</td>
-                            <td>{{item?.name}}</td>
-                            <td scope="row">{{item?.text}}</td>
-                            <td>{{item.likeCount ? item.likeCount : 0}}</td>
-                            <td>{{item?.commentCount ?item.commentCount : 0}}</td>
-                            <td><button class="btn btn-primary">Like</button> 
-                                <button class="btn btn-danger">Comment</button>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-        </div>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table text-dark" *ngIf="filterUserList?.length">
+          <thead>
+            <tr>
+              <th class="border-0" scope="col">No</th>
+              <th class="border-0" scope="col">Name</th>
+              <th class="border-0" scope="col">Content</th>
+              <th class="border-0" scope="col">Likes</th>
+              <th class="border-0" scope="col">Comments</th>
+              <th class="border-0" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filterUserList; let i = index">
+              <td scope="row">{{ i + 1 }}</td>
+              <td>{{ item?.name }}</td>
+              <td scope="row">{{ item?.text }}</td>
+              <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
+              <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
+              <td>
+                <button
+                  class="btn btn-primary"
+                  (click)="userLike()"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                >
+                  Like
+                </button>
+                <button class="btn btn-danger">Comment</button>
+                <!-- Model section start -->
+                <div
+                  class="modal fade"
+                  id="exampleModal"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Add Like
+                        </h5>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <select class="form-control">
+                          <option>Select User</option>
+                          <option value="item.email" *ngFor="let item of users">
+                            {{ item.email }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          (click)="addLike(item)"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

@@ -19,7 +19,7 @@ export class RealuserComponent implements OnInit {
   }
 
   public searchByUserName(): void {
-    this.filterUserList = this.users.filter(item => item.name=== this.selectedtitle);
+    this.filterUserList = this.users.filter(item => item.name === this.selectedtitle);
     console.log('this.filterUserList :>> ', this.filterUserList);
 
   }
@@ -33,4 +33,20 @@ export class RealuserComponent implements OnInit {
     });
 
   }
+
+  public userLike(): void {
+    this.userservice.getUser().subscribe((data) => {
+      this.users = data.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+    });
+  }
+
+  public addLike(item) {
+    console.log('id :>> ', item);
+    //  this.userservice.updateStatus()
+  //   this.userservice.updateStatus(item.likeCount, item.liked_user_ids).then((res) => {
+  //     console.log('res :>> ', res);
+  //   })
+   }
 }
