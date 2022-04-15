@@ -49,7 +49,7 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submit(id: string) {
+  public submit() {
     this.userservice.getAllUser().subscribe((data) => {
       const commentCount = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
