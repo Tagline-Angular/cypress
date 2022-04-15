@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../shared/service/user.service';
 
 @Component({
   selector: 'app-realuser',
@@ -6,14 +7,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./realuser.component.css']
 })
 export class RealuserComponent implements OnInit {
-  selectedtitle: string = '';
-  constructor() { }
+  public selectedtitle: string = '';
+  public users: any = [];
+  public filterUserList: any = [];
+
+  public search: boolean = false;
+  constructor(private userservice: UserService) { }
 
   ngOnInit(): void {
-   
+    this.getAllUserList()
   }
 
-  searchByBrand(){
-    console.log('selectedtitle :>> ', this.selectedtitle);
+  public searchByUserName(): void {
+    this.filterUserList = this.users.filter(item => item.name=== this.selectedtitle);
+    console.log('this.filterUserList :>> ', this.filterUserList);
+
+  }
+
+  private getAllUserList(): void {
+    this.userservice.getAllUser().subscribe((data) => {
+      this.users = data.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      console.log('this.users :>> ', this.users);
+    });
+
   }
 }

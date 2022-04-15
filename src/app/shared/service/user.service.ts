@@ -14,6 +14,7 @@ import { map } from "rxjs/operators";
 })
 export class UserService {
   public basepath = this.firestore.collection("/botuser");
+  public basepath1 = this.firestore.collection("/Users")
 
   constructor(private firestore: AngularFirestore) { }
 
@@ -39,6 +40,10 @@ export class UserService {
     // const basepath = this.firestore.collection('/botuser').doc(user.id)
     return this.firestore.collection('/botuser').doc(user.id).update(user);
     // basepath.id.update(user).then(res => console.log('res :>> ', res)).catch(err => console.log("error", err))
+  }
+
+  public getAllUser(){
+    return this.firestore.collection('Status').snapshotChanges();
   }
 }
 

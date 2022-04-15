@@ -4,6 +4,42 @@
             [(ngModel)]="selectedtitle">
     </div>
     <div>
-        <button type="submit" class="btn btn-primary mb-3" (click)="searchByBrand()">Search</button>
+        
+        <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
+            data-coreui-target="#exampleModalScrollable" (click)="searchByUserName()">Search</button>
     </div>
 </form>
+
+<div class="user-box my-0 py-0">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table text-dark" *ngIf="filterUserList?.length">
+                    <thead>
+                        <tr>
+                            <th class="border-0" scope="col">No</th>
+                            <th class="border-0" scope="col">Name</th>
+                            <th class="border-0" scope="col">Content</th>
+                            <th class="border-0" scope="col">Likes</th>
+                            <th class="border-0" scope="col">Comments</th>
+                            <th class="border-0" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of filterUserList; let i =index;">
+                            <td scope="row">{{i + 1}}</td>
+                            <td>{{item?.name}}</td>
+                            <td scope="row">{{item?.text}}</td>
+                            <td>{{item.likeCount ? item.likeCount : 0}}</td>
+                            <td>{{item?.commentCount ?item.commentCount : 0}}</td>
+                            <td><button class="btn btn-primary">Like</button> 
+                                <button class="btn btn-danger">Comment</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
