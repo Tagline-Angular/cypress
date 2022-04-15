@@ -26,7 +26,7 @@
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Password</label>
-                        <input type="type" class="form-control" id="password" name="password" formControlName="password"
+                        <input type="password" class="form-control" id="password" name="password" formControlName="password"
                             placeholder="Add password" />
                         <div *ngIf="!Botuserform.get('password')?.valid && Botuserform.get('password')?.touched">
                             <small class="text-danger">Please enter the password</small>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="add-btn">
-                        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit(buttonName==='Add'?'Add':'Update')">{{buttonName}}</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit()">{{submit}}</button>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                             <!-- <th scope="row">{{item.id}}</th> -->
                             <td>{{item.name}}</td>
                             <td>{{item.email}}</td>
-                            <td><button class="btn btn-success"  (click)="onEdit(item)">Edit</button> 
+                            <td><button class="btn btn-success"  (click)="onEdit(item, item.id)">Edit</button> 
                                 <button class="btn btn-danger" (click)="deleteUser(item.id)">delete</button>
                             </td>
                         </tr>
