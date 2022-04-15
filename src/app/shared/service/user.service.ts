@@ -35,11 +35,8 @@ export class UserService {
     console.log('this.basepath :>> ', this.basepath);
   }
 
-  public updateuser(user: any) {
-    console.log('user :>> ', user);
-    // const basepath = this.firestore.collection('/botuser').doc(user.id)
-    return this.firestore.collection('/botuser').doc(user.id).update(user);
-    // basepath.id.update(user).then(res => console.log('res :>> ', res)).catch(err => console.log("error", err))
+  public updateuser(userInfo: any,userId:string) {
+    return this.firestore.collection('/botuser').doc(userId).update(userInfo);
   }
 
   public getAllUser(){

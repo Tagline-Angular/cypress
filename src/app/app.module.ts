@@ -46,6 +46,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ViewbotuserComponent } from './views/viewbotuser/viewbotuser.component';
 import { EditUserComponent } from './views/edit-user/edit-user.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   imports: [
@@ -64,8 +65,8 @@ import { EditUserComponent } from './views/edit-user/edit-user.component';
     ReactiveFormsModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule
-   
+    AngularFirestoreModule,
+    ToastrModule.forRoot()
   ],
   declarations: [
     AppComponent,

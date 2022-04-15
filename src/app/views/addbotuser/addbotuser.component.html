@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="add-btn">
-                        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit(buttonName==='Add'?'Add':'Update')">{{buttonName}}</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit()">{{submit}}</button>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                             <!-- <th scope="col">ID</th> -->
                             <th class="border-0" scope="col">Name</th>
                             <th class="border-0" scope="col">Email</th>
-                            <th class="border-0" scope="col">Action</th>
+                            <th class="border-0" scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,8 +63,29 @@
                             <!-- <th scope="row">{{item.id}}</th> -->
                             <td>{{item.name}}</td>
                             <td>{{item.email}}</td>
-                            <td><button class="btn btn-success"  (click)="onEdit(item)">Edit</button> 
-                                <button class="btn btn-danger" (click)="deleteUser(item.id)">delete</button>
+                            <td><button class="btn btn-success"  (click)="onEdit(item, item.id)">Edit</button> 
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Delete</button>
+                                <!-- Model section start -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure, you want to delete this user?
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" (click)="deleteUser(item.id)">Delete</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <!-- Model section end -->
                             </td>
                         </tr>
                     </tbody>
