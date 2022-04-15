@@ -23,39 +23,79 @@
 </form>
 
 <div class="user-box my-0 py-0">
-  <div class="col-12">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table text-dark" *ngIf="filterUserList?.length">
-          <thead>
-            <tr>
-              <th class="border-0" scope="col">No</th>
-              <th class="border-0" scope="col">Name</th>
-              <th class="border-0" scope="col">Content</th>
-              <th class="border-0" scope="col">Likes</th>
-              <th class="border-0" scope="col">Comments</th>
-              <th class="border-0" scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of filterUserList; let i = index">
-              <td scope="row">{{ i + 1 }}</td>
-              <td>{{ item?.name }}</td>
-              <td scope="row">{{ item?.text }}</td>
-              <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
-              <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
-              <td>
-                <button
-                  class="btn btn-primary"
-                  (click)="userLike()"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                >
-                  Like
-                </button>
-                <button class="btn btn-danger">Comment</button>
-                <!-- Model section start -->
-                <div
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table text-dark" *ngIf="filterUserList?.length">
+                    <thead>
+                        <tr>
+                            <th class="border-0" scope="col">No</th>
+                            <th class="border-0" scope="col">Name</th>
+                            <th class="border-0" scope="col">Content</th>
+                            <th class="border-0" scope="col">Likes</th>
+                            <th class="border-0" scope="col">Comments</th>
+                            <th class="border-0" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of filterUserList; let i =index;">
+                            <td scope="row">{{i + 1}}</td>
+                            <td>{{item?.name}}</td>
+                            <td scope="row">{{item?.text}}</td>
+                            <td>{{item.likeCount ? item.likeCount : 0}}</td>
+                            <td>{{item?.commentCount ?item.commentCount : 0}}</td>
+                            <td><button class="btn btn-primary">Like</button> 
+                                <button class="btn btn-danger" data-toggle="modal" (click)="handleCommentModal(item.id)" data-target="#commentModel">Comment</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <!-- Model section start -->
+      <div class="modal fade" id="commentModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="botUserInfoListForm">
+                <div class="row">
+                    <div class="col-12 mb-2">
+                            <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control">
+                                <ng-container *ngFor="let bot of botLists">
+                                    <option [value]="bot?.id">{{bot?.name}}</option>
+                                </ng-container>
+                            </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2" placeholder="Write comment"></textarea>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submit()">Submit</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- Model section end -->
+
+
+
+    <div
                   class="modal fade"
                   id="exampleModal"
                   tabindex="-1"
@@ -97,7 +137,7 @@
                         <button
                           type="button"
                           class="btn btn-primary"
-                          (click)="addLike(item)"
+                          (click)="addLike()"
                         >
                           Submit
                         </button>
@@ -105,11 +145,3 @@
                     </div>
                   </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
