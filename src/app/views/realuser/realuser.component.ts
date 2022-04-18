@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AnyRecord } from "dns";
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 
@@ -14,23 +15,25 @@ export class RealuserComponent implements OnInit {
   public botLists: any = [];
   public cuurentUserId: string = "";
   public currentPostId: string = "";
-  public botUserInfoListForm!: FormGroup;
+  public botUserCommentForm!: FormGroup;
   public botUserLikeForm: FormGroup;
   public realUserList!: FormGroup;
   public filterUserList: any = [];
   public postData: any;
 
+
   public search: boolean = false;
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createFormForBotList();
     this.createFormForRealUserList();
     this.getAllUserList();
     this.getBotUserList();
+
   }
 
   public searchByUserName(): void {
@@ -40,8 +43,8 @@ export class RealuserComponent implements OnInit {
     this.selectedtitle = this.realUserList.value.selectRealUser;
   }
 
-  public createFormForBotList() {
-    this.botUserInfoListForm = new FormGroup({
+  public createFormForBotList(): void {
+    this.botUserCommentForm = new FormGroup({
       selectBot: new FormControl(""),
       comment: new FormControl(""),
     });
@@ -50,33 +53,14 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public createFormForRealUserList() {
+  public createFormForRealUserList(): void {
     this.realUserList = new FormGroup({
-      selectRealUser: new FormControl(""),
+      selectRealUser: new FormControl(" "),
     });
+
   }
 
-  public submitComment() {
-    this.userservice.getAllUser().subscribe((data) => {
-      const commentCount = data.map((e) => {
-        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
-      });
-      commentCount.forEach((ele: any) => {
-        if (ele?.uid === this.currentPostId) {
-        } else {
-        }
-      });
-      // console.log(`commentCount`, commentCount);
-    });
-    const botCommentObj = {
-      name: this.botUserInfoListForm.value.selectBot,
-      comment: this.botUserInfoListForm.value.comment,
-      botUserId: this.currentPostId,
-    };
-    this.botUserInfoListForm.reset();
-  }
-
-  public getBotUserList() {
+  public getBotUserList(): void {
     this.userservice.getUser().subscribe((data) => {
       this.botLists = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
@@ -92,7 +76,7 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submitLike() {
+  public submitLike(): void {
     let likes: number = this.postData.likeCount;
     const totalLikes = likes ? likes + 1 : 1;
     this.postData.likeCount = totalLikes;
@@ -103,15 +87,31 @@ export class RealuserComponent implements OnInit {
     this.toastr.success("Like added!");
   }
 
+  public submitComment(): void {
+    let comment: number = this.postData.commentCount
+    // console.log('=====>>>>>>this.postData? :>> ', this.postData);
+    console.log('comment :>> ', comment);
+    const totalComment = comment ? comment + 1 : 1;
+    console.log('totalComment :>> ', totalComment);
+    this.postData.commentCount = totalComment;
+    console.log('this.postData.id :>> ', this.postData.id);
+    this.botUserCommentForm.reset();
+    this.userservice.updateStatus(this.postData, this.currentPostId);
+    this.toastr.success("Comment added!");
+    this.realUserList.reset()
+  }
+
   //  handle like modal
-  public handleLikeModal(data: any) {
+  public handleLikeModal(data: any): void {
     this.currentPostId = data.id;
     this.postData = data;
   }
 
   // handle comment modal
-  public handleCommentModal(id: string) {
-    this.currentPostId = id;
-    console.log(`id`, id);
+  public handleCommentModal(data: any): void {
+    this.currentPostId = data.id
+    this.postData = data
   }
 }
+
+
