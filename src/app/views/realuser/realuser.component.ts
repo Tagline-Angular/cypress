@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
+import * as moment from "moment";
 
 @Component({
   selector: "app-realuser",
@@ -89,17 +89,23 @@ export class RealuserComponent implements OnInit {
     let comment: number = this.postData.commentCount;
     const totalComment = comment ? comment + 1 : 1;
     this.postData.commentCount = totalComment;
-    this.userservice.updateStatus(this.postData, this.currentPostId);
     const commentUserObj = {
       comment_message: this.botUserCommentForm.value.comment,
       commented_user_id: this.botUserCommentForm.value.selectBot,
-      commented_user_name: this.selectedtitle,
-      comment_time: new Date(),
+      commented_user_name: this.getBotUser(
+        this.botUserCommentForm.value.selectBot
+      )[0].name,
+      comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
+    this.userservice.updateStatus(this.postData, this.currentPostId);
     this.userservice.addComment(this.postData.id, commentUserObj);
     this.botUserCommentForm.reset();
     this.toastr.success("Comment added!");
     this.realUserList.reset();
+  }
+
+  public getBotUser(id: string) {
+    return this.botLists.filter((item) => item.id === id);
   }
 
   //  handle like modal
