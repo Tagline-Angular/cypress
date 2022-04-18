@@ -21,7 +21,6 @@ export class RealuserComponent implements OnInit {
   public filterUserList: any = [];
   public postData: any;
 
-
   public search: boolean = false;
   constructor(
     private userservice: UserService,
@@ -41,6 +40,8 @@ export class RealuserComponent implements OnInit {
       (item) => item.name === this.realUserList.value.selectRealUser
     );
     this.selectedtitle = this.realUserList.value.selectRealUser;
+    console.log('selectedtitle :>> ', this.selectedtitle);
+    // this.realUserList.reset()
   }
 
   public createFormForBotList(): void {
@@ -57,7 +58,6 @@ export class RealuserComponent implements OnInit {
     this.realUserList = new FormGroup({
       selectRealUser: new FormControl(" "),
     });
-
   }
 
   public getBotUserList(): void {
@@ -77,6 +77,7 @@ export class RealuserComponent implements OnInit {
   }
 
   public submitLike(): void {
+
     let likes: number = this.postData.likeCount;
     const totalLikes = likes ? likes + 1 : 1;
     this.postData.likeCount = totalLikes;
@@ -88,17 +89,16 @@ export class RealuserComponent implements OnInit {
   }
 
   public submitComment(): void {
-    let comment: number = this.postData.commentCount
+    let comment: number = this.postData.commentCount;
     // console.log('=====>>>>>>this.postData? :>> ', this.postData);
-    console.log('comment :>> ', comment);
+    console.log("comment :>> ", comment);
     const totalComment = comment ? comment + 1 : 1;
-    console.log('totalComment :>> ', totalComment);
+    console.log("totalComment :>> ", totalComment);
     this.postData.commentCount = totalComment;
-    console.log('this.postData.id :>> ', this.postData.id);
+    console.log("this.postData.id :>> ", this.postData.id);
     this.botUserCommentForm.reset();
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.toastr.success("Comment added!");
-    this.realUserList.reset()
   }
 
   //  handle like modal
@@ -109,9 +109,8 @@ export class RealuserComponent implements OnInit {
 
   // handle comment modal
   public handleCommentModal(data: any): void {
-    this.currentPostId = data.id
-    this.postData = data
+    this.currentPostId = data.id;
+    this.postData = data;
+
   }
 }
-
-

@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import { User } from "../../models/user.model";
 import { UserService } from "../../shared/service/user.service";
 import { ToastrService } from "ngx-toastr";
+import { collectExternalReferences, isNgTemplate } from "@angular/compiler";
+import * as moment from "moment";
 @Component({
   selector: "app-addbotuser",
   templateUrl: "./addbotuser.component.html",
@@ -17,6 +19,7 @@ export class AddbotuserComponent implements OnInit {
   public itsUpdate: boolean = true;
   public buttonName = "Add";
   public h4 = "Add Bot User";
+  public filterUserList: any = [];
   constructor(
     private userservice: UserService,
     private route: Router,
@@ -31,10 +34,6 @@ export class AddbotuserComponent implements OnInit {
         Validators.email,
         Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"),
       ]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
     });
     this.getUserData();
     this.itsUpdate = false;
@@ -42,15 +41,30 @@ export class AddbotuserComponent implements OnInit {
 
   onSubmit() {
     if (this.Botuserform.valid) {
-      if (this.currentUserId) {
-        this.updateUser(this.Botuserform.value);
+      const duplicateRecord = this.users.filter(
+        (item) =>
+          item.name === this.Botuserform.value.name ||
+          item.email === this.Botuserform.value.email
+      );
+      if (duplicateRecord.length > 0) {
+        this.toastr.error("Duplicate record added! Please try with different Email/Name.");
       } else {
-        this.userservice.addUser(this.Botuserform.value).then((res: any) => {
-          if (res) {
-            this.toastr.success("User added!");
-            this.Botuserform.reset();
+        if (this.currentUserId) {
+          this.updateUser(this.Botuserform.value);
+        } else {
+          const data1 = {
+            name: this.Botuserform.value.name,
+            email: this.Botuserform.value.email,
+            date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
           }
-        });
+          console.log('data1 :>> ', data1);
+          this.userservice.addUser(data1).then((res: any) => {
+            if (res) {
+              this.toastr.success("User added!");
+              this.Botuserform.reset()
+            }
+          });
+        }
       }
     }
   }
@@ -58,6 +72,7 @@ export class AddbotuserComponent implements OnInit {
   public getUserData(): void {
     this.userservice.getUser().subscribe((data) => {
       this.users = data.map((e) => {
+        this.users.sort()
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
     });
@@ -92,7 +107,7 @@ export class AddbotuserComponent implements OnInit {
         this.toastr.error("Something went wrong");
       });
     this.Botuserform.reset();
-    this.currentUserId = '';
+    this.currentUserId = "";
     this.h4 = "Add Bot User";
   }
 }

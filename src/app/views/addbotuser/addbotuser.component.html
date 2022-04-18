@@ -1,97 +1,153 @@
 <div class="user-box">
-    <div class="col-12">
-        <h4>{{h4}}</h4>
-        <form [formGroup]="Botuserform">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class=" mb-3">
-                        <label for="name" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="name" name="name" formControlName="name"
-                            placeholder="Add UserName" />
-                        <div *ngIf="!Botuserform.get('name')?.valid && Botuserform.get('name')?.touched">
-                            <small class="text-danger">Please enter the Username</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" formControlName="email"
-                            placeholder="Add email" autocomplete="" />
-                        <div *ngIf="!Botuserform.get('email')?.valid && Botuserform.get('email')?.touched">
-                            <small class="text-danger">Please enter valid email</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" formControlName="password"
-                            placeholder="Add password" />
-                        <div *ngIf="!Botuserform.get('password')?.valid && Botuserform.get('password')?.touched">
-                            <small class="text-danger">Please enter the password</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="add-btn">
-                        <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit()">{{submit}}</button>
-                    </div>
-                </div>
+  <div class="col-12">
+    <h4>{{ h4 }}</h4>
+    <form [formGroup]="Botuserform">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="name" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              formControlName="name"
+              placeholder="Add UserName"
+            />
+            <div
+              *ngIf="
+                !Botuserform.get('name')?.valid &&
+                Botuserform.get('name')?.touched
+              "
+            >
+              <small class="text-danger">Please enter the Username</small>
             </div>
-        </form>
-    </div>
-</div>
-    <!-- <router-outlet></router-outlet> -->
-<div class="user-box my-0 py-0"> 
-    <div class="col-12">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table text-dark" *ngIf="!itsUpdate" >
-                    <thead>
-                        <tr>
-                            <th class="border-0" scope="col">No</th>
-                            <!-- <th scope="col">ID</th> -->
-                            <th class="border-0" scope="col">Name</th>
-                            <th class="border-0" scope="col">Email</th>
-                            <th class="border-0" scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of users; let i =index;">
-                            <th scope="row">{{i+1}}</th>
-                            <!-- <th scope="row">{{item.id}}</th> -->
-                            <td>{{item.name}}</td>
-                            <td>{{item.email}}</td>
-                            <td><button class="btn btn-success"  (click)="onEdit(item, item.id)">Edit</button> 
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModel">Delete</button>
-                                <!-- Model section start -->
-                                <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure, you want to delete this user?
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary" (click)="deleteUser(item.id)">Delete</button>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                                <!-- Model section end -->
-                            </td>
-                        </tr>
-                    </tbody>
-    
-                </table>
-            </div>
+          </div>
         </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="name" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              name="email"
+              formControlName="email"
+              placeholder="Add email"
+              autocomplete=""
+            />
+            <div
+              *ngIf="
+                !Botuserform.get('email')?.valid &&
+                Botuserform.get('email')?.touched
+              "
+            >   
+              <small class="text-danger">Please enter valid email</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="col-md-3">
+            <div class="add-btn">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!Botuserform.valid"
+                (click)="onSubmit()"
+              >
+                {{ submit }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- <router-outlet></router-outlet> -->
+<div class="user-box my-0 py-0">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table text-dark" *ngIf="!itsUpdate">
+          <thead>
+            <tr>
+              <th class="border-0" scope="col">No</th>
+              <!-- <th scope="col">ID</th> -->
+              <th class="border-0" scope="col">Name</th>
+              <th class="border-0" scope="col">Email</th>
+              <th class="border-0" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of users; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <!-- <th scope="row">{{item.id}}</th> -->
+              <td>{{ item.name }}</td>
+              <td>{{ item.email }}</td>
+              <td>
+                <button class="btn btn-success" (click)="onEdit(item, item.id)">
+                  Edit
+                </button>
+                <button
+                  class="btn btn-danger"
+                  data-toggle="modal"
+                  data-target="#deleteModel"
+                >
+                  Delete
+                </button>
+                <!-- Model section start -->
+                <div
+                  class="modal fade"
+                  id="deleteModel"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Confirm Delete
+                        </h5>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure, you want to delete this user?
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          (click)="deleteUser(item.id)"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Model section end -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

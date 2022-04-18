@@ -7,6 +7,7 @@ import {
 import { rejects } from "assert";
 import { resolve } from "path";
 import { promise } from "protractor";
+import { Timestamp } from "rxjs/internal/operators/timestamp";
 import { map } from "rxjs/operators";
 
 @Injectable({
@@ -20,13 +21,26 @@ export class UserService {
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
-      this.basepath.add(userDetails);
+      this.basepath.add(userDetails)
+      console.log('userdetails :>> ', userDetails);
       resolve(true);
+      
     });
   }
 
   public getUser() {
-    return this.firestore.collection('botuser').snapshotChanges();
+    return this.firestore.collection('botuser').snapshotChanges()
+  //   .pipe(
+  //     map(changes => {
+  //         return changes.map(a => {
+  //             const data = a.payload.doc.data() as any;
+  //             Object.keys(data).filter(key => data[key] instanceof Timestamp)
+  //                 .forEach(key => data[key] = data[key].toDate())
+  //             data._id = a.payload.doc.id;
+  //             return data;
+  //         });
+  //     })
+  // );
   }
 
   public remove(id: any) {
