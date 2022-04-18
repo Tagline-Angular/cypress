@@ -16,6 +16,7 @@ export class RealuserComponent implements OnInit {
   public cuurentUserId: string = "";
   public currentPostId: string = "";
   public botUserCommentForm!: FormGroup;
+  public userListForm: FormGroup;
   public botUserLikeForm: FormGroup;
   public realUserList!: FormGroup;
   public filterUserList: any = [];

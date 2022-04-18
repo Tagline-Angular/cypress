@@ -3,8 +3,12 @@
     <form [formGroup]="realUserList">
       <div class="row">
         <div class="col-12 mb-2">
-          <select id="botUserDrropdown" formControlName="selectRealUser" class="dropdown-toggle form-control">
-            <option value="" selected>Select User</option>
+          <select
+            id="botUserDrropdown"
+            formControlName="selectRealUser"
+            class="dropdown-toggle form-control"
+          >
+            <option value="" selected disabled>Select User</option>
             <option *ngFor="let bot of users" [value]="bot?.name">
               {{ bot?.name }}
             </option>
@@ -14,8 +18,13 @@
     </form>
   </div>
   <div>
-    <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
-      data-coreui-target="#exampleModalScrollable" (click)="searchByUserName()">
+    <button
+      class="btn btn-primary"
+      type="button"
+      data-coreui-toggle="modal"
+      data-coreui-target="#exampleModalScrollable"
+      (click)="searchByUserName()"
+    >
       Search
     </button>
   </div>
@@ -44,12 +53,20 @@
                 <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
                 <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
                 <td>
-                  <button class="btn btn-primary" data-target="#LikeModal" data-toggle="modal"
-                    (click)="handleLikeModal(item)">
+                  <button
+                    class="btn btn-primary"
+                    data-target="#LikeModal"
+                    data-toggle="modal"
+                    (click)="handleLikeModal(item)"
+                  >
                     Like
                   </button>
-                  <button class="btn btn-secondary" data-toggle="modal" (click)="handleCommentModal(item)"
-                    data-target="#commentModel">
+                  <button
+                    class="btn btn-secondary"
+                    data-toggle="modal"
+                    (click)="handleCommentModal(item)"
+                    data-target="#commentModel"
+                  >
                     Comment
                   </button>
                 </td>
@@ -63,12 +80,24 @@
 </ng-container>
 
 <!-- Like Modal -->
-<div class="modal fade" id="LikeModal" tabindex="-1" role="dialog" aria-labelledby="LikeModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="LikeModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="LikeModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="LikeModalLabel">Add Like</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -86,7 +115,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitLike()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="submitLike()"
+        >
           Submit
         </button>
       </div>
@@ -95,13 +129,24 @@
 </div>
 
 <!-- Model section start :: Comment Modal -->
-<div class="modal fade" id="commentModel" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel"
-  aria-hidden="true">
+<div
+  class="modal fade"
+  id="commentModel"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="commentModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -109,7 +154,11 @@
         <form [formGroup]="botUserCommentForm">
           <div class="row">
             <div class="col-12 mb-2">
-              <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control">
+              <select
+                id="botUserDrropdown"
+                formControlName="selectBot"
+                class="dropdown-toggle form-control"
+              >
                 <option value="" disabled selected>Select Bot User</option>
                 <option [value]="item.id" *ngFor="let item of botLists">
                   {{ item.name }}
@@ -119,8 +168,13 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2"
-                placeholder="Write comment"></textarea>
+              <textarea
+                formControlName="comment"
+                id="botUserComment"
+                class="form-control"
+                rows="2"
+                placeholder="Write comment"
+              ></textarea>
             </div>
           </div>
         </form>
@@ -129,7 +183,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="submitComment()"
+        >
           Submit
         </button>
       </div>
