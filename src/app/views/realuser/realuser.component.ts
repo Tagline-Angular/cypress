@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { AngularFirestore } from "@angular/fire/firestore";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AnyRecord } from "dns";
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 
@@ -21,19 +21,17 @@ export class RealuserComponent implements OnInit {
   public filterUserList: any = [];
   public postData: any;
 
-
   public search: boolean = false;
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.createFormForBotList();
     this.createFormForRealUserList();
     this.getAllUserList();
     this.getBotUserList();
-
   }
 
   public searchByUserName(): void {
@@ -45,8 +43,8 @@ export class RealuserComponent implements OnInit {
 
   public createFormForBotList(): void {
     this.botUserCommentForm = new FormGroup({
-      selectBot: new FormControl(""),
-      comment: new FormControl(""),
+      selectBot: new FormControl("", Validators.required),
+      comment: new FormControl("", Validators.required),
     });
     this.botUserLikeForm = new FormGroup({
       selectBot: new FormControl(""),
@@ -57,7 +55,6 @@ export class RealuserComponent implements OnInit {
     this.realUserList = new FormGroup({
       selectRealUser: new FormControl(" "),
     });
-
   }
 
   public getBotUserList(): void {
@@ -88,17 +85,20 @@ export class RealuserComponent implements OnInit {
   }
 
   public submitComment(): void {
-    let comment: number = this.postData.commentCount
-    // console.log('=====>>>>>>this.postData? :>> ', this.postData);
-    console.log('comment :>> ', comment);
+    let comment: number = this.postData.commentCount;
     const totalComment = comment ? comment + 1 : 1;
-    console.log('totalComment :>> ', totalComment);
     this.postData.commentCount = totalComment;
-    console.log('this.postData.id :>> ', this.postData.id);
-    this.botUserCommentForm.reset();
     this.userservice.updateStatus(this.postData, this.currentPostId);
+    const commentUserObj = {
+      comment_message: this.botUserCommentForm.value.comment,
+      commented_user_id: this.botUserCommentForm.value.selectBot,
+      commented_user_name: this.selectedtitle,
+      comment_time: new Date(),
+    };
+    this.userservice.addComment(this.postData.id, commentUserObj);
+    this.botUserCommentForm.reset();
     this.toastr.success("Comment added!");
-    this.realUserList.reset()
+    this.realUserList.reset();
   }
 
   //  handle like modal
@@ -109,9 +109,7 @@ export class RealuserComponent implements OnInit {
 
   // handle comment modal
   public handleCommentModal(data: any): void {
-    this.currentPostId = data.id
-    this.postData = data
+    this.currentPostId = data.id;
+    this.postData = data;
   }
 }
-
-
