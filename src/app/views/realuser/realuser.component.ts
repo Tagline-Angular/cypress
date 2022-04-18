@@ -49,7 +49,7 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submit() {
+  public submitComment() {
     this.userservice.getAllUser().subscribe((data) => {
       const commentCount = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
@@ -89,18 +89,19 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public userLike(): void {
-    this.userservice.getUser().subscribe((data) => {
-      this.users = data.map((e) => {
-        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
-      });
-    });
+  
+  public submitLike() {
+    // this.userservice.updateStatus()
+    // console.log('item :>> ', item);
+    // const a=this.userservice.updateStatus(item.likeCount, item.liked_user_id)
+    // console.log('a :>> ', a);
   }
 
-  public submitLike() {}
+  
 
   //  handle like modal
   handleLikeModal(id: string) {
+    console.log('id :>> ', id)
     this.currentPostId = id;
   }
 
