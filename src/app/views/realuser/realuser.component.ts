@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 
 @Component({
@@ -11,14 +12,19 @@ export class RealuserComponent implements OnInit {
   public selectedtitle: string = "";
   public users: any = [];
   public botLists: any = [];
-  public cuurentUserId:string = '';
+  public cuurentUserId: string = "";
   public currentPostId: string = "";
   public botUserInfoListForm!: FormGroup;
+  public botUserLikeForm: FormGroup;
   public realUserList!: FormGroup;
   public filterUserList: any = [];
+  public postData: any;
 
   public search: boolean = false;
-  constructor(private userservice: UserService) {}
+  constructor(
+    private userservice: UserService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.createFormForBotList();
@@ -28,18 +34,19 @@ export class RealuserComponent implements OnInit {
   }
 
   public searchByUserName(): void {
-    // cuurentUserId 
-    console.log(`this.filterUserList`, this.filterUserList)
     this.filterUserList = this.users.filter(
       (item) => item.name === this.realUserList.value.selectRealUser
     );
-    console.log("this.filterUserList :>> ", this.filterUserList);
+    this.selectedtitle = this.realUserList.value.selectRealUser;
   }
 
   public createFormForBotList() {
     this.botUserInfoListForm = new FormGroup({
       selectBot: new FormControl(""),
       comment: new FormControl(""),
+    });
+    this.botUserLikeForm = new FormGroup({
+      selectBot: new FormControl(""),
     });
   }
 
@@ -54,15 +61,11 @@ export class RealuserComponent implements OnInit {
       const commentCount = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
-      commentCount.forEach((ele:any) => {
-        if(ele?.uid === this.currentPostId){
-          console.log(`this.currentPostId`, this.currentPostId)
-          console.log(`ele`, ele)
+      commentCount.forEach((ele: any) => {
+        if (ele?.uid === this.currentPostId) {
         } else {
-          console.log(`this.currentPostId`, this.currentPostId)
-          console.log(" ====>object")
         }
-      })
+      });
       // console.log(`commentCount`, commentCount);
     });
     const botCommentObj = {
@@ -89,24 +92,25 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  
   public submitLike() {
-    // this.userservice.updateStatus()
-    // console.log('item :>> ', item);
-    // const a=this.userservice.updateStatus(item.likeCount, item.liked_user_id)
-    // console.log('a :>> ', a);
+    let likes: number = this.postData.likeCount;
+    const totalLikes = likes ? likes + 1 : 1;
+    this.postData.likeCount = totalLikes;
+    if (!this.postData.liked_user_ids) this.postData.liked_user_ids = [];
+    this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
+    this.userservice.updateStatus(this.postData, this.currentPostId);
+    this.botUserLikeForm.reset();
+    this.toastr.success("Like added!");
   }
 
-  
-
   //  handle like modal
-  handleLikeModal(id: string) {
-    console.log('id :>> ', id)
-    this.currentPostId = id;
+  public handleLikeModal(data: any) {
+    this.currentPostId = data.id;
+    this.postData = data;
   }
 
   // handle comment modal
-  handleCommentModal(id: string) {
+  public handleCommentModal(id: string) {
     this.currentPostId = id;
     console.log(`id`, id);
   }
