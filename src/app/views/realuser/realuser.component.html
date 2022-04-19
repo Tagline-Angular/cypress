@@ -2,17 +2,16 @@
   <div class="col-auto">
     <form [formGroup]="realUserList">
       <div class="row">
-        <div class="col-12 mb-2">
-          <select
-            id="realUserDropdown"
+        <div class="col-12">
+          <ng-select
+            [items]="users"
+            class="item form-control"
+            bindLabel="user_name"
+            bindValue="user_id"
+            placeholder="Select User"
             formControlName="selectRealUser"
-            class="dropdown-toggle form-control"
           >
-            <option value="" selected disabled>Select User</option>
-            <option *ngFor="let user of users" [value]="user?.user_id">
-              {{ user?.user_name }}
-            </option>
-          </select>
+          </ng-select>
         </div>
       </div>
     </form>

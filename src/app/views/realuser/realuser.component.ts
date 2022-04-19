@@ -60,7 +60,7 @@ export class RealuserComponent implements OnInit {
 
   public createFormForRealUserList(): void {
     this.realUserList = new FormGroup({
-      selectRealUser: new FormControl(" "),
+      selectRealUser: new FormControl(),
     });
   }
 

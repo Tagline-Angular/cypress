@@ -47,7 +47,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ViewbotuserComponent } from './views/viewbotuser/viewbotuser.component';
 import { EditUserComponent } from './views/edit-user/edit-user.component';
 import { ToastrModule } from 'ngx-toastr';
-
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
   imports: [
@@ -55,6 +55,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     AppRoutingModule,
     AppAsideModule,
+    NgSelectModule,
     AppBreadcrumbModule.forRoot(),
     AppFooterModule,
     AppHeaderModule,
