@@ -74,7 +74,7 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public getUserData(): void {
-    this.userservice.getUser().subscribe((data) => {
+    this.userservice.getUser("date","desc").subscribe((data) => {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });

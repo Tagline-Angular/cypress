@@ -21,6 +21,7 @@ export class RealuserComponent implements OnInit {
   public realUserList!: FormGroup;
   public postsList: any = [];
   public postData: any;
+  public isUserPost: boolean = false;
 
   public search: boolean = false;
   constructor(
@@ -41,11 +42,11 @@ export class RealuserComponent implements OnInit {
       this.postsList = posts.map((e) => {
         return e.payload.doc.data();
       });
+      this.isUserPost = true;
     });
     this.selectedtitle = this.users.filter(
       (item) => item.id === id
     )[0].user_name;
-    // this.realUserList.reset()
   }
 
   public createFormForBotList(): void {
@@ -65,7 +66,7 @@ export class RealuserComponent implements OnInit {
   }
 
   public getBotUserList(): void {
-    this.userservice.getUser().subscribe((data) => {
+    this.userservice.getUser("name", "asc").subscribe((data) => {
       this.botLists = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
