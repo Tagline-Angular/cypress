@@ -57,6 +57,7 @@ export class AddbotuserComponent implements OnInit {
             email: this.Botuserform.value.email,
             date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
           }
+          // console.log('date :>> ', this.date);
           console.log('data1 :>> ', data1);
           this.userservice.addUser(data1).then((res: any) => {
             if (res) {
@@ -72,7 +73,6 @@ export class AddbotuserComponent implements OnInit {
   public getUserData(): void {
     this.userservice.getUser().subscribe((data) => {
       this.users = data.map((e) => {
-        this.users.sort()
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
     });
