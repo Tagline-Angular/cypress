@@ -13,7 +13,6 @@ export class UserService {
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
       this.basepath.add(userDetails);
-      console.log("userdetails :>> ", userDetails);
       resolve(true);
     });
   }

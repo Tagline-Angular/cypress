@@ -1,10 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { User } from "../../models/user.model";
 import { UserService } from "../../shared/service/user.service";
 import { ToastrService } from "ngx-toastr";
-import { collectExternalReferences, isNgTemplate } from "@angular/compiler";
 import * as moment from "moment";
 @Component({
   selector: "app-addbotuser",
@@ -22,9 +19,8 @@ export class AddbotuserComponent implements OnInit {
   public filterUserList: any = [];
   constructor(
     private userservice: UserService,
-    private route: Router,
     private toastr: ToastrService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.Botuserform = new FormGroup({
@@ -46,23 +42,30 @@ export class AddbotuserComponent implements OnInit {
           item.name === this.Botuserform.value.name ||
           item.email === this.Botuserform.value.email
       );
-      if (duplicateRecord.length > 0) {
-        this.toastr.error("Duplicate record added! Please try with different Email/Name.");
-      } else {
-        if (this.currentUserId) {
+      if (this.currentUserId) {
+        if (duplicateRecord.length > 1) {
+          this.toastr.error(
+            "Duplicate record found! Please try with different Email/Name."
+          );
+        } else {
           this.updateUser(this.Botuserform.value);
+        }
+      } else {
+        if (duplicateRecord.length > 0) {
+          this.toastr.error(
+            "Duplicate record found! Please try with different Email/Name."
+          );
         } else {
           const data1 = {
             name: this.Botuserform.value.name,
             email: this.Botuserform.value.email,
             date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
-          }
-          // console.log('date :>> ', this.date);
-          console.log('data1 :>> ', data1);
+          };
           this.userservice.addUser(data1).then((res: any) => {
             if (res) {
               this.toastr.success("User added!");
-              this.Botuserform.reset()
+              this.Botuserform.reset();
+              this.getUserData();
             }
           });
         } 
@@ -95,15 +98,12 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public updateUser(item): void {
-    console.log(`===>item`, item.id);
     this.userservice
       .updateuser(item, this.currentUserId)
       .then((res) => {
-        console.log("res :>> ", res);
         this.toastr.success("User updated!");
       })
       .catch((err) => {
-        console.log("err :>> ", err);
         this.toastr.error("Something went wrong");
       });
     this.Botuserform.reset();
