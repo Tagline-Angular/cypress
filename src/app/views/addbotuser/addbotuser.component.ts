@@ -22,7 +22,6 @@ export class AddbotuserComponent implements OnInit {
   public filterUserList: any = [];
   constructor(
     private userservice: UserService,
-    private route: Router,
     private toastr: ToastrService
   ) { }
 
