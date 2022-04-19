@@ -18,7 +18,7 @@ export class RealuserComponent implements OnInit {
   public botUserCommentForm!: FormGroup;
   public botUserLikeForm: FormGroup;
   public realUserList!: FormGroup;
-  public filterUserList: any = [];
+  public postsList: any = [];
   public postData: any;
 
   public search: boolean = false;
@@ -35,12 +35,14 @@ export class RealuserComponent implements OnInit {
 
   }
 
-  public searchByUserName(): void {
-    this.filterUserList = this.users.filter(
-      (item) => item.name === this.realUserList.value.selectRealUser
-    );
+  public getPostForUser(): void {
+    const id = this.realUserList.value.selectRealUser;
+     this.userservice.getPostByUser(id).subscribe((posts)=>{
+      this.postsList = posts.map(e=>{
+        return e.payload.doc.data()
+      });
+     });
     this.selectedtitle = this.realUserList.value.selectRealUser;
-    console.log('selectedtitle :>> ', this.selectedtitle);
     // this.realUserList.reset()
   }
 

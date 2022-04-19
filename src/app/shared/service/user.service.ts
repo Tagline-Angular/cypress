@@ -54,7 +54,11 @@ export class UserService {
   }
 
   public getAllUser(){
-    return this.firestore.collection('Status').snapshotChanges();
+    return this.firestore.collection('Users').snapshotChanges();
+  }
+
+  public getPostByUser(userId: string){
+    return this.firestore.collection('Status', ref => ref.where("uid", "==", userId)).snapshotChanges();
   }
 
   public updateStatus(userInfo: any,userId:string){

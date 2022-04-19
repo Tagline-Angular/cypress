@@ -3,10 +3,10 @@
     <form [formGroup]="realUserList">
       <div class="row">
         <div class="col-12 mb-2">
-          <select id="botUserDrropdown" formControlName="selectRealUser" class="dropdown-toggle form-control">
+          <select id="realUserDropdown" formControlName="selectRealUser" class="dropdown-toggle form-control">
             <option value="" selected disabled>Select User</option>
-            <option *ngFor="let bot of users" [value]="bot?.name "  >
-              {{ bot?.name }}
+            <option *ngFor="let user of users" [value]="user?.user_id">
+              {{ user?.user_name }}
             </option>
           </select>
         </div>
@@ -15,19 +15,19 @@
   </div>
   <div>
     <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
-      data-coreui-target="#exampleModalScrollable" (click)="searchByUserName()">
+      data-coreui-target="#exampleModalScrollable" (click)="getPostForUser()">
       Search
     </button>
   </div>
 </form>
 
-<ng-container *ngIf="filterUserList?.length">
+<ng-container *ngIf="postsList?.length">
   <h4 class="mt-3">Posts of {{ selectedtitle }}</h4>
   <div class="user-box my-0 py-0">
     <div class="col-12">
       <div class="row">
         <div class="col-md-12">
-          <table class="table text-dark" *ngIf="filterUserList?.length">
+          <table class="table text-dark" *ngIf="postsList?.length">
             <thead>
               <tr>
                 <th class="border-0" scope="col">No</th>
@@ -38,7 +38,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of filterUserList; let i = index">
+              <tr *ngFor="let item of postsList; let i = index">
                 <td scope="row">{{ i + 1 }}</td>
                 <td scope="row">{{ item?.text }}</td>
                 <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
