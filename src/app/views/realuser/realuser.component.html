@@ -77,7 +77,13 @@
     </div>
   </div>
 </ng-container>
-
+<div class="row" *ngIf="!postsList?.length && isUserPost">
+  <div class="col-md-12 mt-3">
+    <div class="card py-4 px-3">
+      <h4>No user post found!!</h4>
+    </div>
+  </div>
+</div>
 <!-- Like Modal -->
 <div
   class="modal fade"

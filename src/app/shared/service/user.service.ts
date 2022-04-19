@@ -17,8 +17,8 @@ export class UserService {
     });
   }
 
-  public getUser() {
-    return this.firestore.collection("botuser", (ref) => ref.orderBy("date", "desc")).snapshotChanges();
+  public getUser(key: string, action: any) {
+    return this.firestore.collection("botuser",(ref)=> ref.orderBy(key,action)).snapshotChanges();
   }
 
   public remove(id: any) {
@@ -31,7 +31,9 @@ export class UserService {
   }
 
   public getAllUser() {
-    return this.firestore.collection("Users").snapshotChanges();
+    return this.firestore
+      .collection("Users", (ref) => ref.orderBy("user_name","asc"))
+      .snapshotChanges();
   }
 
   public getPostByUser(userId: string) {
