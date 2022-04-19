@@ -42,11 +42,6 @@ export class AddbotuserComponent implements OnInit {
           item.name === this.Botuserform.value.name ||
           item.email === this.Botuserform.value.email
       );
-      console.log(
-        "duplicateRecord.length, duplicateRecord ====>",
-        duplicateRecord.length,
-        duplicateRecord
-      );
       if (this.currentUserId) {
         if (duplicateRecord.length > 1) {
           this.toastr.error(
@@ -70,6 +65,7 @@ export class AddbotuserComponent implements OnInit {
             if (res) {
               this.toastr.success("User added!");
               this.Botuserform.reset();
+              this.getUserData();
             }
           });
         }
