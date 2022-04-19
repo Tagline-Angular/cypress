@@ -41,7 +41,7 @@
                 !Botuserform.get('email')?.valid &&
                 Botuserform.get('email')?.touched
               "
-            >   
+            >
               <small class="text-danger">Please enter valid email</small>
             </div>
           </div>
@@ -86,7 +86,10 @@
               <td>{{ item.name }}</td>
               <td>{{ item.email }}</td>
               <td>
-                <button class="btn btn-success" (click)="onEdit(item, item.id)">
+                <button
+                  class="btn btn-success mr-2"
+                  (click)="onEdit(item, item.id)"
+                >
                   Edit
                 </button>
                 <button
@@ -134,6 +137,7 @@
                         <button
                           type="button"
                           class="btn btn-primary"
+                          data-dismiss="modal"
                           (click)="deleteUser(item.id)"
                         >
                           Delete

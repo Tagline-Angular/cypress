@@ -15,17 +15,19 @@ export class UserService {
       this.basepath.add(userDetails);
       console.log("userdetails :>> ", userDetails);
       resolve(true);
+      if(userDetails){
+        this.getUser()
+      }
     });
   }
 
   public getUser() {
-    return this.firestore.collection("botuser").snapshotChanges();
+    return this.firestore.collection("botuser",(ref)=> ref.orderBy("date","desc")).snapshotChanges();
   }
 
   public remove(id: any) {
     const basePath = this.firestore.collection("botuser").doc(id);
     basePath.ref.delete();
-    console.log("this.basepath :>> ", this.basepath);
   }
 
   public updateuser(userInfo: any, userId: string) {
@@ -37,9 +39,7 @@ export class UserService {
   }
 
   public getPostByUser(userId: string) {
-    return this.firestore
-      .collection("Status", (ref) => ref.where("uid", "==", userId))
-      .snapshotChanges();
+    return this.firestore.collection("Status", (ref) => ref.where("uid", "==", userId)).snapshotChanges();
   }
 
   public updateStatus(userInfo: any, userId: string) {

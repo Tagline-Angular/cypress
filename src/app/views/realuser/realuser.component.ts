@@ -37,12 +37,14 @@ export class RealuserComponent implements OnInit {
 
   public getPostForUser(): void {
     const id = this.realUserList.value.selectRealUser;
-     this.userservice.getPostByUser(id).subscribe((posts)=>{
-      this.postsList = posts.map(e=>{
-        return e.payload.doc.data()
+    this.userservice.getPostByUser(id).subscribe((posts) => {
+      this.postsList = posts.map((e) => {
+        return e.payload.doc.data();
       });
-     });
-    this.selectedtitle = this.realUserList.value.selectRealUser;
+    });
+    this.selectedtitle = this.users.filter(
+      (item) => item.id === id
+    )[0].user_name;
     // this.realUserList.reset()
   }
 
@@ -79,7 +81,6 @@ export class RealuserComponent implements OnInit {
   }
 
   public submitLike(): void {
-
     let likes: number = this.postData.likeCount;
     const totalLikes = likes ? likes + 1 : 1;
     this.postData.likeCount = totalLikes;
