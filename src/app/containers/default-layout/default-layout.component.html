@@ -11,12 +11,7 @@
 
 <div class="app-body">
   <app-sidebar>
-  <!-- <app-sidebar #appSidebar [fixed]="true" [display]="'lg'" [minimized]="sidebarMinimized"
-    (minimizedChange)="toggleMinimize($event)">
-    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="appSidebar.minimized">
-    </app-sidebar-nav>
-    <app-sidebar-minimizer></app-sidebar-minimizer> -->
-    <div class="row">
+  <div class="row">
       <div class="col-4">
         <ul class="nav navbar-nav">
           <li class="nav-item">
@@ -34,7 +29,7 @@
   <!-- Main content -->
   <main class="main">
     <!-- Breadcrumb -->
-    <cui-breadcrumb></cui-breadcrumb>
+    <!-- <cui-breadcrumb></cui-breadcrumb> -->
     <div class="container-fluid">
       <router-outlet></router-outlet>
     </div><!-- /.container-fluid -->

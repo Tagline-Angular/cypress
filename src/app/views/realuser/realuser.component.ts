@@ -43,8 +43,7 @@ export class RealuserComponent implements OnInit {
       });
     });
     this.selectedtitle = this.users.filter(
-      (item) => item.id === id
-    )[0].user_name;
+      (item) => item.id === id)[0].user_name;
     // this.realUserList.reset()
   }
 

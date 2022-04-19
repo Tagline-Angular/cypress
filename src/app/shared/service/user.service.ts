@@ -8,21 +8,18 @@ export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore) { }
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
       this.basepath.add(userDetails);
       console.log("userdetails :>> ", userDetails);
       resolve(true);
-      if(userDetails){
-        this.getUser()
-      }
     });
   }
 
   public getUser() {
-    return this.firestore.collection("botuser",(ref)=> ref.orderBy("date","desc")).snapshotChanges();
+    return this.firestore.collection("botuser", (ref) => ref.orderBy("date", "desc")).snapshotChanges();
   }
 
   public remove(id: any) {

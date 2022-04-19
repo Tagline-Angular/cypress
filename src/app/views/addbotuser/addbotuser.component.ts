@@ -65,7 +65,7 @@ export class AddbotuserComponent implements OnInit {
               this.Botuserform.reset()
             }
           });
-        }
+        } 
       }
     }
   }
@@ -80,8 +80,8 @@ export class AddbotuserComponent implements OnInit {
 
   public deleteUser(id): void {
     this.userservice.remove(id);
-    this.toastr.success("User deleted!");
     this.getUserData();
+    this.toastr.success("User deleted!");
   }
 
   onEdit(item, id) {

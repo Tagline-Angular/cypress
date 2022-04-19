@@ -3,6 +3,7 @@
     margin: 0 15px 16px;
     border-radius: 5px;
     padding: 12px 0px 6px;  
+    margin-top: 30px;
 }
 .add-btn{
     margin-top: 28px;
@@ -12,4 +13,22 @@
 }
 .user-box h4{
     text-transform: capitalize;
+}
+
+.breadcrumb {
+    position: relative;
+    border-radius: 0;
+    border-bottom: 1px solid #c8ced3;
+}
+
+.breadcrumb {
+    display: -ms-flexbox;
+    display: none;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    list-style: none;
+    background-color: #fff;
+    border-radius: 0;
 }
