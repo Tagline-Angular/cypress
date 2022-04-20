@@ -8,7 +8,7 @@ export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) {}
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
