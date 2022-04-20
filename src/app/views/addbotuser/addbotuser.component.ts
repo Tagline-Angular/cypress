@@ -74,17 +74,22 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public getUserData(): void {
-    this.userservice.getUser("date","desc").subscribe((data) => {
+    this.userservice.getUser("date", "desc").subscribe((data) => {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
     });
   }
 
-  public deleteUser(id): void {
-    this.userservice.remove(id);
-    this.getUserData();
+  public handleDelete(id: string) {
+    this.currentUserId = id;
+  }
+
+  public deleteUser(): void {
+    this.userservice.remove(this.currentUserId);
     this.toastr.success("User deleted!");
+    this.getUserData();
+    this.currentUserId = "";
   }
 
   onEdit(item, id) {

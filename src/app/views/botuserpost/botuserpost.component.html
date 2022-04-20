@@ -1,0 +1,62 @@
+<div class="user-box">
+  <div class="col-12">
+    <h4>{{ h4 }}</h4>
+    <form [formGroup]="botUserPostForm">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="name" class="form-label">Select Bot User</label>
+            <select
+              id="botUserDrropdown"
+              formControlName="selectBotUser"
+              class="dropdown-toggle form-control"
+            >
+              <option value="" disabled selected>Select Bot User</option>
+              <option *ngFor="let bot of botLists"  [value]="bot">
+                {{ bot.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label for="name" class="form-label">Comment</label>
+            <textarea
+              rows="2"
+              type="text"
+              class="form-control"
+              id="comment"
+              name="comment"
+              formControlName="comment"
+              placeholder="Add email"
+              autocomplete=""
+            ></textarea>
+            <!-- <div
+              *ngIf="
+                !botUserPostForm.get('comment')?.valid &&
+                botUserPostForm.get('comment')?.touched
+              "
+            >
+              <small class="text-danger">Please enter Comment</small>
+            </div> -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="col-md-3">
+            <div class="add-btn">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!botUserPostForm.valid"
+                (click)="onSubmit()"
+              >
+                {{ submit }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
