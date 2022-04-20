@@ -1,35 +1,33 @@
+import { BotuserpostComponent } from './../botuserpost/botuserpost.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AddbotuserComponent } from '../addbotuser/addbotuser.component';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { RealuserComponent } from '../realuser/realuser.component';
-import { ViewbotuserComponent } from '../viewbotuser/viewbotuser.component';
-
-import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     // component: AddbotuserComponent,
-    redirectTo:'user',
-
+    redirectTo: "user",
   },
   {
-    path: 'user',
+    path: "user",
     component: AddbotuserComponent,
-    children: [
-    
-    ]
+    children: [],
   },
   {
-    path: 'edit-user',
-    component: EditUserComponent
+    path: "edit-user",
+    component: EditUserComponent,
   },
   {
-    path: 'real-user',
+    path: "real-user",
     component: RealuserComponent,
   },
-
+  {
+    path: "bot-post",
+    component: BotuserpostComponent,
+  },
 ];
 
 

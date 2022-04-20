@@ -48,6 +48,7 @@ import { ViewbotuserComponent } from './views/viewbotuser/viewbotuser.component'
 import { EditUserComponent } from './views/edit-user/edit-user.component';
 import { ToastrModule } from 'ngx-toastr';
 import { NgSelectModule } from "@ng-select/ng-select";
+import { BotuserpostComponent } from './views/botuserpost/botuserpost.component';
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
     RealuserComponent,
     ViewbotuserComponent,
     EditUserComponent,
+    BotuserpostComponent,
     
   ],
   providers: [{
