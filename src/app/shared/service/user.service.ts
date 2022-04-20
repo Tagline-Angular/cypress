@@ -60,6 +60,12 @@ export class UserService {
       .snapshotChanges();
   }
 
+  public getAllUserPosts() {
+    return this.firestore.collection("Status", (ref) =>
+      ref.orderBy("time", "desc")
+    ).snapshotChanges();
+  };
+
   public addComment(postId: string, commentData: any) {
     return this.firestore
       .collection("Status/" + postId + "/comments")

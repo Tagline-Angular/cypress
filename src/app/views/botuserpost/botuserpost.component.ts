@@ -29,6 +29,7 @@ export class BotuserpostComponent implements OnInit {
       comment: new FormControl(null, [Validators.required]),
     });
     this.getBotUserList();
+    this.getAllPosts();
   }
 
   onSubmit() {
@@ -55,22 +56,24 @@ export class BotuserpostComponent implements OnInit {
         if (res) {
           this.toastr.success("Post added!");
           this.botUserPostForm.reset();
-          // this.getUserData();
+          this.getAllPosts();
         }
       });
     }
-    this.userservice.getPostByUser(botUserData[0]?.id).subscribe((posts) => {
-      this.botPostsList = posts.map((e) => {
-        return e.payload.doc.data();
-      });
-      // this.isUserPost = true;
-    });
   }
 
   public getBotUserList(): void {
     this.userservice.getUser("name", "asc").subscribe((data) => {
       this.botLists = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+    });
+  }
+
+  public getAllPosts() {
+    this.userservice.getAllUserPosts().subscribe((res) => {
+      this.botPostsList = res.map((e) => {
+        return e.payload.doc.data();
       });
     });
   }
