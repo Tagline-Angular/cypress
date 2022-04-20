@@ -17,6 +17,10 @@ export class UserService {
     });
   }
 
+  public addBotUserPost(botUserDetails: any): any {
+    return this.firestore.collection("Status").add(botUserDetails);
+  }
+
   public getUser(key: string, action: any) {
     return this.firestore
       .collection("botuser", (ref) => ref.orderBy(key, action))
