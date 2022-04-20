@@ -29,3 +29,11 @@ $spinkit-spinner-color: $body-color;
 h4 {
   color: #333;
 }
+
+.remove-btn button:last-child {
+  display: none !important;
+}
+
+.app.header-fixed.sidebar-show button:nth-child(5) {
+  display: none !important;
+}
