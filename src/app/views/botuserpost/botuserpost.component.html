@@ -6,50 +6,31 @@
         <div class="col-md-3">
           <div class="mb-3">
             <label for="name" class="form-label">Select Bot User</label>
-            <select
-              id="botUserDrropdown"
-              formControlName="selectBotUser"
-              class="dropdown-toggle form-control"
-            >
-              <option value="" disabled selected>Select Bot User</option>
-              <option *ngFor="let bot of botLists"  [value]="bot">
+            <select id="botUserDrropdown" formControlName="selectBotUser" class="dropdown-toggle form-control">
+              <option value="" disabled>Select Bot User</option>
+              <option *ngFor="let bot of botLists" [value]="bot.id">
                 {{ bot.name }}
               </option>
             </select>
+            <div *ngIf="botUserPostForm.get('selectBotUser')?.touched">
+              <small class="text-danger">Please Select User</small>
+            </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="mb-3">
             <label for="name" class="form-label">Comment</label>
-            <textarea
-              rows="2"
-              type="text"
-              class="form-control"
-              id="comment"
-              name="comment"
-              formControlName="comment"
-              placeholder="Add email"
-              autocomplete=""
-            ></textarea>
-            <!-- <div
-              *ngIf="
-                !botUserPostForm.get('comment')?.valid &&
-                botUserPostForm.get('comment')?.touched
-              "
-            >
+            <textarea rows="2" type="text" class="form-control" id="comment" name="comment" formControlName="comment"
+              placeholder="Add Comment" autocomplete=""></textarea>
+            <div *ngIf="botUserPostForm.get('comment')?.touched">
               <small class="text-danger">Please enter Comment</small>
-            </div> -->
+            </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="col-md-3">
             <div class="add-btn">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="!botUserPostForm.valid"
-                (click)="onSubmit()"
-              >
+              <button type="submit" class="btn btn-primary" [disabled]="!botUserPostForm.valid" (click)="onSubmit()">
                 {{ submit }}
               </button>
             </div>
@@ -60,3 +41,31 @@
   </div>
 </div>
 
+<ng-container *ngIf="botPostsList?.length">
+  <div class="user-box my-0 py-0">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table text-dark" *ngIf="botPostsList?.length">
+            <thead>
+              <tr>
+                <th class="border-0" scope="col">No</th>
+                <th class="border-0" scope="col">Content</th>
+                <th class="border-0" scope="col">Likes</th>
+                <th class="border-0" scope="col">Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of botPostsList; let i = index">
+                <td scope="row">{{ i + 1 }}</td>
+                <td scope="row">{{ item?.text }}</td>
+                <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
+                <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
