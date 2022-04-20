@@ -55,7 +55,7 @@ export class RealuserComponent implements OnInit {
       comment: new FormControl("", Validators.required),
     });
     this.botUserLikeForm = new FormGroup({
-      selectBot: new FormControl(""),
+      selectBot: new FormControl("" ,Validators.required)
     });
   }
 

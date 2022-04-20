@@ -108,13 +108,20 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="botUserLikeForm">
-          <select formControlName="selectBot" class="form-control">
-            <option value="" disabled selected>Select Bot User</option>
-            <option [value]="item.id" *ngFor="let item of botLists">
-              {{ item.name }}
-            </option>
-          </select>
-        </form>
+          <select
+                id="botUserDrropdown"
+                formControlName="selectBot"
+                class="dropdown-toggle form-control"
+              >
+                <option value="" disabled selected>Select Bot User</option>
+                <option [value]="item.id" *ngFor="let item of botLists">
+                  {{ item.name }}
+                </option>
+              </select>
+              <div *ngIf="botUserLikeForm.get('selectBot')?.touched && botUserLikeForm.get('selectBot')?.invalid">
+                <small class="text-danger">Please Select User</small>
+              </div>
+          </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -125,6 +132,7 @@
           class="btn btn-primary"
           data-dismiss="modal"
           (click)="submitLike()"
+          [disabled]="!botUserLikeForm.valid"
         >
           Submit
         </button>
@@ -169,6 +177,9 @@
                   {{ item.name }}
                 </option>
               </select>
+              <div *ngIf="botUserCommentForm.get('selectBot')?.touched && botUserCommentForm.get('selectBot')?.invalid">
+                <small class="text-danger">Please Select User</small>
+              </div>
             </div>
           </div>
           <div class="row">
@@ -180,6 +191,9 @@
                 rows="2"
                 placeholder="Write comment"
               ></textarea>
+            </div>
+            <div *ngIf="botUserCommentForm.get('comment')?.touched && botUserCommentForm.get('comment')?.invalid">
+              <small class="text-danger">Please add comment</small>
             </div>
           </div>
         </form>
@@ -193,6 +207,7 @@
           class="btn btn-primary"
           data-dismiss="modal"
           (click)="submitComment()"
+          [disabled]="!botUserCommentForm.valid"
         >
           Submit
         </button>
