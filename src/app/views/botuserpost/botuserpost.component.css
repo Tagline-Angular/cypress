@@ -5,6 +5,10 @@
     padding: 12px 0px 6px;
 }
 
+.label-text{
+    margin: 0 15px 16px;
+}
+
 .add-btn {
     margin-top: 28px;
 }

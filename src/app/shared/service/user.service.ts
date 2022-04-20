@@ -8,7 +8,7 @@ export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore) {}
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
@@ -59,6 +59,12 @@ export class UserService {
       .collection("comments")
       .snapshotChanges();
   }
+
+  public getAllUserPosts() {
+    return this.firestore.collection("Status", (ref) =>
+      ref.orderBy("time", "desc")
+    ).snapshotChanges();
+  };
 
   public addComment(postId: string, commentData: any) {
     return this.firestore
