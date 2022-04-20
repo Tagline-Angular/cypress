@@ -34,13 +34,9 @@ export class BotuserpostComponent implements OnInit {
 
   onSubmit() {
     // var utc = new Date(this.currentDate.toUTCString().slice(0, -4));
-    // console.log('utc :>> ',utc);
-    // console.log('this.currentDate :>> ', this.currentDate);
     const time = moment().utc().format(`MMMM D, yyyy h:mm:ss A z`);
-    console.log('time :>> ', time);
 
     const botUserData = this.botLists.filter((e) => e.id === this.botUserPostForm.value?.selectBotUser);
-    console.log('botUserdata :>> ', botUserData);
     if (this.botUserPostForm.valid) {
       const data1 = {
         align: 2,
@@ -58,10 +54,8 @@ export class BotuserpostComponent implements OnInit {
         type: 'text',
         uid: botUserData[0]?.id
       };
-      console.log('data1 :>> ', data1);
       this.userservice.addBotUserPost(data1).then((res: any) => {
         if (res) {
-          console.log('res :>> ', res);
           this.toastr.success("Post added!");
           this.botUserPostForm.reset();
           // this.getUserData();
@@ -72,7 +66,6 @@ export class BotuserpostComponent implements OnInit {
       this.botPostsList = posts.map((e) => {
         return e.payload.doc.data();
       });
-      console.log('this.botPostsList :>> ', this.botPostsList);
       // this.isUserPost = true;
     });
   }
@@ -84,18 +77,4 @@ export class BotuserpostComponent implements OnInit {
       });
     });
   }
-
-  // public getPostForUser(): void {
-  //   const id = this.botUserPostForm.value.selectRealUser;
-  //   this.userservice.getPostByUser(id).subscribe((posts) => {
-  //     this.botPostsList = posts.map((e) => {
-  //       return e.payload.doc.data();
-  //     });
-  //     console.log('this.botPostsList :>> ', this.botPostsList);
-  //     // this.isUserPost = true;
-  //   });
-  //   // this.selectedtitle = this.users.filter(
-  //   //   (item) => item.id === id
-  //   // )[0].user_name;
-  // }
 }

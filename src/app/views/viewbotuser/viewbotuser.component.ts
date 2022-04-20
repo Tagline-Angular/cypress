@@ -7,17 +7,9 @@ import { UserService } from '../../shared/service/user.service';
   styleUrls: ['./viewbotuser.component.css']
 })
 export class ViewbotuserComponent implements OnInit {
-  // public users:any=[]
-  constructor(private userservice:UserService) { }
+  constructor(private userservice: UserService) { }
 
   ngOnInit(): void {
-  //  this.getUserData();
   }
 
-  // public getUserData(): void {
-  //   this.userservice.getUser().then((res: any) => {
-  //     console.log('res :>> ', res);
-  //      this.users = res;
-  //   })
-  // }
 }

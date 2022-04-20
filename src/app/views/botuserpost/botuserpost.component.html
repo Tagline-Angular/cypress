@@ -12,17 +12,17 @@
                 {{ bot.name }}
               </option>
             </select>
-            <div *ngIf="botUserPostForm.get('selectBotUser')?.touched">
+            <div *ngIf="botUserPostForm.get('selectBotUser')?.touched && botUserPostForm.get('selectBotUser')?.invalid">
               <small class="text-danger">Please Select User</small>
             </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="mb-3">
-            <label for="name" class="form-label">Comment</label>
+            <label for="name" class="form-label">Post Content</label>
             <textarea rows="2" type="text" class="form-control" id="comment" name="comment" formControlName="comment"
               placeholder="Add Comment" autocomplete=""></textarea>
-            <div *ngIf="botUserPostForm.get('comment')?.touched">
+            <div *ngIf="botUserPostForm.get('comment')?.touched && botUserPostForm.get('comment')?.invalid">
               <small class="text-danger">Please enter Comment</small>
             </div>
           </div>
