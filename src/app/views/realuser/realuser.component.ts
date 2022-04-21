@@ -40,7 +40,7 @@ export class RealuserComponent implements OnInit {
     const id = this.realUserList.value.selectRealUser;
     this.userservice.getPostByUser(id).subscribe((posts) => {
       this.postsList = posts.map((e) => {
-        return e.payload.doc.data();
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
       this.isUserPost = true;
     });
@@ -55,7 +55,7 @@ export class RealuserComponent implements OnInit {
       comment: new FormControl("", Validators.required),
     });
     this.botUserLikeForm = new FormGroup({
-      selectBot: new FormControl("" ,Validators.required)
+      selectBot: new FormControl("", Validators.required),
     });
   }
 
@@ -108,7 +108,6 @@ export class RealuserComponent implements OnInit {
     this.userservice.addComment(this.postData.id, commentUserObj);
     this.botUserCommentForm.reset();
     this.toastr.success("Comment added!");
-    this.realUserList.reset();
   }
 
   public getBotUser(id: string) {
