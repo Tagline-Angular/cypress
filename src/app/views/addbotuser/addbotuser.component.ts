@@ -20,7 +20,7 @@ export class AddbotuserComponent implements OnInit {
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.Botuserform = new FormGroup({
@@ -39,9 +39,10 @@ export class AddbotuserComponent implements OnInit {
     if (this.Botuserform.valid) {
       const duplicateRecord = this.users.filter(
         (item) =>
-          item.name === this.Botuserform.value.name ||
+          item.name === this.Botuserform.value.name.toLowerCase() ||
           item.email === this.Botuserform.value.email
       );
+      console.log('duplicateRecord :>> ', duplicateRecord);
       if (this.currentUserId) {
         if (duplicateRecord.length > 1) {
           this.toastr.error(
@@ -68,7 +69,7 @@ export class AddbotuserComponent implements OnInit {
               this.getUserData();
             }
           });
-        } 
+        }
       }
     }
   }
