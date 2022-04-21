@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../shared/service/user.service";
 import { ToastrService } from "ngx-toastr";
 import * as moment from "moment";
+import { BotuserpostComponent } from "../botuserpost/botuserpost.component";
+
 @Component({
   selector: "app-addbotuser",
   templateUrl: "./addbotuser.component.html",
@@ -23,8 +25,9 @@ export class AddbotuserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
     this.Botuserform = new FormGroup({
-      name: new FormControl(null, [Validators.required]),
+      name: new FormControl(null, [Validators.required,BotuserpostComponent.noWhiteSpace]),
       email: new FormControl(null, [
         Validators.required,
         Validators.email,
@@ -42,7 +45,6 @@ export class AddbotuserComponent implements OnInit {
           item.name === this.Botuserform.value.name.toLowerCase() ||
           item.email === this.Botuserform.value.email
       );
-      console.log('duplicateRecord :>> ', duplicateRecord);
       if (this.currentUserId) {
         if (duplicateRecord.length > 1) {
           this.toastr.error(
@@ -116,4 +118,8 @@ export class AddbotuserComponent implements OnInit {
     this.currentUserId = "";
     this.h4 = "Add Bot User";
   }
+
+  get fControl() {
+    return this.Botuserform.controls;
+  } 
 }

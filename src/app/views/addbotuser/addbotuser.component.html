@@ -6,42 +6,23 @@
         <div class="col-md-3">
           <div class="mb-3">
             <label for="name" class="form-label">Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              formControlName="name"
-              placeholder="Add UserName"
-            />
-            <div
-              *ngIf="
-                !Botuserform.get('name')?.valid &&
-                Botuserform.get('name')?.touched
-              "
-            >
-              <small class="text-danger">Please enter the Username</small>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name"
+              placeholder="Add UserName" />
+            <div class="text-danger" *ngIf="fControl['name'].touched && fControl['name'].errors?.required">
+              Please enter the Username
             </div>
+            <div *ngIf="fControl['name'].errors?.noWhiteSpace" class="text-danger">White spaces are not allowed</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="mb-3">
             <label for="name" class="form-label">Email</label>
-            <input
-              type="text"
-              class="form-control"
-              id="email"
-              name="email"
-              formControlName="email"
-              placeholder="Add email"
-              autocomplete=""
-            />
-            <div
-              *ngIf="
+            <input type="text" class="form-control" id="email" name="email" formControlName="email"
+              placeholder="Add email" autocomplete="" />
+            <div *ngIf="
                 !Botuserform.get('email')?.valid &&
                 Botuserform.get('email')?.touched
-              "
-            >
+              ">
               <small class="text-danger">Please enter valid email</small>
             </div>
           </div>
@@ -49,12 +30,9 @@
         <div class="col-md-3">
           <div class="col-md-3">
             <div class="add-btn">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="!Botuserform.valid"
-                (click)="onSubmit()"
-              >
+              <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+
+                <!-- [disabled]="!Botuserform.valid" -->
                 {{ submit }}
               </button>
             </div>
@@ -65,7 +43,7 @@
   </div>
 </div>
 <!-- <router-outlet></router-outlet> -->
-  <h4 class="label-text">List of all Bot users</h4>
+<h4 class="label-text">List of all Bot users</h4>
 <div class="user-box my-0 py-0">
   <div class="col-12">
     <div class="row">
@@ -87,21 +65,14 @@
               <td>{{ item.name }}</td>
               <td>{{ item.email }}</td>
               <td>
-                <button
-                  class="btn btn-success mr-2"
-                  (click)="onEdit(item, item.id)"
-                >
+                <button class="btn btn-success mr-2" (click)="onEdit(item, item.id)">
                   Edit
                 </button>
-                <button
-                  class="btn btn-danger"
-                  data-toggle="modal"
-                  data-target="#deleteModel"
-                  (click)="handleDelete(item.id)"
-                >
+                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModel"
+                  (click)="handleDelete(item.id)">
                   Delete
                 </button>
-              
+
               </td>
             </tr>
           </tbody>
@@ -111,27 +82,16 @@
   </div>
 </div>
 
-  <!-- Model section start -->
-  <div
-  class="modal fade"
-  id="deleteModel"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<!-- Model section start -->
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
           Confirm Delete
         </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -139,20 +99,11 @@
         Are you sure, you want to delete this user?
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-dismiss="modal"
-          (click)="deleteUser()"
-        >
-          Delete 
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteUser()">
+          Delete
         </button>
       </div>
     </div>

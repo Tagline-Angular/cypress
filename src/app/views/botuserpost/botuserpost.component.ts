@@ -1,4 +1,4 @@
-import { Validators } from "@angular/forms";
+import { AbstractControl, ValidationErrors, Validators } from "@angular/forms";
 import { FormControl } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "./../../shared/service/user.service";
@@ -76,5 +76,12 @@ export class BotuserpostComponent implements OnInit {
         return e.payload.doc.data();
       });
     });
+  }
+
+  static noWhiteSpace(control: AbstractControl): ValidationErrors | null {
+    if ((control.value as string)?.indexOf(' ') >= 0) {
+      return { noWhiteSpace: true }
+    }
+    return null;
   }
 }
