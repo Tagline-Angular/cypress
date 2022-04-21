@@ -42,6 +42,7 @@ export class UserService {
       .snapshotChanges();
   }
 
+  //like and comments update in firebase
   public getPostByUser(userId: string) {
     return this.firestore
       .collection("Status", (ref) => ref.where("uid", "==", userId))
@@ -49,7 +50,7 @@ export class UserService {
   }
 
   public updateStatus(userInfo: any, userId: string) {
-    return this.firestore.collection("/Status").doc(userId).update(userInfo);
+    this.firestore.collection("Status").doc(userId).update(userInfo);
   }
 
   public getCommentsForPost(postId: string) {
@@ -61,10 +62,10 @@ export class UserService {
   }
 
   public getAllUserPosts() {
-    return this.firestore.collection("Status", (ref) =>
-      ref.orderBy("time", "desc")
-    ).snapshotChanges();
-  };
+    return this.firestore
+      .collection("Status", (ref) => ref.orderBy("time", "desc"))
+      .snapshotChanges();
+  }
 
   public addComment(postId: string, commentData: any) {
     return this.firestore

@@ -21,7 +21,7 @@ export class BotuserpostComponent implements OnInit {
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.botUserPostForm = new FormGroup({
