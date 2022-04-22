@@ -15,7 +15,7 @@ export class BotuserpostComponent implements OnInit {
   public botUserPostForm!: FormGroup;
   public submit = "Submit";
   public botLists: any = [];
-  public h4 = "Add Bot User Post";
+  public h4 = "Add Bot-User Post";
   public botPostsList: any = [];
 
   constructor(

@@ -5,9 +5,9 @@
       <div class="row">
         <div class="col-md-3">
           <div class="mb-3">
-            <label for="name" class="form-label">Select Bot User</label>
+            <label for="name" class="form-label">Select Bot-User</label>
             <select id="botUserDrropdown" formControlName="selectBotUser" class="dropdown-toggle form-control" placeholder="Add Bot User">
-              <option value="" disabled selected>Select Bot User</option>
+              <option value="" disabled selected>Select Bot-User</option>
               <option *ngFor="let bot of botLists" [value]="bot.id">
                 {{ bot.name }}
               </option>
@@ -23,7 +23,7 @@
             <textarea rows="2" type="text" class="form-control" id="comment" name="comment" formControlName="comment"
               placeholder="Add Post Content" autocomplete=""></textarea>
             <div *ngIf="botUserPostForm.get('comment')?.touched && botUserPostForm.get('comment')?.invalid">
-              <small class="text-danger">Please enter Comment</small>
+              <small class="text-danger m-1">Please enter Comment</small>
             </div>
           </div>
         </div>

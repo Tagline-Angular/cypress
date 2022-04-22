@@ -22,12 +22,15 @@ export class RealuserComponent implements OnInit {
   public postsList: any = [];
   public postData: any;
   public isUserPost: boolean = false;
+  public botUserunLikeForm!: FormGroup;
+  public buttonName = "Like";
+  public isAlreadyLiked: boolean = false;
 
   public search: boolean = false;
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createFormForBotList();
@@ -57,6 +60,7 @@ export class RealuserComponent implements OnInit {
     this.botUserLikeForm = new FormGroup({
       selectBot: new FormControl("", Validators.required),
     });
+    this.botUserunLikeForm = new FormGroup({})
   }
 
   public createFormForRealUserList(): void {
@@ -81,15 +85,61 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public submitLike(): void {
+  // select method for bot selector
+  selectBotUser(event) {
+    if (this.postData.liked_user_ids && this.postData.liked_user_ids.includes(event.target.value)) {
+      this.buttonName = "UnLike";
+      this.isAlreadyLiked = true;
+    } else {
+      this.isAlreadyLiked = false;
+      this.buttonName = "Like";
+    }
+  }
+
+  public performLike() {
     let likes: number = this.postData.likeCount;
     const totalLikes = likes ? likes + 1 : 1;
     this.postData.likeCount = totalLikes;
-    if (!this.postData.liked_user_ids) this.postData.liked_user_ids = [];
     this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.botUserLikeForm.reset();
     this.toastr.success("Like added!");
+  }
+
+  public performUnLike() {
+    let likes: number = this.postData.likeCount;
+    const totalLikes = likes ? likes - 1 : 1;
+    this.postData.likeCount = totalLikes;
+  }
+
+  public submitLikeUnlike() {
+    if (this.isAlreadyLiked) {
+      const likes: number = this.postData.likeCount;
+      const totalLikes = likes ? likes - 1 : 1;
+      this.postData.likeCount = totalLikes;
+      // remove liked user id from array
+      const index = this.postData.liked_user_ids.indexOf(this.botUserLikeForm.value.selectBot);
+      if (index > -1) {
+        this.postData.liked_user_ids.splice(index, 1);
+      }
+    } else {
+      let likes: number = this.postData.likeCount;
+      const totalLikes = likes ? likes + 1 : 1;
+      this.postData.likeCount = totalLikes;
+      this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
+    }
+    this.userservice.updateStatus(this.postData, this.currentPostId);
+    this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
+    this.botUserLikeForm.reset();
+    this.buttonName = 'Like';
+    this.isAlreadyLiked = false;
+  }
+
+  public handleCancel() {
+    this.botUserLikeForm.reset();
+    this.botUserCommentForm.reset();
+    this.buttonName = 'Like';
+    this.isAlreadyLiked = false;
   }
 
   public submitComment(): void {

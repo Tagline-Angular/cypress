@@ -77,11 +77,11 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="botUserLikeForm">
-          <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control">
-            <option value="" disabled selected>Select Bot User</option>
-            <option [value]="item.id" *ngFor="let item of botLists" >
+          <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control"
+            (change)="selectBotUser($event)" *ngIf="buttonName ? buttonName : 'Like' ">
+            <option value="" disabled selected>Select Bot-User</option>
+            <option [value]="item.id" *ngFor="let item of botLists">
               {{ item.name }}
-              
             </option>
           </select>
           <div *ngIf="
@@ -91,14 +91,14 @@
             <small class="text-danger">Please Select User</small>
           </div>
         </form>
+        <div class="mt-2" *ngIf="isAlreadyLiked">Already liked post by this bot user!</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitLike()" 
-          [disabled]="!botUserLikeForm.valid">
-          Submit
+        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-dismiss="modal">
+          {{buttonName}}
         </button>
       </div>
     </div>
@@ -149,7 +149,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()"

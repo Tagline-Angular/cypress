@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../shared/service/user.service";
 import { ToastrService } from "ngx-toastr";
 import * as moment from "moment";
-import { BotuserpostComponent } from "../botuserpost/botuserpost.component";
+import { UsernameValidator } from "./username.validator";
 
 @Component({
   selector: "app-addbotuser",
@@ -27,7 +27,7 @@ export class AddbotuserComponent implements OnInit {
   ngOnInit(): void {
     
     this.Botuserform = new FormGroup({
-      name: new FormControl(null, [Validators.required,BotuserpostComponent.noWhiteSpace]),
+      name: new FormControl(null, [Validators.required,UsernameValidator.noWhiteSpace]),
       email: new FormControl(null, [
         Validators.required,
         Validators.email,
@@ -99,6 +99,7 @@ export class AddbotuserComponent implements OnInit {
     this.currentUserId = id;
     this.Botuserform.patchValue(item);
     this.h4 = "Update Bot User";
+    this.buttonName ="update"
     window.scroll({
       top: 0,
       behavior: "smooth",
@@ -119,7 +120,7 @@ export class AddbotuserComponent implements OnInit {
     this.h4 = "Add Bot User";
   }
 
-  get fControl() {
+  get formControl() {
     return this.Botuserform.controls;
   } 
 }

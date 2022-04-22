@@ -8,10 +8,10 @@
             <label for="name" class="form-label">Username</label>
             <input type="text" class="form-control" id="name" name="name" formControlName="name"
               placeholder="Add UserName" />
-            <div class="text-danger" *ngIf="fControl['name'].touched && fControl['name'].errors?.required">
-              Please enter the Username
+            <div class="text-danger" *ngIf="formControl['name'].touched && formControl['name'].errors?.required">
+              Please enter the username
             </div>
-            <div *ngIf="fControl['name'].errors?.noWhiteSpace" class="text-danger">White spaces are not allowed</div>
+            <div *ngIf="formControl['name'].errors?.noWhiteSpace" class="text-danger">White spaces are not allowed</div>
           </div>
         </div>
         <div class="col-md-3">
@@ -30,10 +30,8 @@
         <div class="col-md-3">
           <div class="col-md-3">
             <div class="add-btn">
-              <button type="submit" class="btn btn-primary" (click)="onSubmit()">
-
-                <!-- [disabled]="!Botuserform.valid" -->
-                {{ submit }}
+              <button type="submit" class="btn btn-primary" [disabled]="!Botuserform.valid" (click)="onSubmit()">
+                {{ buttonName }}
               </button>
             </div>
           </div>
