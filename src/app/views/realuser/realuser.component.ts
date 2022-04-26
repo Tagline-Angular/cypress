@@ -185,11 +185,11 @@ export class RealuserComponent implements OnInit {
   public handleCommentModal(data: any): void {
     console.log('data', data)
     this.disableComment = data?.disabled_comment;
-    if (!this.disableComment && this.disableComment == undefined) {
-      this.currentPostId = data.id;
-      this.postData = data;
-    } else {
-      this.toastr.warning("Comment for this post has been disabled");
-    }
+    // if (!this.disableComment && this.disableComment == undefined) {
+    //   this.currentPostId = data.id;
+    //   this.postData = data;
+    // } else {
+    //   this.toastr.warning("Comment for this post has been disabled");
+    // }
   }
 }
