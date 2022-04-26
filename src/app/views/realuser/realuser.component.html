@@ -80,8 +80,8 @@
           <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control"
             (change)="selectBotUser($event)" *ngIf="buttonName ? buttonName : 'Like'">
             <option value="" disabled selected>Select Bot-User</option>
-            <option [value]="item.id" *ngFor="let item of botLists">
-              {{ item.name }}
+            <option [value]="item.user_id" *ngFor="let item of botLists">
+              {{ item.user_name }}
             </option>
           </select>
           <div *ngIf="
@@ -122,7 +122,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeLikeModal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -137,8 +137,8 @@
                 (change)="selectBotUser($event)"
               >
                 <option value="" disabled selected>Select Bot User</option>
-                <option [value]="item.id" *ngFor="let item of botLists">
-                  {{ item.name }}
+                <option [value]="item.user_id" *ngFor="let item of botLists">
+                  {{ item.user_name }}
                 </option>
               </select>
               <div *ngIf="
@@ -163,7 +163,7 @@
           </div>
         </form>
         <div class="mt-2 text-danger" *ngIf="blockUser">
-          you are not able to comments this post
+          You are not able to comments this post
         </div>
       </div>
       <div class="modal-footer">
@@ -171,7 +171,7 @@
           Cancel
         </button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()"
-         >
+         [disabled]="!botUserCommentForm.valid">
           Submit
         </button>
 

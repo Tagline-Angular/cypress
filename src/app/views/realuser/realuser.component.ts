@@ -29,6 +29,7 @@ export class RealuserComponent implements OnInit {
   public blockUser: boolean = false;
   public search: boolean = false;
   public botUserSelected: boolean = false;
+  public finalarrays: [] = []
 
   constructor(
     private userservice: UserService,
@@ -52,7 +53,7 @@ export class RealuserComponent implements OnInit {
       this.isUserPost = true;
     });
     this.selectedtitle = this.users.filter(
-      (item) => item.id === id
+      (item) => item.user_id === id
     )[0].user_name;
   }
 
@@ -73,23 +74,28 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-  public getBotUserList(): void {
-    this.userservice.getUser("name", "asc").subscribe((data) => {
-      this.botLists = data.map((e) => {
-        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
-      });
-      console.log('this.botLists', this.botLists)
-    });
-  }
 
   private getAllUserList(): void {
     this.userservice.getAllUser().subscribe((data) => {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
+      console.log('this.users.length :>> ', this.users.length);
     });
   }
 
+  private getBotUserList(): void {
+    this.userservice.getUser("user_name", "asc").subscribe((data) => {
+      this.botLists = data.map((e) => {
+        return Object.assign({ user_id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      console.log('this.botLists :>> ', this.botLists);
+      // this.getAllUsers(this.botLists)
+      this.users= this.users.concat(this.botLists);
+      console.log('this.users :>> ', this.users, this.users.concat(this.botLists));
+    });
+  }
+  
   // select method for bot selector
   selectBotUser(event) {
     this.botUserSelected = true;
@@ -101,7 +107,7 @@ export class RealuserComponent implements OnInit {
       this.buttonName = "Like";
     }
     if (this.postData.blocked_users && this.postData.blocked_users.includes(event.target.value)) {
-         this.blockUser = true;  
+      this.blockUser = true;
     } else {
       this.blockUser = false;
     }
@@ -141,7 +147,7 @@ export class RealuserComponent implements OnInit {
     this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
     this.botUserLikeForm.reset();
     this.buttonName = 'Like';
-    this.isAlreadyLiked = false;    
+    this.isAlreadyLiked = false;
     document.getElementById('closeLikeModal')?.click();
 
   }
@@ -152,7 +158,7 @@ export class RealuserComponent implements OnInit {
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     this.botUserSelected = false;
-    this.blockUser=false
+    this.blockUser = false
   }
 
   public submitComment(): void {
@@ -164,7 +170,7 @@ export class RealuserComponent implements OnInit {
       commented_user_id: this.botUserCommentForm.value.selectBot,
       commented_user_name: this.getBotUser(
         this.botUserCommentForm.value.selectBot
-      )[0].name,
+      )[0].user_name,
       comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
     if (this.botUserCommentForm.value) {
@@ -173,10 +179,13 @@ export class RealuserComponent implements OnInit {
       this.botUserCommentForm.reset();
       this.toastr.success("Comment added!");
     }
+    document.getElementById('closeModal')?.click();
   }
 
   public getBotUser(id: string) {
-    return this.botLists.filter((item) => item.id === id);
+    console.log('id :>> ', id);
+    console.log('this.botLists.filter((item) => item.user_id === id) :>> ', this.botLists.filter((item) => item.user_id === id));
+    return this.botLists.filter((item) => item.user_id === id);
   }
 
   //  handle like modal

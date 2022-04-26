@@ -43,7 +43,7 @@ export class BotuserpostComponent implements OnInit {
         commentCount: 0,
         likeCount: 0,
         liked_user_ids: [],
-        name: botUserData[0]?.name,
+        name: botUserData[0]?.user_name,
         style_color: 4278190080,
         style_font: "OpenSans",
         style_size: 20,
@@ -63,10 +63,11 @@ export class BotuserpostComponent implements OnInit {
   }
 
   public getBotUserList(): void {
-    this.userservice.getUser("name", "asc").subscribe((data) => {
+    this.userservice.getUser("user_name", "asc").subscribe((data) => {
       this.botLists = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
+      console.log('botLists :>> ', this.botLists);
     });
   }
 

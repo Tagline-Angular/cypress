@@ -9,7 +9,7 @@
             <select id="botUserDrropdown" formControlName="selectBotUser" class="dropdown-toggle form-control" placeholder="Add Bot User">
               <option value="" disabled selected>Select Bot-User</option>
               <option *ngFor="let bot of botLists" [value]="bot.id">
-                {{ bot.name }}
+                {{ bot.user_name }}
               </option>
             </select>
             <div *ngIf="botUserPostForm.get('selectBotUser')?.touched && botUserPostForm.get('selectBotUser')?.invalid">

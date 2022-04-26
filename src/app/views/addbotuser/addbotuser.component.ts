@@ -27,7 +27,7 @@ export class AddbotuserComponent implements OnInit {
   ngOnInit(): void {
     
     this.Botuserform = new FormGroup({
-      name: new FormControl(null, [Validators.required,UsernameValidator.noWhiteSpace]),
+      user_name: new FormControl(null, [Validators.required,UsernameValidator.noWhiteSpace]),
       email: new FormControl(null, [
         Validators.required,
         Validators.email,
@@ -42,7 +42,7 @@ export class AddbotuserComponent implements OnInit {
     if (this.Botuserform.valid) {
       const duplicateRecord = this.users.filter(
         (item) =>
-          item.name === this.Botuserform.value.name.toLowerCase() ||
+          item.user_name === this.Botuserform.value.user_name.toLowerCase() ||
           item.email === this.Botuserform.value.email
       );
       if (this.currentUserId) {
@@ -60,9 +60,15 @@ export class AddbotuserComponent implements OnInit {
           );
         } else {
           const data1 = {
-            name: this.Botuserform.value.name,
+            user_name: this.Botuserform.value.user_name,
             email: this.Botuserform.value.email,
             date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            phone: '',
+            platform: '',
+            status_time:  moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            token: 'token',
+            token_created_at:  moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            token_updated_at: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
           };
           this.userservice.addUser(data1).then((res: any) => {
             if (res) {
