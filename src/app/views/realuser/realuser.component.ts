@@ -49,7 +49,7 @@ export class RealuserComponent implements OnInit {
       this.postsList = posts.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('this,postLists :>> ', this.postsList);
+      this.postsList.sort((a, b) => b.time.toDate() - a.time.toDate());
       this.isUserPost = true;
     });
     this.selectedtitle = this.users.filter(
