@@ -27,9 +27,9 @@ export class RealuserComponent implements OnInit {
   public disableComment: boolean = false;
   public isAlreadyLiked: boolean = false;
   public blockUser: boolean = false;
-
   public search: boolean = false;
   public botUserSelected: boolean = false;
+
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
@@ -48,6 +48,7 @@ export class RealuserComponent implements OnInit {
       this.postsList = posts.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
+      console.log('this,postLists :>> ', this.postsList);
       this.isUserPost = true;
     });
     this.selectedtitle = this.users.filter(
@@ -99,13 +100,15 @@ export class RealuserComponent implements OnInit {
       this.isAlreadyLiked = false;
       this.buttonName = "Like";
     }
-
-    // if (this.postData.blocked_users && this.postData.blocked_users.includes(event.target.value)) {
-    //   this.blockUser=true;
-    // } else {
-    //   this.blockUser = false;
-    // }
+    if (this.postData.blocked_users && this.postData.blocked_users.includes(event.target.value)) {
+         this.blockUser = true;  
+    } else {
+      this.blockUser = false;
+    }
+    console.log('postData.blocked_users :>> ', this.postData.blocked_users);
   }
+
+
 
   public submitLikeUnlike() {
     if (this.botUserSelected) {
@@ -131,7 +134,6 @@ export class RealuserComponent implements OnInit {
       if (this.postData && !this.postData.liked_user_ids) {
         this.postData.liked_user_ids = [];
       }
-      console.log('this.postData', this.postData)
       this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
     }
     // this.botLists.
@@ -139,7 +141,9 @@ export class RealuserComponent implements OnInit {
     this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
     this.botUserLikeForm.reset();
     this.buttonName = 'Like';
-    this.isAlreadyLiked = false;
+    this.isAlreadyLiked = false;    
+    document.getElementById('closeLikeModal')?.click();
+
   }
 
   public handleCancel() {
@@ -147,7 +151,8 @@ export class RealuserComponent implements OnInit {
     this.botUserCommentForm.reset();
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
-    this.botUserSelected = false; 
+    this.botUserSelected = false;
+    this.blockUser=false
   }
 
   public submitComment(): void {
@@ -176,20 +181,21 @@ export class RealuserComponent implements OnInit {
 
   //  handle like modal
   public handleLikeModal(data: any): void {
-    console.log('data', data)
+    // console.log('data', data)
     this.currentPostId = data.id;
     this.postData = data;
   }
 
   // handle comment modal
   public handleCommentModal(data: any): void {
-    console.log('data', data)
+    // console.log('data', data)
     this.disableComment = data?.disabled_comment;
-    // if (!this.disableComment && this.disableComment == undefined) {
-    //   this.currentPostId = data.id;
-    //   this.postData = data;
-    // } else {
-    //   this.toastr.warning("Comment for this post has been disabled");
-    // }
+
+    if (!this.disableComment && this.disableComment == undefined) {
+      this.currentPostId = data.id;
+      this.postData = data;
+    } else {
+      this.toastr.warning("Comment for this post has been disabled");
+    }
   }
 }
