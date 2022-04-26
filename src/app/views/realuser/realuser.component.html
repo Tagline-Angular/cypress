@@ -71,7 +71,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="LikeModalLabel">Add Like</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeLikeModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -85,17 +85,13 @@
             </option>
           </select>
           <div *ngIf="
-              botUserLikeForm.get('selectBot')?.pristine &&
-              botUserLikeForm.get('selectBot')?.invalid && !botUserSelected
-            " userSelected>
-            <small class="text-danger">Please Select User</small>
+                !botUserLikeForm.get('selectBot')?.valid &&
+                botUserLikeForm.get('selectBot')?.touched
+              ">
+            <small class="text-danger">Please Select Bot-User</small>
           </div>
-          <!-- <div *ngIf="!botUserSelected" userSelected data-backdrop="static">
-            <small class="text-danger">Please Select User22</small>
-            
-          </div> -->
         </form>
-        <div class="mt-2" *ngIf="isAlreadyLiked">
+        <div class="mt-2 text-danger" *ngIf="isAlreadyLiked">
           Already liked post by this bot user!
         </div>
       </div>
@@ -103,7 +99,8 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static" #userSelected> 
+        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static"
+          [disabled]="!botUserLikeForm.valid">
           {{ buttonName }}
         </button>
       </div>
@@ -125,7 +122,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeLikeModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -155,7 +152,7 @@
           <div class="row">
             <div class="col-12">
               <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2"
-                placeholder="Write comment"></textarea>
+                placeholder="Write comment" *ngIf="!blockUser"></textarea>
             </div>
             <div *ngIf="
                 botUserCommentForm.get('comment')?.touched &&
@@ -165,15 +162,19 @@
             </div>
           </div>
         </form>
+        <div class="mt-2 text-danger" *ngIf="blockUser">
+          you are not able to comments this post
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()"
+         >
           Submit
         </button>
-        
+
       </div>
     </div>
   </div>
