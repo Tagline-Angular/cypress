@@ -85,17 +85,13 @@
             </option>
           </select>
           <div *ngIf="
-              botUserLikeForm.get('selectBot')?.pristine &&
-              botUserLikeForm.get('selectBot')?.invalid && !botUserSelected
-            " userSelected>
-            <small class="text-danger">Please Select User</small>
+                !botUserLikeForm.get('selectBot')?.valid &&
+                botUserLikeForm.get('selectBot')?.touched
+              ">
+            <small class="text-danger">Please Select Bot-User</small>
           </div>
-          <!-- <div *ngIf="!botUserSelected" userSelected data-backdrop="static">
-            <small class="text-danger">Please Select User22</small>
-            
-          </div> -->
         </form>
-        <div class="mt-2" *ngIf="isAlreadyLiked">
+        <div class="mt-2 text-danger" *ngIf="isAlreadyLiked">
           Already liked post by this bot user!
         </div>
       </div>
@@ -103,7 +99,8 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static" #userSelected> 
+        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static"
+          [disabled]="!botUserLikeForm.valid">
           {{ buttonName }}
         </button>
       </div>
@@ -158,10 +155,11 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()"
+          [disabled]="!botUserCommentForm.valid">
           Submit
         </button>
-        
+
       </div>
     </div>
   </div>

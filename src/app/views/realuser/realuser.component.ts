@@ -130,7 +130,7 @@ export class RealuserComponent implements OnInit {
     this.botUserCommentForm.reset();
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
-    this.botUserSelected = false;
+    this.botUserSelected = false; 
   }
 
   public submitComment(): void {
@@ -145,7 +145,7 @@ export class RealuserComponent implements OnInit {
       )[0].name,
       comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
-    if (this.botUserCommentForm.value.disabled_comment === true) {
+    if (this.botUserCommentForm.value) {
       this.userservice.updateStatus(this.postData, this.currentPostId);
       this.userservice.addComment(this.postData.id, commentUserObj);
       this.botUserCommentForm.reset();
