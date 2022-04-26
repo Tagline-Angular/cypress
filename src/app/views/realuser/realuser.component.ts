@@ -29,6 +29,7 @@ export class RealuserComponent implements OnInit {
   public blockUser: boolean = false;
 
   public search: boolean = false;
+  public botUserSelected: boolean = false;
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
@@ -90,7 +91,7 @@ export class RealuserComponent implements OnInit {
 
   // select method for bot selector
   selectBotUser(event) {
-    console.log('object :>> ', this.postData);
+    this.botUserSelected = true;
     if (this.postData.liked_user_ids && this.postData.liked_user_ids.includes(event.target.value)) {
       this.buttonName = "UnLike";
       this.isAlreadyLiked = true;
@@ -106,31 +107,22 @@ export class RealuserComponent implements OnInit {
     // }
   }
 
-  public performLike() {
-    let likes: number = this.postData.likeCount;
-    const totalLikes = likes ? likes + 1 : 1;
-    this.postData.likeCount = totalLikes;
-    this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
-    this.userservice.updateStatus(this.postData, this.currentPostId);
-    this.botUserLikeForm.reset();
-    this.toastr.success("Like added!");
-  }
-
-  public performUnLike() {
-    let likes: number = this.postData.likeCount;
-    const totalLikes = likes ? likes - 1 : 1;
-    this.postData.likeCount = totalLikes;
-  }
-
   public submitLikeUnlike() {
-    if (this.isAlreadyLiked) {
-      const likes: number = this.postData.likeCount;
-      const totalLikes = likes ? likes - 1 : 1;
-      this.postData.likeCount = totalLikes;
-      // remove liked user id from array
-      const index = this.postData.liked_user_ids.indexOf(this.botUserLikeForm.value.selectBot);
-      if (index > -1) {
-        this.postData.liked_user_ids.splice(index, 1);
+    if (this.botUserSelected) {
+      if (this.isAlreadyLiked) {
+        const likes: number = this.postData.likeCount;
+        const totalLikes = likes ? likes - 1 : 1;
+        this.postData.likeCount = totalLikes;
+        // remove liked user id from array
+        const index = this.postData.liked_user_ids.indexOf(this.botUserLikeForm.value.selectBot);
+        if (index > -1) {
+          this.postData.liked_user_ids.splice(index, 1);
+        }
+      } else {
+        let likes: number = this.postData.likeCount;
+        const totalLikes = likes ? likes + 1 : 1;
+        this.postData.likeCount = totalLikes;
+        this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
       }
     } else {
       let likes: number = this.postData.likeCount;
@@ -155,6 +147,7 @@ export class RealuserComponent implements OnInit {
     this.botUserCommentForm.reset();
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
+    this.botUserSelected = false;
   }
 
   public submitComment(): void {
@@ -169,11 +162,12 @@ export class RealuserComponent implements OnInit {
       )[0].name,
       comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
-    this.userservice.updateStatus(this.postData, this.currentPostId);
-    this.userservice.addComment(this.postData.id, commentUserObj);
-    this.botUserCommentForm.reset();
-    this.toastr.success("Comment added!");
-
+    if (this.botUserCommentForm.value.disabled_comment === true) {
+      this.userservice.updateStatus(this.postData, this.currentPostId);
+      this.userservice.addComment(this.postData.id, commentUserObj);
+      this.botUserCommentForm.reset();
+      this.toastr.success("Comment added!");
+    }
   }
 
   public getBotUser(id: string) {

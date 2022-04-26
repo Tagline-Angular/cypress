@@ -3,27 +3,16 @@
     <form [formGroup]="realUserList">
       <div class="row">
         <div class="col-12">
-          <ng-select
-            [items]="users"
-            class="form-control"
-            bindLabel="user_name"
-            bindValue="user_id"
-            placeholder="Select User"
-            formControlName="selectRealUser"
-          >
+          <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id"
+            placeholder="Select User" formControlName="selectRealUser">
           </ng-select>
         </div>
       </div>
     </form>
   </div>
   <div>
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-coreui-toggle="modal"
-      data-coreui-target="#exampleModalScrollable"
-      (click)="getPostForUser()"
-    >
+    <button class="btn btn-primary" type="button" data-coreui-toggle="modal"
+      data-coreui-target="#exampleModalScrollable" (click)="getPostForUser()">
       Search
     </button>
   </div>
@@ -52,20 +41,12 @@
                 <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
                 <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
                 <td>
-                  <button
-                    class="btn btn-primary mr-2"
-                    data-target="#LikeModal"
-                    data-toggle="modal"
-                    (click)="handleLikeModal(item)"
-                  >
+                  <button class="btn btn-primary mr-2" data-target="#LikeModal" data-toggle="modal"
+                    (click)="handleLikeModal(item)">
                     Like
                   </button>
-                  <button
-                    class="btn btn-secondary"
-                    data-toggle="modal"
-                    (click)="handleCommentModal(item)"
-                    data-target="#commentModel"
-                  >
+                  <button class="btn btn-secondary" data-toggle="modal" (click)="handleCommentModal(item)"
+                    data-target="#commentModel">
                     Comment
                   </button>
                 </td>
@@ -85,69 +66,44 @@
   </div>
 </div>
 <!-- Like Modal -->
-<div
-  class="modal fade"
-  id="LikeModal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="LikeModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="LikeModal" tabindex="-1" role="dialog" aria-labelledby="LikeModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="LikeModalLabel">Add Like</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form [formGroup]="botUserLikeForm">
-          <select
-            id="botUserDrropdown"
-            formControlName="selectBot"
-            class="dropdown-toggle form-control"
-            (change)="selectBotUser($event)"
-            *ngIf="buttonName ? buttonName : 'Like'"
-          >
+          <select id="botUserDrropdown" formControlName="selectBot" class="dropdown-toggle form-control"
+            (change)="selectBotUser($event)" *ngIf="buttonName ? buttonName : 'Like'">
             <option value="" disabled selected>Select Bot-User</option>
             <option [value]="item.id" *ngFor="let item of botLists">
               {{ item.name }}
             </option>
           </select>
-          <div
-            *ngIf="
-              botUserLikeForm.get('selectBot')?.touched &&
-              botUserLikeForm.get('selectBot')?.invalid
-            "
-          >
+          <div *ngIf="
+              botUserLikeForm.get('selectBot')?.pristine &&
+              botUserLikeForm.get('selectBot')?.invalid && !botUserSelected
+            " userSelected>
             <small class="text-danger">Please Select User</small>
           </div>
+          <!-- <div *ngIf="!botUserSelected" userSelected data-backdrop="static">
+            <small class="text-danger">Please Select User22</small>
+            
+          </div> -->
         </form>
         <div class="mt-2" *ngIf="isAlreadyLiked">
           Already liked post by this bot user!
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-          (click)="handleCancel()"
-        >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="submitLikeUnlike()"
-          data-dismiss="modal"
-        >
+        <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static" #userSelected> 
           {{ buttonName }}
         </button>
       </div>
@@ -169,12 +125,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -193,54 +144,36 @@
                   {{ item.name }}
                 </option>
               </select>
-              <div
-                *ngIf="
+              <div *ngIf="
                   botUserCommentForm.get('selectBot')?.touched &&
                   botUserCommentForm.get('selectBot')?.invalid
-                "
-              >
+                ">
                 <small class="text-danger">Please Select User</small>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
-              <textarea
-                formControlName="comment"
-                id="botUserComment"
-                class="form-control"
-                rows="2"
-                placeholder="Write comment"
-              ></textarea>
+              <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2"
+                placeholder="Write comment"></textarea>
             </div>
-            <div
-              *ngIf="
+            <div *ngIf="
                 botUserCommentForm.get('comment')?.touched &&
                 botUserCommentForm.get('comment')?.invalid
-              "
-            >
+              ">
               <small class="text-danger">Please add comment</small>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-          (click)="handleCancel()"
-        >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-dismiss="modal"
-          (click)="submitComment()"
-        >
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()">
           Submit
         </button>
+        
       </div>
     </div>
   </div>
