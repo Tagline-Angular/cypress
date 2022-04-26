@@ -77,7 +77,7 @@
     </div>
   </div>
 </ng-container>
-<div class="row" *ngIf="!postsList?.length && isUserPost">
+<div class="row" *ngIf="!postsList?.length && isUserPost && realUserList.value.selectRealUser">
   <div class="col-md-12 mt-3">
     <div class="card py-4 px-3">
       <h4>No user post found!!</h4>
@@ -157,6 +157,7 @@
 
 <!-- Model section start :: Comment Modal -->
 <div
+*ngIf="!this.disableComment && this.disableComment == undefined"
   class="modal fade"
   id="commentModel"
   tabindex="-1"
@@ -185,6 +186,7 @@
                 id="botUserDrropdown"
                 formControlName="selectBot"
                 class="dropdown-toggle form-control"
+                (change)="selectBotUser($event)"
               >
                 <option value="" disabled selected>Select Bot User</option>
                 <option [value]="item.id" *ngFor="let item of botLists">
