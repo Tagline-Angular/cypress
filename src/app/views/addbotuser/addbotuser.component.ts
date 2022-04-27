@@ -17,6 +17,8 @@ export class AddbotuserComponent implements OnInit {
   public currentUserId: string = "";
   public itsUpdate: boolean = true;
   public buttonName = "Add";
+  public botPostsList = [];
+  public deleteData:any=[];
   public h4 = "Add Bot User";
   public filterUserList: any = [];
   constructor(
@@ -89,12 +91,24 @@ export class AddbotuserComponent implements OnInit {
       });
     });
   }
-
+  
+  
   public handleDelete(id: string) {
     this.currentUserId = id;
+    this.userservice.getAllUserPosts().subscribe((res) => {
+      this.botPostsList = res.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      this.deleteData = this.botPostsList.filter((data) => data.uid === this.currentUserId);
+    });
   }
 
   public deleteUser(): void {
+    this.deleteData.forEach((ele) => {
+      let id = ele.id;
+      this.userservice.removePost(id);
+    });
+    
     this.userservice.remove(this.currentUserId);
     this.toastr.success("User deleted!");
     this.getUserData();

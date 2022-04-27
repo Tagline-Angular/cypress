@@ -8,7 +8,7 @@ export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private firestore: AngularFirestore) { }
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
@@ -31,6 +31,11 @@ export class UserService {
     const basePath = this.firestore.collection("botuser").doc(id);
     basePath.ref.delete();
   }
+
+  public removePost(id: any) {
+    const deData = this.firestore.collection("Status").doc(id);
+    deData.ref.delete();
+  } 
 
   public updateuser(userInfo: any, userId: string) {
     return this.firestore.collection("/botuser").doc(userId).update(userInfo);
