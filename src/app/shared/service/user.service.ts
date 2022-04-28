@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 
@@ -8,7 +9,7 @@ export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: AngularFirestore,private http:HttpClient) { }
 
   public addUser(userDetails: any): any {
     return new Promise((resolve, reject) => {
@@ -76,5 +77,14 @@ export class UserService {
     return this.firestore
       .collection("Status/" + postId + "/comments")
       .add(commentData);
+  }
+
+ public  sendNotification(reqObj) {
+    console.log(`reqObj`, reqObj)
+    return this.http.post('https://fcm.googleapis.com/fcm/send', reqObj,
+      {
+        headers: new HttpHeaders().append("Authorization", "key=AAAAUJoQN4A:APA91bEsQ6EplIuQV3nyNnsVNgMRZX0vJVJbr89zr0DBPpye0EhNKpTEOjznLSHShIaXYfTPdUPFMbeKf0jjpCLOPa-k6AA6ucAqbN7Nib1NfDxT0IY_BeGJjTTrOgNpMWBWI4sJ0SNq"),
+      }
+    );
   }
 }

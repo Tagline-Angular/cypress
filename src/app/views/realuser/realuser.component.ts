@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 import * as moment from "moment";
+import { MessagingService } from "../../shared/service/messaging.service";
 
 @Component({
   selector: "app-realuser",
@@ -30,13 +31,21 @@ export class RealuserComponent implements OnInit {
   public search: boolean = false;
   public botUserSelected: boolean = false;
   public finalarrays: [] = []
+  public FCMtoken:any = [];
+  public message;
+  public realUser;
 
   constructor(
     private userservice: UserService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private messagingService:MessagingService
   ) { }
 
   ngOnInit(): void {
+    this.messagingService.requestPermission();
+    this.messagingService.receiveMessage();
+    this.message = this.messagingService.currentMessage;
+
     this.createFormForBotList();
     this.createFormForRealUserList();
     this.getAllUserList();
@@ -80,7 +89,7 @@ export class RealuserComponent implements OnInit {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('this.users.length :>> ', this.users.length);
+      this.realUser = this.users;
     });
   }
 
@@ -89,16 +98,17 @@ export class RealuserComponent implements OnInit {
       this.botLists = data.map((e) => {
         return Object.assign({ user_id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('this.botLists :>> ', this.botLists);
       // this.getAllUsers(this.botLists)
-      this.users= this.users.concat(this.botLists);
-      console.log('this.users :>> ', this.users, this.users.concat(this.botLists));
+      this.users = this.users.concat(this.botLists);
     });
   }
-  
+
   // select method for bot selector
   selectBotUser(event) {
     this.botUserSelected = true;
+    if (this.postData && !this.postData.liked_user_ids) {
+      this.postData.liked_user_ids = [];
+    }
     if (this.postData.liked_user_ids && this.postData.liked_user_ids.includes(event.target.value)) {
       this.buttonName = "UnLike";
       this.isAlreadyLiked = true;
@@ -111,7 +121,6 @@ export class RealuserComponent implements OnInit {
     } else {
       this.blockUser = false;
     }
-    console.log('postData.blocked_users :>> ', this.postData.blocked_users);
   }
 
 
@@ -131,7 +140,25 @@ export class RealuserComponent implements OnInit {
         let likes: number = this.postData.likeCount;
         const totalLikes = likes ? likes + 1 : 1;
         this.postData.likeCount = totalLikes;
+        if (this.postData && !this.postData.liked_user_ids) {
+          this.postData.liked_user_ids = [];
+        }
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
+        //send like notiofication
+        const name = this.getBotUser(this.botUserLikeForm.value.selectBot)[0].user_name;
+        let reqObj = {
+          content_available: true,
+          mutable_content: true,
+          notification: {
+            title: name,
+            body: 'Liked your post',
+          },
+          registration_ids: this.FCMtoken,
+          priority: "high",
+        };
+        this.userservice.sendNotification(reqObj).subscribe((res) => {
+          console.log(`res`, res);
+        });
       }
     } else {
       let likes: number = this.postData.likeCount;
@@ -158,7 +185,7 @@ export class RealuserComponent implements OnInit {
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     this.botUserSelected = false;
-    this.blockUser = false
+    this.blockUser = false;
   }
 
   public submitComment(): void {
@@ -178,32 +205,49 @@ export class RealuserComponent implements OnInit {
       this.userservice.addComment(this.postData.id, commentUserObj);
       this.botUserCommentForm.reset();
       this.toastr.success("Comment added!");
+      //Send comment notification
+      let reqObj = {
+        content_available: true,
+        mutable_content: true,
+        notification: {
+          title: commentUserObj.commented_user_name,
+          body: 'Commented on your post :' + commentUserObj.comment_message,
+        },
+        registration_ids: this.FCMtoken,
+        priority: "high",
+      };
+      this.userservice.sendNotification(reqObj).subscribe((res) => {
+        console.log(`res`, res);
+      });
     }
     document.getElementById('closeModal')?.click();
   }
-
   public getBotUser(id: string) {
-    console.log('id :>> ', id);
-    console.log('this.botLists.filter((item) => item.user_id === id) :>> ', this.botLists.filter((item) => item.user_id === id));
     return this.botLists.filter((item) => item.user_id === id);
   }
 
   //  handle like modal
   public handleLikeModal(data: any): void {
-    // console.log('data', data)
     this.currentPostId = data.id;
     this.postData = data;
+    const test = this.realUser.filter((selectedUser) => selectedUser.id === data.uid);
+    if (test && test.length > 0) {
+      this.FCMtoken.push(test[0].token);
+    } else this.FCMtoken = '';
   }
 
   // handle comment modal
   public handleCommentModal(data: any): void {
-    // console.log('data', data)
     this.disableComment = data?.disabled_comment;
+    const test = this.realUser.filter((selectedUser) => selectedUser.id === data.uid);
+    if (test && test.length > 0) {
+      this.FCMtoken.push(test[0].token);
 
-    if (!this.disableComment && this.disableComment == undefined) {
+    } else this.FCMtoken = '';
+    if (!this.disableComment) {
       this.currentPostId = data.id;
       this.postData = data;
-    } else {
+    } else{
       this.toastr.warning("Comment for this post has been disabled");
     }
   }

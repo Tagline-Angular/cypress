@@ -49,6 +49,9 @@ import { EditUserComponent } from './views/edit-user/edit-user.component';
 import { ToastrModule } from 'ngx-toastr';
 import { NgSelectModule } from "@ng-select/ng-select";
 import { BotuserpostComponent } from './views/botuserpost/botuserpost.component';
+import { HttpClientModule } from '@angular/common/http';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { MessagingService } from './shared/service/messaging.service';
 
 @NgModule({
   imports: [
@@ -69,7 +72,9 @@ import { BotuserpostComponent } from './views/botuserpost/botuserpost.component'
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
-    ToastrModule.forRoot()
+    AngularFireMessagingModule,
+    ToastrModule.forRoot(),
+    HttpClientModule
   ],
   declarations: [
     AppComponent,
@@ -84,7 +89,9 @@ import { BotuserpostComponent } from './views/botuserpost/botuserpost.component'
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
-  }],
+  },
+    MessagingService  ],
+
   bootstrap: [ AppComponent ]
 })
 export class AppModule {}

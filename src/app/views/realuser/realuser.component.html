@@ -71,7 +71,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="LikeModalLabel">Add Like</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeLikeModal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeLikeModal" (click)="handleCancel()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -86,7 +86,7 @@
           </select>
           <div *ngIf="
                 !botUserLikeForm.get('selectBot')?.valid &&
-                botUserLikeForm.get('selectBot')?.touched
+                botUserLikeForm.get('selectBot')?.dirty
               ">
             <small class="text-danger">Please Select Bot-User</small>
           </div>
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close" id="closeCancle" (click)="handleCancel()">
           Cancel
         </button>
         <button type="button" class="btn btn-primary" (click)="submitLikeUnlike()" data-backdrop="static"
@@ -110,7 +110,7 @@
 
 <!-- Model section start :: Comment Modal -->
 <div
-*ngIf="!this.disableComment && this.disableComment == undefined"
+*ngIf="!this.disableComment"
   class="modal fade"
   id="commentModel"
   tabindex="-1"
@@ -122,7 +122,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add comment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal" (click)="handleCancel()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

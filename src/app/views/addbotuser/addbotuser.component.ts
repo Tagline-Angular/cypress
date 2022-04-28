@@ -95,12 +95,14 @@ export class AddbotuserComponent implements OnInit {
   
   public handleDelete(id: string) {
     this.currentUserId = id;
+    //Delete user post on deleted user start
     this.userservice.getAllUserPosts().subscribe((res) => {
       this.botPostsList = res.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
       this.deleteData = this.botPostsList.filter((data) => data.uid === this.currentUserId);
     });
+    //Delete user post on deleted user end
   }
 
   public deleteUser(): void {
