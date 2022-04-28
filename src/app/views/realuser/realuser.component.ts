@@ -145,6 +145,10 @@ export class RealuserComponent implements OnInit {
         }
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
         //send like notiofication
+        const test = this.realUser.filter((selectedUser) => selectedUser.id === this.postData.uid);
+        if (test && test.length > 0) {
+          this.FCMtoken.push(test[0].token);
+        } else this.FCMtoken = [];
         const name = this.getBotUser(this.botUserLikeForm.value.selectBot)[0].user_name;
         let reqObj = {
           content_available: true,
@@ -158,6 +162,7 @@ export class RealuserComponent implements OnInit {
         };
         this.userservice.sendNotification(reqObj).subscribe((res) => {
           console.log(`res`, res);
+          this.FCMtoken = [];
         });
       }
     } else {
@@ -206,6 +211,11 @@ export class RealuserComponent implements OnInit {
       this.botUserCommentForm.reset();
       this.toastr.success("Comment added!");
       //Send comment notification
+      const test = this.realUser.filter((selectedUser) => selectedUser.id === this.postData.uid);
+      if (test && test.length > 0) {
+        this.FCMtoken.push(test[0].token);
+
+      } else this.FCMtoken = [];
       let reqObj = {
         content_available: true,
         mutable_content: true,
@@ -217,6 +227,7 @@ export class RealuserComponent implements OnInit {
         priority: "high",
       };
       this.userservice.sendNotification(reqObj).subscribe((res) => {
+        this.FCMtoken = [];
         console.log(`res`, res);
       });
     }
@@ -230,20 +241,14 @@ export class RealuserComponent implements OnInit {
   public handleLikeModal(data: any): void {
     this.currentPostId = data.id;
     this.postData = data;
-    const test = this.realUser.filter((selectedUser) => selectedUser.id === data.uid);
-    if (test && test.length > 0) {
-      this.FCMtoken.push(test[0].token);
-    } else this.FCMtoken = '';
+    
   }
 
   // handle comment modal
   public handleCommentModal(data: any): void {
+    this.postData = data;
     this.disableComment = data?.disabled_comment;
-    const test = this.realUser.filter((selectedUser) => selectedUser.id === data.uid);
-    if (test && test.length > 0) {
-      this.FCMtoken.push(test[0].token);
-
-    } else this.FCMtoken = '';
+    
     if (!this.disableComment) {
       this.currentPostId = data.id;
       this.postData = data;
