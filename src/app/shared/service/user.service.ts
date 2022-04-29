@@ -7,6 +7,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
+  public basepath2 = this.firestore.collection("/Status")
 
   constructor(private firestore: AngularFirestore) {}
 
@@ -28,7 +29,7 @@ export class UserService {
   }
 
   public remove(id: any) {
-    const basePath = this.firestore.collection("botuser").doc(id);
+  const basePath = this.firestore.collection("botuser").doc(id);
     basePath.ref.delete();
   }
 
@@ -72,4 +73,21 @@ export class UserService {
       .collection("Status/" + postId + "/comments")
       .add(commentData);
   }
+
+  public deleteBotComments(posts, fullPost) {
+    const basePath = this.firestore.collection("Status").doc(posts.statusId).collection("comments").doc(posts.commentId);
+    basePath.ref.delete();
+  }
+
+  public decreaseBotCommentCount(post) {
+     console.log('post :>> ', post);
+    this.firestore.collection("Status").doc(post.statusId).update(post);  
+  }
+
+  public removeBotUserPost(id: any) {
+    console.log('id :>> ', id);
+    const b1 = this.firestore.collection("Status").doc(id)
+    b1.ref.delete()
+  }
+
 }

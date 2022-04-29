@@ -17,7 +17,8 @@ export class BotuserpostComponent implements OnInit {
   public botLists: any = [];
   public h4 = "Add Bot-User Post";
   public botPostsList: any = [];
-
+  public botUserData: any
+  public currentUserId: string = "";
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
@@ -33,7 +34,7 @@ export class BotuserpostComponent implements OnInit {
   }
 
   onSubmit() {
-    const botUserData = this.botLists.filter(
+    this.botUserData = this.botLists.filter(
       (e) => e.id === this.botUserPostForm.value?.selectBotUser
     );
     if (this.botUserPostForm.valid) {
@@ -43,22 +44,26 @@ export class BotuserpostComponent implements OnInit {
         commentCount: 0,
         likeCount: 0,
         liked_user_ids: [],
-        name: botUserData[0]?.user_name,
+        name: this.botUserData[0]?.user_name,
         style_color: 4278190080,
         style_font: "OpenSans",
         style_size: 20,
-        text: this.botUserPostForm.value.comment,
+        text: this.botUserPostForm.value.comment.trim(),
         time: moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
         type: "text",
-        uid: botUserData[0]?.id,
+        uid: this.botUserData[0]?.id,
       };
-      this.userservice.addBotUserPost(data1).then((res: any) => {
-        if (res) {
-          this.toastr.success("Post added!");
-          this.botUserPostForm.reset();
-          this.getAllPosts();
-        }
-      });
+      this.botUserPostForm.get("comment").setValue(this.botUserPostForm.value.comment.trim())
+
+      if(this.botUserPostForm.valid){
+        this.userservice.addBotUserPost(data1).then((res: any) => {
+          if (res) {
+            this.toastr.success("Post added!");
+            this.botUserPostForm.reset();
+            this.getAllPosts();
+          }
+        });
+      }
     }
   }
 
@@ -67,14 +72,13 @@ export class BotuserpostComponent implements OnInit {
       this.botLists = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('botLists :>> ', this.botLists);
     });
   }
 
   public getAllPosts() {
     this.userservice.getAllUserPosts().subscribe((res) => {
       this.botPostsList = res.map((e) => {
-        return e.payload.doc.data();
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
     });
   }
@@ -84,5 +88,17 @@ export class BotuserpostComponent implements OnInit {
       return { noWhiteSpace: true }
     }
     return null;
+  }
+
+  public handleDelete(id: string) {
+    this.currentUserId = id;
+  }
+
+  public deleteUser(): void {
+    this.userservice.removeBotUserPost(this.currentUserId);
+    this.toastr.success("User deleted!"); 
+    this.getAllPosts();
+    this.currentUserId = "";
+
   }
 }

@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12">
           <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id"
-            placeholder="Select User" formControlName="selectRealUser">
+            placeholder="Select User" formControlName="selectRealUser" id="yourId" onfocus=" let value = this.value; this.value = null; this.value=value">
           </ng-select>
         </div>
       </div>
@@ -151,7 +151,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2"
+              <textarea formControlName="comment" id="botUserComment" class="form-control" rows="2"                                                               
                 placeholder="Write comment" *ngIf="!blockUser"></textarea>
             </div>
             <div *ngIf="
@@ -170,7 +170,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="handleCancel()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()"
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitComment()" 
          [disabled]="!botUserCommentForm.valid">
           Submit
         </button>

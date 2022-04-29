@@ -60,7 +60,7 @@ export class RealuserComponent implements OnInit {
   public createFormForBotList(): void {
     this.botUserCommentForm = new FormGroup({
       selectBot: new FormControl("", Validators.required),
-      comment: new FormControl("", Validators.required),
+      comment: new FormControl("", [Validators.required,Validators.pattern("")]),
     });
     this.botUserLikeForm = new FormGroup({
       selectBot: new FormControl("", Validators.required),
@@ -80,8 +80,8 @@ export class RealuserComponent implements OnInit {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('this.users.length :>> ', this.users.length);
     });
+    document.getElementById("yourId").focus()
   }
 
   private getBotUserList(): void {
@@ -91,11 +91,12 @@ export class RealuserComponent implements OnInit {
       });
       console.log('this.botLists :>> ', this.botLists);
       // this.getAllUsers(this.botLists)
-      this.users= this.users.concat(this.botLists);
+      this.users = this.users.concat(this.botLists);
+      this.users = this.users.concat(this.botLists).sort(function(a,b){return ((a.name < b.user_name) ? -1 : ((a.name === b.name) ? 0 : 1))});
       console.log('this.users :>> ', this.users, this.users.concat(this.botLists));
     });
   }
-  
+
   // select method for bot selector
   selectBotUser(event) {
     this.botUserSelected = true;
@@ -165,8 +166,13 @@ export class RealuserComponent implements OnInit {
     let comment: number = this.postData.commentCount;
     const totalComment = comment ? comment + 1 : 1;
     this.postData.commentCount = totalComment;
+    this.botUserCommentForm.get('comment').setValue(this.botUserCommentForm.value.comment.trim());
+    console.log('this.botUserCommentForm :>> ', this.botUserCommentForm);
+    if(this.botUserCommentForm.invalid){
+      return
+    }
     const commentUserObj = {
-      comment_message: this.botUserCommentForm.value.comment,
+      comment_message: this.botUserCommentForm.value.comment.trim(),
       commented_user_id: this.botUserCommentForm.value.selectBot,
       commented_user_name: this.getBotUser(
         this.botUserCommentForm.value.selectBot
@@ -197,10 +203,8 @@ export class RealuserComponent implements OnInit {
 
   // handle comment modal
   public handleCommentModal(data: any): void {
-    // console.log('data', data)
     this.disableComment = data?.disabled_comment;
-
-    if (!this.disableComment && this.disableComment == undefined) {
+    if(!this.disableComment && this.disableComment == undefined) {
       this.currentPostId = data.id;
       this.postData = data;
     } else {

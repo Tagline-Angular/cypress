@@ -25,7 +25,7 @@ export class AddbotuserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.Botuserform = new FormGroup({
       user_name: new FormControl(null, [Validators.required,UsernameValidator.noWhiteSpace]),
       email: new FormControl(null, [
@@ -92,13 +92,79 @@ export class AddbotuserComponent implements OnInit {
 
   public handleDelete(id: string) {
     this.currentUserId = id;
+    this.deleteBotLikesComments(this.currentUserId);
+
   }
 
   public deleteUser(): void {
     this.userservice.remove(this.currentUserId);
     this.toastr.success("User deleted!");
     this.getUserData();
+    // this.deleteBotLikesComments(this.currentUserId);
     this.currentUserId = "";
+
+  }
+
+  public deleteBotLikesComments(userId: string) {
+    let allPosts: any;
+    this.userservice.getAllUserPosts().subscribe((res) => {
+      allPosts = res.map((e) => {
+        return e.payload.doc.data();
+      });
+
+      this.deleteLikesOfBot(allPosts, userId);  // delete bot users likes
+      this.deleteCommentsOfBot(allPosts, userId); // delete bot users comments
+
+    });
+
+  }
+
+  public deleteLikesOfBot(allPosts: any, userId: any) {
+    let likedPost = [];
+    likedPost = allPosts.filter((post: any) =>
+      post.liked_user_ids?.find(likedIds =>
+        likedIds === userId
+      )
+    );
+
+    likedPost.forEach((post: any) => {
+      post.likeCount -= 1;
+      let deleteIndex = post.liked_user_ids.indexOf(userId);
+      post.liked_user_ids.splice(deleteIndex, 1);
+      this.userservice.updateStatus(post, post.id);
+    })
+  }
+
+  
+  public deleteCommentsOfBot(allPosts: any, userId: any) {
+    let postToDelete = [];
+    allPosts.forEach((post: any) => {
+      this.userservice.getCommentsForPost(post.id).subscribe(async (res: any) => {
+        let commentedPosts = res.map((e) => {
+          return Object.assign({ statusId: post.id }, { commentId: e.payload.doc.id }, e.payload.doc.data());
+        }); // get all posts having comments from any user
+
+          // commentedPosts.forEach((post) => {
+          //   if (post.commented_user_id == userId) {
+          //     postToDelete.push(post)
+          //   }
+          // }
+          
+          postToDelete = commentedPosts.filter((commentPost) =>
+            commentPost.commented_user_id == userId
+          )
+
+          if (postToDelete && postToDelete.length) {
+            postToDelete.forEach((deletepost) => {
+              this.userservice.deleteBotComments(deletepost, post); // to delete comments
+              // post.commentCount -= 1;
+              // this.userservice.decreaseBotCommentCount(post); // to decrease count
+            })
+          }
+      })
+
+    })
+    console.log('postToDelete :>> ', postToDelete);
   }
 
   onEdit(item, id) {
