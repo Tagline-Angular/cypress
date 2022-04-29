@@ -74,7 +74,7 @@ export class UserService {
       .add(commentData);
   }
 
-  public deleteBotComments(posts, fullPost) {
+  public deleteBotComments(posts) {
     const basePath = this.firestore.collection("Status").doc(posts.statusId).collection("comments").doc(posts.commentId);
     basePath.ref.delete();
   }
@@ -86,8 +86,8 @@ export class UserService {
 
   public removeBotUserPost(id: any) {
     console.log('id :>> ', id);
-    const b1 = this.firestore.collection("Status").doc(id)
-    b1.ref.delete()
+    const userPostDelete = this.firestore.collection("Status").doc(id)
+    userPostDelete.ref.delete()
   }
 
 }

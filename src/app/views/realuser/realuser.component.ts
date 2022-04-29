@@ -211,4 +211,6 @@ export class RealuserComponent implements OnInit {
       this.toastr.warning("Comment for this post has been disabled");
     }
   }
+
+  
 }
