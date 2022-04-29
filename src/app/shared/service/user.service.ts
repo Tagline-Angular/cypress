@@ -79,6 +79,19 @@ export class UserService {
       .add(commentData);
   }
 
+  public deleteBotComments(post) {
+    post.filteredComments.forEach((comment)=>{
+      const basePath = this.firestore.collection("Status").doc(post.id).collection("comments").doc(comment.commentId);
+      basePath.ref.delete();
+    })
+  }
+
+  public decreaseBotCommentCount(post) {
+    // console.log('post :>> ', post);
+    this.firestore.collection("Status").doc(post.statusId).update(post);
+  }
+
+
  public  sendNotification(reqObj) {
     console.log(`reqObj`, reqObj)
     return this.http.post('https://fcm.googleapis.com/fcm/send', reqObj,

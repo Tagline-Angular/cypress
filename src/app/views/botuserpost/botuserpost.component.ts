@@ -17,6 +17,7 @@ export class BotuserpostComponent implements OnInit {
   public botLists: any = [];
   public h4 = "Add Bot-User Post";
   public botPostsList: any = [];
+  public botUserData:any;
 
   constructor(
     private userservice: UserService,
@@ -33,7 +34,7 @@ export class BotuserpostComponent implements OnInit {
   }
 
   onSubmit() {
-    const botUserData = this.botLists.filter(
+    this.botUserData = this.botLists.filter(
       (e) => e.id === this.botUserPostForm.value?.selectBotUser
     );
     if (this.botUserPostForm.valid) {
@@ -43,14 +44,14 @@ export class BotuserpostComponent implements OnInit {
         commentCount: 0,
         likeCount: 0,
         liked_user_ids: [],
-        name: botUserData[0]?.user_name,
+        name: this.botUserData[0]?.user_name,
         style_color: 4278190080,
         style_font: "OpenSans",
         style_size: 20,
         text: this.botUserPostForm.value.comment,
         time: moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
         type: "text",
-        uid: botUserData[0]?.id,
+        uid: this.botUserData[0]?.id,
       };
       this.userservice.addBotUserPost(data1).then((res: any) => {
         if (res) {

@@ -100,6 +100,8 @@ export class RealuserComponent implements OnInit {
       });
       // this.getAllUsers(this.botLists)
       this.users = this.users.concat(this.botLists);
+      this.users = this.users.concat(this.botLists).sort(function(a,b){return ((a.name < b.user_name) ? -1 : ((a.name === b.name) ? 0 : 1))});
+
     });
   }
 
@@ -177,7 +179,8 @@ export class RealuserComponent implements OnInit {
     // this.botLists.
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
-    this.botUserLikeForm.reset();
+    // this.botUserLikeForm.reset();
+    this.botUserLikeForm.setValue({selectBot:''});
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     document.getElementById('closeLikeModal')?.click();
@@ -185,7 +188,7 @@ export class RealuserComponent implements OnInit {
   }
 
   public handleCancel() {
-    this.botUserLikeForm.reset();
+    this.botUserLikeForm.setValue({selectBot:''});
     this.botUserCommentForm.reset();
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
