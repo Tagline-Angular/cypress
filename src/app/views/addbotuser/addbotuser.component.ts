@@ -100,7 +100,6 @@ export class AddbotuserComponent implements OnInit {
 
   public handleDelete(id: string) {
     this.currentUserId = id;
-    // this.deleteBotLikesComments(this.currentUserId);
   }
 
   public deleteUser(): void {
@@ -138,9 +137,7 @@ export class AddbotuserComponent implements OnInit {
         })
       )
 
-      .subscribe((res) => {
-
-        this.deleteBotUserComments();
+      .subscribe(async (res) => {
 
         allPosts = res;
         this.deleteLikesOfBot(allPosts, userId);
@@ -157,7 +154,7 @@ export class AddbotuserComponent implements OnInit {
         })
 
 
-        newArray.forEach(async (newPost) => {
+        await newArray.forEach(async (newPost) => {
           delete newPost.comments;
           newPost.commentCount = newPost.commentCount - newPost.filteredComments.length;
           await this.userservice.deleteBotComments(newPost);
@@ -175,11 +172,9 @@ export class AddbotuserComponent implements OnInit {
         // let batchIndex = 0;
 
         // allPosts.forEach(documentSnapshot => {
-        //   // console.log('documentSnapshot :>> ', documentSnapshot);
         //   const documentData = documentSnapshot;
 
         //   // update document data here...
-        //   console.log('batchIndex :>> ', batchIndex);
         //   // batchArray[batchIndex].update(documentSnapshot.ref, documentData);
         //   operationCounter++;
 
@@ -192,7 +187,6 @@ export class AddbotuserComponent implements OnInit {
 
         // batchArray.forEach(async batch => await batch.commit());
 
-        // console.log('batchArray :>> ', batchArray);
 
 
       });
@@ -215,11 +209,6 @@ export class AddbotuserComponent implements OnInit {
     })
   }
 
-
-  public deleteBotUserComments() {
-
-  }
-
   public async deleteCommentsOfBot(allPosts: any, userId: any) {
     // let postToDelete = [];
     // let commentedPosts = []
@@ -237,14 +226,12 @@ export class AddbotuserComponent implements OnInit {
         //   }
         // }
 
-        // console.log('commentedPosts :>> ', this.commentedPosts);
         this.postToDelete.push(
           this.commentedPosts.filter((commentPost) =>
             commentPost.commented_user_id == userId
           )
         )
 
-        // console.log('this.postToDelete :>> ', this.postToDelete);
 
         // if (this.postToDelete && this.postToDelete.length) {
         //   this.postToDelete.forEach((deletepost) => {
@@ -256,14 +243,10 @@ export class AddbotuserComponent implements OnInit {
       })
 
     })
-    console.log('this.commentedPosts :>> ', this.commentedPosts);
 
     this.postToDelete = await this.commentedPosts.filter((commentPost) =>
       commentPost.commented_user_id == userId
     )
-    console.log('this.commentedPosts :>> ', this.commentedPosts);
-
-    console.log('this.postToDelete :>> ', this.postToDelete);
   }
   onEdit(item, id) {
     this.currentUserId = id;
