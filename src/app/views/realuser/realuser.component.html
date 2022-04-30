@@ -3,8 +3,11 @@
     <form [formGroup]="realUserList">
       <div class="row">
         <div class="col-12">
-          <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id" [editableSearchTerm]="true"
-            placeholder="Select User" formControlName="selectRealUser">
+          <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id"
+            placeholder="Select User" formControlName="selectRealUser" id="yourId" [editableSearchTerm]="true"
+            onfocus=" let value = this.value; this.value = null; this.value=value;"
+            (change)="getPostForUser()"
+            >
           </ng-select>
         </div>
       </div>

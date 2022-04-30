@@ -19,12 +19,9 @@
             <label for="email" class="form-label">Email</label>
             <input type="text" class="form-control" id="email" name="email" formControlName="email"
               placeholder="Add email" autocomplete="" />
-            <div *ngIf="
-                !Botuserform.get('email')?.valid &&
-                Botuserform.get('email')?.touched
-              ">
-              <small class="text-danger">Please enter valid email</small>
-            </div>
+              <div class="text-danger" *ngIf="formControl['email'].touched && formControl['email'].errors?.required">
+                Please enter the email
+              </div>  
           </div>
         </div>
         <div class="col-md-3">

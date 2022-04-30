@@ -89,11 +89,8 @@ export class RealuserComponent implements OnInit {
       this.botLists = data.map((e) => {
         return Object.assign({ user_id: e.payload.doc.id }, e.payload.doc.data());
       });
-      console.log('this.botLists :>> ', this.botLists);
-      // this.getAllUsers(this.botLists)
       this.users = this.users.concat(this.botLists);
-      this.users = this.users.concat(this.botLists).sort(function(a,b){return ((a.name < b.user_name) ? -1 : ((a.name === b.name) ? 0 : 1))});
-      console.log('this.users :>> ', this.users, this.users.concat(this.botLists));
+      this.users = this.users.concat(this.botLists).sort(function (a, b) { return ((a.name < b.user_name) ? -1 : ((a.name === b.name) ? 0 : 1)) });
     });
   }
 
@@ -112,7 +109,6 @@ export class RealuserComponent implements OnInit {
     } else {
       this.blockUser = false;
     }
-    console.log('postData.blocked_users :>> ', this.postData.blocked_users);
   }
 
 
@@ -147,6 +143,7 @@ export class RealuserComponent implements OnInit {
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
     this.botUserLikeForm.reset();
+    this.botUserLikeForm.setValue({ selectBot: '' }); // Select desiabled option from dropdown instead of reseting from
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     document.getElementById('closeLikeModal')?.click();
@@ -155,6 +152,7 @@ export class RealuserComponent implements OnInit {
 
   public handleCancel() {
     this.botUserLikeForm.reset();
+    this.botUserLikeForm.setValue({ selectBot: '' });
     this.botUserCommentForm.reset();
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
@@ -167,8 +165,7 @@ export class RealuserComponent implements OnInit {
     const totalComment = comment ? comment + 1 : 1;
     this.postData.commentCount = totalComment;
     this.botUserCommentForm.get('comment').setValue(this.botUserCommentForm.value.comment.trim());
-    console.log('this.botUserCommentForm :>> ', this.botUserCommentForm);
-    if(this.botUserCommentForm.invalid){
+    if (this.botUserCommentForm.invalid){
       return
     }
     const commentUserObj = {
@@ -189,14 +186,11 @@ export class RealuserComponent implements OnInit {
   }
 
   public getBotUser(id: string) {
-    console.log('id :>> ', id);
-    console.log('this.botLists.filter((item) => item.user_id === id) :>> ', this.botLists.filter((item) => item.user_id === id));
     return this.botLists.filter((item) => item.user_id === id);
   }
 
   //  handle like modal
   public handleLikeModal(data: any): void {
-    // console.log('data', data)
     this.currentPostId = data.id;
     this.postData = data;
   }
