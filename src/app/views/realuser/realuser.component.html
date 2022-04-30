@@ -3,8 +3,8 @@
     <form [formGroup]="realUserList">
       <div class="row">
         <div class="col-12">
-          <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id"
-            placeholder="Select User" formControlName="selectRealUser" id="yourId" onfocus=" let value = this.value; this.value = null; this.value=value">
+          <ng-select [items]="users" class="form-control" bindLabel="user_name" bindValue="user_id" [editableSearchTerm]="true"
+            placeholder="Select User" formControlName="selectRealUser">
           </ng-select>
         </div>
       </div>
@@ -19,7 +19,7 @@
 </form>
 
 <ng-container *ngIf="postsList?.length && realUserList.value.selectRealUser">
-  <h4 class="mt-3">Posts of {{ selectedtitle }}</h4>
+  <h3 class="mt-3">Posts of {{ selectedtitle }}</h3>
   <div class="user-box my-0 py-0">
     <div class="col-12">
       <div class="row">
