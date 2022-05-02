@@ -100,15 +100,27 @@ export class AddbotuserComponent implements OnInit {
 
   public handleDelete(id: string) {
     this.currentUserId = id;
+    //Delete user post on deleted user start
+    this.userservice.getAllUserPosts().subscribe((res) => {
+      this.botPostsList = res.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      this.deleteData = this.botPostsList.filter((data) => data.uid === this.currentUserId);
+    });
+    //Delete user post on deleted user end
   }
 
   public deleteUser(): void {
+    this.deleteData.forEach((ele) => {
+      let id = ele.id;
+      this.userservice.removePost(id);
+    });
+    
     this.userservice.remove(this.currentUserId);
+    this.deleteBotLikesComments(this.currentUserId);
     this.toastr.success("User deleted!");
     this.getUserData();
-    this.deleteBotLikesComments(this.currentUserId);
     this.currentUserId = "";
-
   }
 
   public deleteBotLikesComments(userId: string) {
@@ -119,32 +131,25 @@ export class AddbotuserComponent implements OnInit {
           allPosts = res
             .map((r: any) => {
               let payload = Object.assign({ id: r.payload.doc.id }, r.payload.doc.data());
-
               return this.userservice.getCommentsForPost(payload.id)
                 .pipe(
                   map((comments: any) => {
-
                     const data = {
                       ...payload,
                       comments: comments.map(e => Object.assign({ commentId: e.payload.doc.id }, { statusId: r.payload.doc.id }, e.payload.doc.data()))
                     }
                     return data
-
                   })
                 )
             });
           return combineLatest(allPosts);
         })
       )
-
       .subscribe(async (res) => {
-
         allPosts = res;
         this.deleteLikesOfBot(allPosts, userId);
-
         const newArray = [];
         allPosts.forEach((post: any) => {
-
           const _post = post.comments.filter((e: any) =>
             e.commented_user_id == userId
           )
@@ -152,45 +157,16 @@ export class AddbotuserComponent implements OnInit {
             newArray.push(Object.assign(post, { filteredComments: _post }))
           }
         })
-
-
         await newArray.forEach(async (newPost) => {
-          delete newPost.comments;
           newPost.commentCount = newPost.commentCount - newPost.filteredComments.length;
           await this.userservice.deleteBotComments(newPost);
-
           setTimeout(async () => {
             await delete newPost.filteredComments;
             await delete newPost.comments;
             await this.userservice.updateStatus(newPost, newPost.id);
           }, 0);
         })
-
-        // const batchArray = [];
-        // batchArray.push(this.fireStrore.firestore.batch());
-        // let operationCounter = 0;
-        // let batchIndex = 0;
-
-        // allPosts.forEach(documentSnapshot => {
-        //   const documentData = documentSnapshot;
-
-        //   // update document data here...
-        //   // batchArray[batchIndex].update(documentSnapshot.ref, documentData);
-        //   operationCounter++;
-
-        //   if (operationCounter === 499) {
-        //     batchArray.push(this.fireStrore.firestore.batch());
-        //     batchIndex++;
-        //     operationCounter = 0;
-        //   }
-        // });
-
-        // batchArray.forEach(async batch => await batch.commit());
-
-
-
       });
-
   }
 
   public deleteLikesOfBot(allPosts: any, userId: any) {
