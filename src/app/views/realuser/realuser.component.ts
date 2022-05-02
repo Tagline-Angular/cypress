@@ -4,7 +4,6 @@ import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 import * as moment from "moment";
 
-
 @Component({
   selector: "app-realuser",
   templateUrl: "./realuser.component.html",
@@ -34,11 +33,10 @@ export class RealuserComponent implements OnInit {
   public realUser;
   public FCMtoken: any = [];
 
-
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.createFormForBotList();
@@ -64,12 +62,15 @@ export class RealuserComponent implements OnInit {
   public createFormForBotList(): void {
     this.botUserCommentForm = new FormGroup({
       selectBot: new FormControl("", Validators.required),
-      comment: new FormControl("", [Validators.required, Validators.pattern("")]),
+      comment: new FormControl("", [
+        Validators.required,
+        Validators.pattern(""),
+      ]),
     });
     this.botUserLikeForm = new FormGroup({
       selectBot: new FormControl("", Validators.required),
     });
-    this.botUserunLikeForm = new FormGroup({})
+    this.botUserunLikeForm = new FormGroup({});
   }
 
   public createFormForRealUserList(): void {
@@ -78,7 +79,6 @@ export class RealuserComponent implements OnInit {
     });
   }
 
-
   private getAllUserList(): void {
     this.userservice.getAllUser().subscribe((data) => {
       this.users = data.map((e) => {
@@ -86,37 +86,46 @@ export class RealuserComponent implements OnInit {
       });
       this.realUser = this.users;
     });
-    document.getElementById("yourId").focus()
+    document.getElementById("yourId").focus();
   }
 
   private getBotUserList(): void {
     this.userservice.getUser("user_name", "asc").subscribe((data) => {
       this.botLists = data.map((e) => {
-        return Object.assign({ user_id: e.payload.doc.id }, e.payload.doc.data());
+        return Object.assign(
+          { user_id: e.payload.doc.id },
+          e.payload.doc.data()
+        );
       });
       this.users = this.users.concat(this.botLists);
-      this.users = this.users.concat(this.botLists).sort(function (a, b) { return ((a.name < b.user_name) ? -1 : ((a.name === b.name) ? 0 : 1)) });
+      this.users = this.users.concat(this.botLists).sort(function (a, b) {
+        return a.name < b.user_name ? -1 : a.name === b.name ? 0 : 1;
+      });
     });
   }
 
   // select method for bot selector
   selectBotUser(event) {
     this.botUserSelected = true;
-    if (this.postData.liked_user_ids && this.postData.liked_user_ids.includes(event.target.value)) {
+    if (
+      this.postData.liked_user_ids &&
+      this.postData.liked_user_ids.includes(event.target.value)
+    ) {
       this.buttonName = "UnLike";
       this.isAlreadyLiked = true;
     } else {
       this.isAlreadyLiked = false;
       this.buttonName = "Like";
     }
-    if (this.postData.blocked_users && this.postData.blocked_users.includes(event.target.value)) {
+    if (
+      this.postData.blocked_users &&
+      this.postData.blocked_users.includes(event.target.value)
+    ) {
       this.blockUser = true;
     } else {
       this.blockUser = false;
     }
   }
-
-
 
   public submitLikeUnlike() {
     if (this.botUserSelected) {
@@ -125,7 +134,9 @@ export class RealuserComponent implements OnInit {
         const totalLikes = likes ? likes - 1 : 1;
         this.postData.likeCount = totalLikes;
         // remove liked user id from array
-        const index = this.postData.liked_user_ids.indexOf(this.botUserLikeForm.value.selectBot);
+        const index = this.postData.liked_user_ids.indexOf(
+          this.botUserLikeForm.value.selectBot
+        );
         if (index > -1) {
           this.postData.liked_user_ids.splice(index, 1);
         }
@@ -133,21 +144,26 @@ export class RealuserComponent implements OnInit {
         let likes: number = this.postData.likeCount;
         const totalLikes = likes ? likes + 1 : 1;
         this.postData.likeCount = totalLikes;
-        this.postData.liked_user_ids = this.postData.liked_user_ids ? this.postData.liked_user_ids : []; // create new field if there's no likes 
+        this.postData.liked_user_ids = this.postData.liked_user_ids
+          ? this.postData.liked_user_ids
+          : []; // create new field if there's no likes
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
       }
       //send like notiofication
-      const test = this.realUser.filter((selectedUser) => selectedUser.id === this.postData.uid);
+      const test = this.realUser.filter(
+        (selectedUser) => selectedUser.id === this.postData.uid
+      );
       if (test && test.length > 0) {
         this.FCMtoken.push(test[0].token);
       } else this.FCMtoken = [];
-      const name = this.getBotUser(this.botUserLikeForm.value.selectBot)[0].user_name;
+      const name = this.getBotUser(this.botUserLikeForm.value.selectBot)[0]
+        .user_name;
       let reqObj = {
         content_available: true,
         mutable_content: true,
         notification: {
           title: name,
-          body: 'Liked your post',
+          body: "Liked your post",
         },
         registration_ids: this.FCMtoken,
         priority: "high",
@@ -155,7 +171,6 @@ export class RealuserComponent implements OnInit {
       this.userservice.sendNotification(reqObj).subscribe((res) => {
         console.log(`res`, res);
         this.FCMtoken = [];
-
       });
     } else {
       let likes: number = this.postData.likeCount;
@@ -166,42 +181,42 @@ export class RealuserComponent implements OnInit {
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
       }
       this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
-
     }
     // this.botLists.
     this.userservice.updateStatus(this.postData, this.currentPostId);
-    this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
+    this.toastr.success(this.isAlreadyLiked ? "Post unliked!" : "Post liked!");
     this.botUserLikeForm.reset();
-    this.botUserLikeForm.setValue({ selectBot: '' });
-     // Select desiabled option from dropdown instead of reseting from
-    this.buttonName = 'Like';
+    this.botUserLikeForm.setValue({ selectBot: "" });
+    this.buttonName = "Like";
     this.isAlreadyLiked = false;
-    document.getElementById('closeLikeModal')?.click();
-
+    document.getElementById("closeLikeModal")?.click();
   }
 
   public handleCancel() {
     this.botUserLikeForm.reset();
-    this.botUserLikeForm.setValue({ selectBot: '' });
+    this.botUserLikeForm.setValue({ selectBot: "" });
     this.botUserCommentForm.reset();
-    this.botUserCommentForm.patchValue({ selectBot: '' });
+    this.botUserCommentForm.patchValue({ selectBot: "" });
 
-    this.buttonName = 'Like';
+    this.buttonName = "Like";
     this.isAlreadyLiked = false;
     this.botUserSelected = false;
-    this.blockUser = false
+    this.blockUser = false;
   }
 
   public submitComment(): void {
     let comment: number = this.postData.commentCount;
     const totalComment = comment ? comment + 1 : 1;
     this.postData.commentCount = totalComment;
-    this.botUserCommentForm.get('comment').setValue(this.botUserCommentForm.value.comment.trim());
-    if (this.botUserCommentForm.invalid){
-      return
+    this.botUserCommentForm
+      .get("comment")
+      .setValue(this.botUserCommentForm.value.comment.trim());
+    if (this.botUserCommentForm.invalid) {
+      return;
     }
     const commentUserObj = {
-      comment_message: this.botUserCommentForm.value.comment,
+      comment_message: this.botUserCommentForm.value.comment.trim(),
+      comment_messages: this.botUserCommentForm.value.comment,
       commented_user_id: this.botUserCommentForm.value.selectBot,
       commented_user_name: this.getBotUser(
         this.botUserCommentForm.value.selectBot
@@ -212,20 +227,21 @@ export class RealuserComponent implements OnInit {
       this.userservice.updateStatus(this.postData, this.currentPostId);
       this.userservice.addComment(this.postData.id, commentUserObj);
       this.botUserCommentForm.reset();
-      this.botUserCommentForm.patchValue({selectBot:''})
+      this.botUserCommentForm.patchValue({ selectBot: "" })
       this.toastr.success("Comment added!");
       //Send comment notification
-      const test = this.realUser.filter((selectedUser) => selectedUser.id === this.postData.uid);
+      const test = this.realUser.filter(
+        (selectedUser) => selectedUser.id === this.postData.uid
+      );
       if (test && test.length > 0) {
         this.FCMtoken.push(test[0].token);
-
       } else this.FCMtoken = [];
       let reqObj = {
         content_available: true,
         mutable_content: true,
         notification: {
           title: commentUserObj.commented_user_name,
-          body: 'Commented on your post :' + commentUserObj.comment_message,
+          body: "Commented on your post :" + commentUserObj.comment_message,
         },
         registration_ids: this.FCMtoken,
         priority: "high",
@@ -235,7 +251,7 @@ export class RealuserComponent implements OnInit {
         console.log(`res`, res);
       });
     }
-    document.getElementById('closeModal')?.click();
+    document.getElementById("closeModal")?.click();
   }
 
   public getBotUser(id: string) {
@@ -258,6 +274,4 @@ export class RealuserComponent implements OnInit {
       this.toastr.warning("Comment for this post has been disabled");
     }
   }
-
-
 }
