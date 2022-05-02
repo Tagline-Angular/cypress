@@ -96,9 +96,8 @@ export class BotuserpostComponent implements OnInit {
 
   public deleteUser(): void {
     this.userservice.removeBotUserPost(this.currentUserId);
-    this.toastr.success("User deleted!"); 
+    this.toastr.success("post deleted!"); 
     this.getAllPosts();
-    this.currentUserId = "";
-
+    this.currentUserId = " ";
   }
 }

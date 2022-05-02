@@ -4,6 +4,7 @@ import { ToastrService } from "ngx-toastr";
 import { UserService } from "../../shared/service/user.service";
 import * as moment from "moment";
 
+
 @Component({
   selector: "app-realuser",
   templateUrl: "./realuser.component.html",
@@ -136,14 +137,16 @@ export class RealuserComponent implements OnInit {
       this.postData.likeCount = totalLikes;
       if (this.postData && !this.postData.liked_user_ids) {
         this.postData.liked_user_ids = [];
+        this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
       }
-      this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
+     
     }
     // this.botLists.
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.toastr.success(this.isAlreadyLiked ? 'Post unliked!' : 'Post liked!');
     this.botUserLikeForm.reset();
-    this.botUserLikeForm.setValue({ selectBot: '' }); // Select desiabled option from dropdown instead of reseting from
+    this.botUserLikeForm.setValue({ selectBot: '' });
+     // Select desiabled option from dropdown instead of reseting from
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     document.getElementById('closeLikeModal')?.click();
@@ -154,6 +157,7 @@ export class RealuserComponent implements OnInit {
     this.botUserLikeForm.reset();
     this.botUserLikeForm.setValue({ selectBot: '' });
     this.botUserCommentForm.reset();
+    this.botUserCommentForm.patchValue({selectBot:''})
     this.buttonName = 'Like';
     this.isAlreadyLiked = false;
     this.botUserSelected = false;
@@ -180,6 +184,7 @@ export class RealuserComponent implements OnInit {
       this.userservice.updateStatus(this.postData, this.currentPostId);
       this.userservice.addComment(this.postData.id, commentUserObj);
       this.botUserCommentForm.reset();
+      this.botUserCommentForm.patchValue({selectBot:''})
       this.toastr.success("Comment added!");
     }
     document.getElementById('closeModal')?.click();
