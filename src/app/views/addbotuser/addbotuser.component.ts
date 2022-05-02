@@ -26,6 +26,7 @@ export class AddbotuserComponent implements OnInit {
   public filterUserList: any = [];
   public commentedPosts = [];
   public postToDelete = [];
+  public postArr = [];
   constructor(
     private userservice: UserService,
     private toastr: ToastrService,
@@ -120,10 +121,10 @@ export class AddbotuserComponent implements OnInit {
       this.userservice.removePost(id);
     });
 
-    this.userservice.remove(this.currentUserId);
-    this.deleteBotLikesComments(this.currentUserId);
     this.toastr.success("User deleted!");
     this.getUserData();
+    this.deleteBotLikesComments(this.currentUserId);
+    this.userservice.remove(this.currentUserId);
     this.currentUserId = "";
   }
 
@@ -134,52 +135,83 @@ export class AddbotuserComponent implements OnInit {
       .pipe(
         switchMap((res) => {
           allPosts = res.map((r: any) => {
-            let payload = Object.assign(
-              { id: r.payload.doc.id },
-              r.payload.doc.data()
-            );
-            return this.userservice.getCommentsForPost(payload.id).pipe(
-              map((comments: any) => {
-                const data = {
-                  ...payload,
-                  comments: comments.map((e) =>
-                    Object.assign(
-                      { commentId: e.payload.doc.id },
-                      { statusId: r.payload.doc.id },
-                      e.payload.doc.data()
-                    )
-                  ),
-                };
-                return data;
-              })
-            );
+            let payload = Object.assign({ id: r.payload.doc.id }, r.payload.doc.data());
+            return this.userservice.getCommentsForPost(payload.id)
+              .pipe(
+                map((comments: any) => {
+                  const data = {
+                    ...payload,
+                    comments: comments.map(e => Object.assign({ commentId: e.payload.doc.id }, { statusId: r.payload.doc.id }, e.payload.doc.data()))
+                  }
+                  return data
+                })
+              )
           });
           return combineLatest(allPosts);
         })
       )
-      .subscribe(async (res) => {
+      .subscribe((res) => {
         allPosts = res;
         this.deleteLikesOfBot(allPosts, userId);
-        const newArray = [];
-        allPosts.forEach((post: any) => {
-          const _post = post.comments.filter(
-            (e: any) => e.commented_user_id == userId
-          );
-          if (_post.length) {
-            newArray.push(Object.assign(post, { filteredComments: _post }));
-          }
-        });
-        await newArray.forEach(async (newPost) => {
-          newPost.commentCount =
-            newPost.commentCount - newPost.filteredComments.length  ;
-          await this.userservice.deleteBotComments(newPost);
-          setTimeout(async () => {
-            await delete newPost.filteredComments;
-            await delete newPost.comments;
-            await this.userservice.updateStatus(newPost, newPost.id);
-          }, 0);
-        });
+        this.getFilteredPosts(allPosts, userId);
       });
+  }
+
+  getFilteredPosts(allPosts, userId) {
+    let newArray = [];
+    this.postArr = [];
+    allPosts.map((post: any) => {
+      return Object.assign(post, { filteredComments: post.comments.filter(e => e.commented_user_id === userId) })
+    })
+    newArray = allPosts.filter(post => post.filteredComments.length > 0);
+    if (newArray && newArray.length > 0) {
+      newArray.forEach(async (newPost) => {
+        await this.deleteBotUserComment(newPost);
+      })
+    }
+  }
+
+  deleteBotUserComment(post) {
+    // let postArr =[]
+    let count = 0
+    if (post.filteredComments && post.filteredComments.length > 0) {
+
+      this.userservice.deleteBotComments(post);
+      post.filteredComments.forEach((e, index) => {
+          count++;
+          const updatedPost = {
+            align: post.align,
+            category: post.category,
+            commentCount: post.commentCount - count,
+            id: post.id,
+            name: post.name,
+            style_color: post.style_color,
+            style_font: post.style_font,
+            style_size: post.style_size,
+            text: post.text,
+            time: post.time,
+            type: post.type,
+            uid: post.uid
+          }
+          if (index === post.filteredComments.length - 1) {
+            this.postArr.push(updatedPost);
+          }
+      });
+
+
+      setTimeout(() => {
+      this.updateStatusCol(this.postArr);
+      }, 0);
+    }
+  }
+
+
+  updateStatusCol(arr) {
+    if (arr && arr.length > 0) {
+      arr.forEach(element => {
+        this.userservice.updateStatus(element, element.id);
+      });
+    }
   }
 
   public deleteLikesOfBot(allPosts: any, userId: any) {
@@ -196,51 +228,6 @@ export class AddbotuserComponent implements OnInit {
     });
   }
 
-  public async deleteCommentsOfBot(allPosts: any, userId: any) {
-    // let postToDelete = [];
-    // let commentedPosts = []
-    this.commentedPosts = [];
-    this.postToDelete = [];
-    allPosts.forEach((post: any) => {
-      this.userservice
-        .getCommentsForPost(post.id)
-        .subscribe(async (res: any) => {
-          this.commentedPosts.push(
-            res.map((e) => {
-              return Object.assign(
-                { statusId: post.id },
-                { commentId: e.payload.doc.id },
-                e.payload.doc.data()
-              );
-            })
-          ); // get all posts having comments from any user
-
-          // commentedPosts.forEach((post) => {
-          //   if (post.commented_user_id == userId) {
-          //     postToDelete.push(post)
-          //   }
-          // }
-
-          this.postToDelete.push(
-            this.commentedPosts.filter(
-              (commentPost) => commentPost.commented_user_id == userId
-            )
-          );
-
-          // if (this.postToDelete && this.postToDelete.length) {
-          //   this.postToDelete.forEach((deletepost) => {
-          //     this.userservice.deleteBotComments(deletepost, post); // to delete comments
-          //     // post.commentCount -= 1;
-          //     // this.userservice.decreaseBotCommentCount(post); // to decrease count
-          //   })
-          // }
-        });
-    });
-    console.log('this.postToDelete :>> ', this.postToDelete);
-    this.postToDelete = await this.commentedPosts.filter(
-       (commentPost) => commentPost.commented_user_id == userId
-    );
-  }
   onEdit(item, id) {
     this.currentUserId = id;
     this.Botuserform.patchValue(item);  

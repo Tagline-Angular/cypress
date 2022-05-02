@@ -267,7 +267,7 @@ export class RealuserComponent implements OnInit {
   // handle comment modal
   public handleCommentModal(data: any): void {
     this.disableComment = data?.disabled_comment;
-    if (!this.disableComment && this.disableComment == undefined) {
+    if (!this.disableComment) {
       this.currentPostId = data.id;
       this.postData = data;
     } else {

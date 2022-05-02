@@ -56,8 +56,8 @@ export class UserService {
       .snapshotChanges();
   }
 
-  public updateStatus(userInfo: any, userId: string) {
-    this.firestore.collection("Status").doc(userId).update(userInfo);
+  public updateStatus(post: any, postId: string) {
+    this.firestore.collection("Status").doc(postId).update(post);
   }
 
   public getCommentsForPost(postId: string) {
