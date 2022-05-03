@@ -74,13 +74,13 @@ export class AddbotuserComponent implements OnInit {
             user_name: this.Botuserform.value.user_name,
             email: this.Botuserform.value.email,
             isBotUser:true,
-            date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            date: moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
             phone: "",
             platform: "",
-            status_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            status_time:  moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
             token: "token",
-            token_created_at: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
-            token_updated_at: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
+            token_created_at:  moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
+            token_updated_at:  moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
           };
           this.userservice.addUser(data1).then((res: any) => {
             console.log('res :>> ', res);
@@ -96,10 +96,11 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public getUserData(): void {
-    this.userservice.getUser("date", "desc").subscribe((data) => {
+    this.userservice.getUser("date","desc").subscribe((data) => {
       this.users = data.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
+      this.users.sort((a, b) => b.date.toDate() - a.date.toDate());
     });
   }
 
@@ -114,7 +115,7 @@ export class AddbotuserComponent implements OnInit {
         (data) => data.uid === this.currentUserId
       );
     });
-    //Delete user post on deleted user end
+    //Delete user post on deleted user end  
   }
 
   public deleteUser(): void {

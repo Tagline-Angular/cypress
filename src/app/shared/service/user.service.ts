@@ -10,13 +10,10 @@ export class UserService {
   public basepath1 = this.firestore.collection("/Users");
   public basepath2 = this.firestore.collection("/Status")
 
-  constructor(private firestore: AngularFirestore,private http:HttpClient) { }
+  constructor(private firestore: AngularFirestore, private http: HttpClient) { }
 
   public addUser(userDetails: any): any {
-    return new Promise((resolve, reject) => {
-      this.basepath.add(userDetails);
-      resolve(true);
-    });
+    return this.firestore.collection("botuser", (ref) => ref.orderBy("date", "desc")).add(userDetails)
   }
 
   public addBotUserPost(botUserDetails: any): any {
@@ -37,7 +34,7 @@ export class UserService {
   public removePost(id: any) {
     const deData = this.firestore.collection("Status").doc(id);
     deData.ref.delete();
-  } 
+  }
 
   public updateuser(userInfo: any, userId: string) {
     return this.firestore.collection("/botuser").doc(userId).update(userInfo);
@@ -97,7 +94,7 @@ export class UserService {
     userPostDelete.ref.delete()
   }
 
-  public  sendNotification(reqObj) {
+  public sendNotification(reqObj) {
     console.log(`reqObj`, reqObj)
     return this.http.post('https://fcm.googleapis.com/fcm/send', reqObj,
       {
