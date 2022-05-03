@@ -37,7 +37,7 @@ export class RealuserComponent implements OnInit {
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createFormForBotList();
@@ -87,7 +87,6 @@ export class RealuserComponent implements OnInit {
       });
       this.realUser = this.users;
     });
-    document.getElementById("yourId").focus();
   }
 
   private getBotUserList(): void {
@@ -214,15 +213,28 @@ export class RealuserComponent implements OnInit {
   }
 
   public submitComment(): void {
+    const id = this.realUserList.value.selectRealUser;
+    
+    this.userservice.getPostByUser(id).subscribe((posts) => {
+      this.postsList = posts.map((e) => {
+        return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+      });
+      this.postsList.sort((a, b) => b.time.toDate() - a.time.toDate());
+      this.isUserPost = true;
+    });
+    this.postData = this.postsList.filter((post) => post.id == this.postData.id)[0];
+
     let comment: number = this.postData.commentCount;
     const totalComment = comment ? comment + 1 : 1;
     this.postData.commentCount = totalComment;
+
     this.botUserCommentForm
       .get("comment")
       .setValue(this.botUserCommentForm.value.comment.trim());
     if (this.botUserCommentForm.invalid) {
       return;
     }
+
     const commentUserObj = {
       comment_message: this.botUserCommentForm.value.comment.trim(),
       comment_messages: this.botUserCommentForm.value.comment,
@@ -233,44 +245,49 @@ export class RealuserComponent implements OnInit {
       comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
     if (this.botUserCommentForm.value) {
-      this.userservice.updateStatus(this.postData, this.currentPostId);
-      this.userservice.addComment(this.postData.id, commentUserObj);
-      this.botUserCommentForm.reset();
-      this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
+      if (this.postData.disabled_comment === false) {
+        this.userservice.updateStatus(this.postData, this.currentPostId);
+        this.userservice.addComment(this.postData.id, commentUserObj);
+        this.botUserCommentForm.reset();
+        this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
 
-      this.isAlreadyLiked = false; // hide Already liked post by this bot user! Error 
-      this.buttonName = "Like";
+        this.isAlreadyLiked = false; // hide Already liked post by this bot user! Error 
+        this.buttonName = "Like";
 
-      this.toastr.success("Comment added!");
-      //Send comment notification
-      const test = this.realUser.filter(
-        (selectedUser) => selectedUser.id === this.postData.uid
-      );
-      if (test && test.length > 0) {
-        this.FCMtoken.push(test[0].token);
-      } else this.FCMtoken = [];
-      let reqObj = {
-        content_available: true,
-        mutable_content: true,
-        notification: {
-          title: commentUserObj.commented_user_name,
-          body: "Commented on your post :" + commentUserObj.comment_message,
-        },
-        data: {
-          click_action: 'FLUTTER_NOTIFICATION_CLICK',
-          id: commentUserObj.commented_user_id,
-          status: 'done',
-          type: 'status',
-          statusId: this.postData.id,
-          userName: commentUserObj.commented_user_name
-        },
-        registration_ids: this.FCMtoken,
-        priority: "high",
-      };
-      this.userservice.sendNotification(reqObj).subscribe((res) => {
-        this.FCMtoken = [];
-        console.log(`res`, res);
-      });
+        this.toastr.success("Comment added!");
+        //Send comment notification
+        const test = this.realUser.filter(
+          (selectedUser) => selectedUser.id === this.postData.uid
+        );
+        if (test && test.length > 0) {
+          this.FCMtoken.push(test[0].token);
+        } else this.FCMtoken = [];
+        let reqObj = {
+          content_available: true,
+          mutable_content: true,
+          notification: {
+            title: commentUserObj.commented_user_name,
+            body: "Commented on your post :" + commentUserObj.comment_message,
+          },
+          data: {
+            click_action: 'FLUTTER_NOTIFICATION_CLICK',
+            id: commentUserObj.commented_user_id,
+            status: 'done',
+            type: 'status',
+            statusId: this.postData.id,
+            userName: commentUserObj.commented_user_name
+          },
+          registration_ids: this.FCMtoken,
+          priority: "high",
+        };
+        this.userservice.sendNotification(reqObj).subscribe((res) => {
+          this.FCMtoken = [];
+          console.log(`res`, res);
+        });
+      } else {
+        this.toastr.warning('Comment for this post has been disabled');
+      }
+
     }
     document.getElementById("closeModal")?.click();
   }
@@ -285,6 +302,7 @@ export class RealuserComponent implements OnInit {
     this.postData = data;
     this.botUserLikeForm.reset();
     this.botUserLikeForm.setValue({ selectBot: "" });
+    this.isAlreadyLiked= false;
   }
 
   // handle comment modal
@@ -296,5 +314,7 @@ export class RealuserComponent implements OnInit {
     } else {
       this.toastr.warning("Comment for this post has been disabled");
     }
+    this.botUserCommentForm.reset();
+    this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
   }
 }
