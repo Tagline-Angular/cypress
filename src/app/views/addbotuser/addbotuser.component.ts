@@ -27,6 +27,7 @@ export class AddbotuserComponent implements OnInit {
   public commentedPosts = [];
   public postToDelete = [];
   public postArr = [];
+  public loadingMessage:string = '';
   constructor(
     private userservice: UserService,
     private toastr: ToastrService,
@@ -119,15 +120,16 @@ export class AddbotuserComponent implements OnInit {
   }
 
   public deleteUser(): void {
+    this.loadingMessage ='Deleting user, Please wait';
     this.deleteData.forEach((ele) => {
       let id = ele.id;
       this.userservice.removePost(id);
     });
 
-    this.toastr.success("User deleted!");
     this.getUserData();
     this.deleteBotLikesComments(this.currentUserId);
     this.userservice.remove(this.currentUserId);
+    this.toastr.success("User deleted!");
     this.currentUserId = "";
   }
 
@@ -157,6 +159,8 @@ export class AddbotuserComponent implements OnInit {
         allPosts = res;
         this.deleteLikesOfBot(allPosts, userId);
         this.getFilteredPosts(allPosts, userId);
+        this.loadingMessage ='';
+        document.getElementById('closeDeleteModal')?.click();
       });
   }
 

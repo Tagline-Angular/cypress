@@ -19,3 +19,10 @@
 .user-box h4{
     text-transform: capitalize;
 }
+
+.fs-12{
+    color: #f86c6b;
+    height: 17px;
+    width: 17px;
+    margin-right: 7px;
+}
