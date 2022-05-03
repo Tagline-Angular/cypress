@@ -86,12 +86,6 @@
               {{ item.user_name }}
             </option>
           </select>
-          <div *ngIf="
-                !botUserLikeForm.get('selectBot')?.valid &&
-                (botUserLikeForm.get('selectBot')?.touched || botUserLikeForm.get('selectBot')?.dirty)
-              ">
-            <small class="text-danger">{{userErrorMessage}}</small>
-          </div>
         </form>
         <div class="mt-2 text-danger" *ngIf="isAlreadyLiked">
           Already liked post by this bot user!
@@ -143,12 +137,6 @@
                   {{ item.user_name }}
                 </option>
               </select>
-              <div *ngIf="
-                  botUserCommentForm.get('selectBot')?.touched &&
-                  botUserCommentForm.get('selectBot')?.invalid
-                ">
-                <small class="text-danger">Please Select User</small>
-              </div>
             </div>
           </div>
           <div class="row">
