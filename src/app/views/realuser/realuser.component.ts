@@ -32,6 +32,7 @@ export class RealuserComponent implements OnInit {
   public finalarrays: [] = [];
   public realUser;
   public FCMtoken: any = [];
+  public userErrorMessage: string = 'Please Select Bot-User';
 
   constructor(
     private userservice: UserService,
@@ -148,38 +149,38 @@ export class RealuserComponent implements OnInit {
           ? this.postData.liked_user_ids
           : []; // create new field if there's no likes
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
-      //send like notiofication
-      const test = this.realUser.filter(
-        (selectedUser) => selectedUser.id === this.postData.uid
-      );
-      if (test && test.length > 0) {
-        this.FCMtoken.push(test[0].token);
-      } else this.FCMtoken = [];
+        //send like notiofication
+        const test = this.realUser.filter(
+          (selectedUser) => selectedUser.id === this.postData.uid
+        );
+        if (test && test.length > 0) {
+          this.FCMtoken.push(test[0].token);
+        } else this.FCMtoken = [];
 
-      const userData = this.getBotUser(this.botUserLikeForm.value.selectBot)[0];
-      let reqObj = {
-        content_available: true,
-        mutable_content: true,
-        notification: {
-          title: userData.user_name,
-          body: "Liked your post",
-        },
-        data: {
-          click_action: 'FLUTTER_NOTIFICATION_CLICK',
-          id: userData.user_id,
-          status: 'done',
-          type: 'status',
-          statusId: this.postData.id,
-          userName: userData.user_name
-        },
-        registration_ids: this.FCMtoken,
-        priority: "high",
+        const userData = this.getBotUser(this.botUserLikeForm.value.selectBot)[0];
+        let reqObj = {
+          content_available: true,
+          mutable_content: true,
+          notification: {
+            title: userData.user_name,
+            body: "Liked your post",
+          },
+          data: {
+            click_action: 'FLUTTER_NOTIFICATION_CLICK',
+            id: userData.user_id,
+            status: 'done',
+            type: 'status',
+            statusId: this.postData.id,
+            userName: userData.user_name
+          },
+          registration_ids: this.FCMtoken,
+          priority: "high",
+        }
+        this.userservice.sendNotification(reqObj).subscribe((res) => {
+          console.log(`res`, res);
+          this.FCMtoken = [];
+        });
       }
-      this.userservice.sendNotification(reqObj).subscribe((res) => {
-        console.log(`res`, res);
-        this.FCMtoken = [];
-      });
-    }
     } else {
       let likes: number = this.postData.likeCount;
       const totalLikes = likes ? likes + 1 : 1;
@@ -238,7 +239,7 @@ export class RealuserComponent implements OnInit {
       this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
 
       this.isAlreadyLiked = false; // hide Already liked post by this bot user! Error 
-      this.buttonName = "Like"; 
+      this.buttonName = "Like";
 
       this.toastr.success("Comment added!");
       //Send comment notification
@@ -282,6 +283,8 @@ export class RealuserComponent implements OnInit {
   public handleLikeModal(data: any): void {
     this.currentPostId = data.id;
     this.postData = data;
+    this.botUserLikeForm.reset();
+    this.botUserLikeForm.setValue({ selectBot: "" });
   }
 
   // handle comment modal
