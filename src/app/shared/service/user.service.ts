@@ -81,8 +81,6 @@ export class UserService {
   }
 
   public deleteBotComments(post) {
-
-
     post.filteredComments.forEach((e) => {
       const basePath = this.firestore.collection("Status").doc(post.id).collection("comments").doc(e.commentId);
       basePath.ref.delete();

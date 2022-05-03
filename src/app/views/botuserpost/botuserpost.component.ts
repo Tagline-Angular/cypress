@@ -19,6 +19,7 @@ export class BotuserpostComponent implements OnInit {
   public botPostsList: any = [];
   public botUserData: any
   public currentUserId: string = "";
+  public buttonname: string = "Delete"
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
@@ -51,12 +52,14 @@ export class BotuserpostComponent implements OnInit {
         text: this.botUserPostForm.value.comment.trim(),
         time: moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
         type: "text",
+        isBotUser: true,
         uid: this.botUserData[0]?.id,
       };
       this.botUserPostForm.get("comment").setValue(this.botUserPostForm.value.comment.trim())
 
-      if(this.botUserPostForm.valid){
+      if (this.botUserPostForm.valid) {
         this.userservice.addBotUserPost(data1).then((res: any) => {
+          console.log('res :>> ', data1);
           if (res) {
             this.toastr.success("Post added!");
             this.botUserPostForm.reset();
@@ -92,11 +95,12 @@ export class BotuserpostComponent implements OnInit {
 
   public handleDelete(id: string) {
     this.currentUserId = id;
+    console.log('this.currentUserId :>> ', this.currentUserId);
   }
 
   public deleteUser(): void {
     this.userservice.removeBotUserPost(this.currentUserId);
-    this.toastr.success("post deleted!"); 
+    this.toastr.success("post deleted!");
     this.getAllPosts();
     this.currentUserId = " ";
   }

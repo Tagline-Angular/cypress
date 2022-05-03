@@ -61,12 +61,12 @@
             <tbody>
               <tr *ngFor="let item of botPostsList; let i = index">
                 <td scope="row">{{ i + 1 }}</td>
-                <td scope="row">{{ item?.name }}</td>
+                <td scope="row">{{ item?.name }} </td>
                 <td scope="row">{{ item?.text }}</td>
-                <td>{{ item.likeCount ? item.likeCount : 0 }}</td>
-                <td>{{ item?.commentCount ? item.commentCount : 0 }}</td>
-                <td><button class="btn btn-danger" (click)="handleDelete(item.id)" data-toggle="modal"
-                    data-target="#deleteModel">Delete</button></td>
+                <td class="text-center">{{ item.likeCount ? item.likeCount : 0 }}</td>
+                <td class="text-center">{{ item?.commentCount ? item.commentCount : 0 }}</td>
+                <td><button class="btn btn-danger" (click)="handleDelete(item.id)" *ngIf="item.isBotUser === true"
+                    data-toggle="modal" data-target="#deleteModel">Delete</button></td>
               </tr>
             </tbody>
           </table>

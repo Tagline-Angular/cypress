@@ -73,6 +73,7 @@ export class AddbotuserComponent implements OnInit {
           const data1 = {
             user_name: this.Botuserform.value.user_name,
             email: this.Botuserform.value.email,
+            isBotUser:true,
             date: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
             phone: "",
             platform: "",
@@ -82,6 +83,7 @@ export class AddbotuserComponent implements OnInit {
             token_updated_at: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
           };
           this.userservice.addUser(data1).then((res: any) => {
+            console.log('res :>> ', res);
             if (res) {
               this.toastr.success("User added!");
               this.Botuserform.reset();
