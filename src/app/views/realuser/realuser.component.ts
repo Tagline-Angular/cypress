@@ -190,7 +190,7 @@ export class RealuserComponent implements OnInit {
       }
       this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
     }
-    // this.botLists.
+
     this.userservice.updateStatus(this.postData, this.currentPostId);
     this.toastr.success(this.isAlreadyLiked ? "Post unliked!" : "Post liked!");
     this.botUserLikeForm.reset();
@@ -204,7 +204,7 @@ export class RealuserComponent implements OnInit {
     this.botUserLikeForm.reset();
     this.botUserLikeForm.setValue({ selectBot: "" });
     this.botUserCommentForm.reset();
-    this.botUserCommentForm.patchValue({ selectBot: "" });
+    this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
 
     this.buttonName = "Like";
     this.isAlreadyLiked = false;
@@ -235,7 +235,11 @@ export class RealuserComponent implements OnInit {
       this.userservice.updateStatus(this.postData, this.currentPostId);
       this.userservice.addComment(this.postData.id, commentUserObj);
       this.botUserCommentForm.reset();
-      this.botUserCommentForm.patchValue({ selectBot: "" })
+      this.botUserCommentForm.patchValue({ selectBot: "", comment: "" });
+
+      this.isAlreadyLiked = false; // hide Already liked post by this bot user! Error 
+      this.buttonName = "Like"; 
+
       this.toastr.success("Comment added!");
       //Send comment notification
       const test = this.realUser.filter(
