@@ -148,7 +148,6 @@ export class RealuserComponent implements OnInit {
           ? this.postData.liked_user_ids
           : []; // create new field if there's no likes
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
-      }
       //send like notiofication
       const test = this.realUser.filter(
         (selectedUser) => selectedUser.id === this.postData.uid
@@ -156,22 +155,31 @@ export class RealuserComponent implements OnInit {
       if (test && test.length > 0) {
         this.FCMtoken.push(test[0].token);
       } else this.FCMtoken = [];
-      const name = this.getBotUser(this.botUserLikeForm.value.selectBot)[0]
-        .user_name;
+
+      const userData = this.getBotUser(this.botUserLikeForm.value.selectBot)[0];
       let reqObj = {
         content_available: true,
         mutable_content: true,
         notification: {
-          title: name,
+          title: userData.user_name,
           body: "Liked your post",
+        },
+        data: {
+          click_action: 'FLUTTER_NOTIFICATION_CLICK',
+          id: userData.user_id,
+          status: 'done',
+          type: 'status',
+          statusId: this.postData.id,
+          userName: userData.user_name
         },
         registration_ids: this.FCMtoken,
         priority: "high",
-      };
+      }
       this.userservice.sendNotification(reqObj).subscribe((res) => {
         console.log(`res`, res);
         this.FCMtoken = [];
       });
+    }
     } else {
       let likes: number = this.postData.likeCount;
       const totalLikes = likes ? likes + 1 : 1;
@@ -242,6 +250,14 @@ export class RealuserComponent implements OnInit {
         notification: {
           title: commentUserObj.commented_user_name,
           body: "Commented on your post :" + commentUserObj.comment_message,
+        },
+        data: {
+          click_action: 'FLUTTER_NOTIFICATION_CLICK',
+          id: commentUserObj.commented_user_id,
+          status: 'done',
+          type: 'status',
+          statusId: this.postData.id,
+          userName: commentUserObj.commented_user_name
         },
         registration_ids: this.FCMtoken,
         priority: "high",
