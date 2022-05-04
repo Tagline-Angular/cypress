@@ -95,7 +95,6 @@ export class UserService {
   }
 
   public sendNotification(reqObj) {
-    console.log(`reqObj`, reqObj)
     return this.http.post('https://fcm.googleapis.com/fcm/send', reqObj,
       {
         headers: new HttpHeaders().append("Authorization", "key=AAAAUJoQN4A:APA91bEsQ6EplIuQV3nyNnsVNgMRZX0vJVJbr89zr0DBPpye0EhNKpTEOjznLSHShIaXYfTPdUPFMbeKf0jjpCLOPa-k6AA6ucAqbN7Nib1NfDxT0IY_BeGJjTTrOgNpMWBWI4sJ0SNq"),

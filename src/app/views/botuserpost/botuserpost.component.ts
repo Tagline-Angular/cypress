@@ -49,6 +49,7 @@ export class BotuserpostComponent implements OnInit {
         style_color: 4278190080,
         style_font: "OpenSans",
         style_size: 20,
+        disabled_comment: false,
         text: this.botUserPostForm.value.comment.trim(),
         time: moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
         type: "text",
@@ -59,7 +60,6 @@ export class BotuserpostComponent implements OnInit {
 
       if (this.botUserPostForm.valid) {
         this.userservice.addBotUserPost(data1).then((res: any) => {
-          console.log('res :>> ', data1);
           if (res) {
             this.toastr.success("Post added!");
             this.botUserPostForm.reset();
@@ -95,7 +95,6 @@ export class BotuserpostComponent implements OnInit {
 
   public handleDelete(id: string) {
     this.currentUserId = id;
-    console.log('this.currentUserId :>> ', this.currentUserId);
   }
 
   public deleteUser(): void {

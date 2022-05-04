@@ -97,7 +97,6 @@ export class RealuserComponent implements OnInit {
           e.payload.doc.data()
         );
       });
-      this.users = this.users.concat(this.botLists);
       this.users = this.users.concat(this.botLists).sort(function (a, b) {
         return a.name < b.user_name ? -1 : a.name === b.name ? 0 : 1;
       });
@@ -148,6 +147,7 @@ export class RealuserComponent implements OnInit {
           ? this.postData.liked_user_ids
           : []; // create new field if there's no likes
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
+      if(!this.postData.isBotUser /* Do not send notification for bot user's post */){
         //send like notiofication
         const test = this.realUser.filter(
           (selectedUser) => selectedUser.id === this.postData.uid
@@ -176,10 +176,10 @@ export class RealuserComponent implements OnInit {
           priority: "high",
         }
         this.userservice.sendNotification(reqObj).subscribe((res) => {
-          console.log(`res`, res);
           this.FCMtoken = [];
         });
       }
+    }
     } else {
       let likes: number = this.postData.likeCount;
       const totalLikes = likes ? likes + 1 : 1;
@@ -214,7 +214,7 @@ export class RealuserComponent implements OnInit {
 
   public submitComment(): void {
     const id = this.realUserList.value.selectRealUser;
-    
+
     this.userservice.getPostByUser(id).subscribe((posts) => {
       this.postsList = posts.map((e) => {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
@@ -245,7 +245,7 @@ export class RealuserComponent implements OnInit {
       comment_time: moment().format("YYYY-MM-DD HH:MM:SS.SSSSSS"),
     };
     if (this.botUserCommentForm.value) {
-      if (this.postData.disabled_comment === false) {
+      if (!this.postData.disabled_comment) {
         this.userservice.updateStatus(this.postData, this.currentPostId);
         this.userservice.addComment(this.postData.id, commentUserObj);
         this.botUserCommentForm.reset();
@@ -256,6 +256,7 @@ export class RealuserComponent implements OnInit {
 
         this.toastr.success("Comment added!");
         //Send comment notification
+      if (!this.postData.isBotUser /* Do not send notification for bot user's post */) {
         const test = this.realUser.filter(
           (selectedUser) => selectedUser.id === this.postData.uid
         );
@@ -282,8 +283,8 @@ export class RealuserComponent implements OnInit {
         };
         this.userservice.sendNotification(reqObj).subscribe((res) => {
           this.FCMtoken = [];
-          console.log(`res`, res);
         });
+      }
       } else {
         this.toastr.warning('Comment for this post has been disabled');
       }
@@ -302,7 +303,7 @@ export class RealuserComponent implements OnInit {
     this.postData = data;
     this.botUserLikeForm.reset();
     this.botUserLikeForm.setValue({ selectBot: "" });
-    this.isAlreadyLiked= false;
+    this.isAlreadyLiked = false;
   }
 
   // handle comment modal

@@ -84,7 +84,6 @@ export class AddbotuserComponent implements OnInit {
             token_updated_at:  moment(moment().format("MMMM DD, YYYY, h:mm:ss a")).toDate(),
           };
           this.userservice.addUser(data1).then((res: any) => {
-            console.log('res :>> ', res);
             if (res) {
               this.toastr.success("User added!");
               this.Botuserform.reset();
@@ -179,7 +178,6 @@ export class AddbotuserComponent implements OnInit {
   }
 
   deleteBotUserComment(post) {
-    // let postArr =[]
     let count = 0
     if (post.filteredComments && post.filteredComments.length > 0) {
 
