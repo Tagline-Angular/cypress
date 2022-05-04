@@ -128,6 +128,17 @@ export class RealuserComponent implements OnInit {
 
   public submitLikeUnlike() {
     if (this.botUserSelected) {
+      const id = this.realUserList.value.selectRealUser;
+
+      this.userservice.getPostByUser(id).subscribe((posts) => {
+        this.postsList = posts.map((e) => {
+          return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
+        });
+        this.postsList.sort((a, b) => b.time.toDate() - a.time.toDate());
+        // this.isUserPost = true;
+      });
+      this.postData = this.postsList.filter((post) => post.id == this.postData.id)[0];
+
       if (this.isAlreadyLiked) {
         const likes: number = this.postData.likeCount;
         const totalLikes = likes ? likes - 1 : 1;
@@ -147,39 +158,39 @@ export class RealuserComponent implements OnInit {
           ? this.postData.liked_user_ids
           : []; // create new field if there's no likes
         this.postData.liked_user_ids.push(this.botUserLikeForm.value.selectBot);
-      if(!this.postData.isBotUser /* Do not send notification for bot user's post */){
-        //send like notiofication
-        const test = this.realUser.filter(
-          (selectedUser) => selectedUser.id === this.postData.uid
-        );
-        if (test && test.length > 0) {
-          this.FCMtoken.push(test[0].token);
-        } else this.FCMtoken = [];
+        if (!this.postData.isBotUser /* Do not send notification for bot user's post */) {
+          //send like notiofication
+          const test = this.realUser.filter(
+            (selectedUser) => selectedUser.id === this.postData.uid
+          );
+          if (test && test.length > 0) {
+            this.FCMtoken.push(test[0].token);
+          } else this.FCMtoken = [];
 
-        const userData = this.getBotUser(this.botUserLikeForm.value.selectBot)[0];
-        let reqObj = {
-          content_available: true,
-          mutable_content: true,
-          notification: {
-            title: userData.user_name,
-            body: "Liked your post",
-          },
-          data: {
-            click_action: 'FLUTTER_NOTIFICATION_CLICK',
-            id: userData.user_id,
-            status: 'done',
-            type: 'status',
-            statusId: this.postData.id,
-            userName: userData.user_name
-          },
-          registration_ids: this.FCMtoken,
-          priority: "high",
+          const userData = this.getBotUser(this.botUserLikeForm.value.selectBot)[0];
+          let reqObj = {
+            content_available: true,
+            mutable_content: true,
+            notification: {
+              title: userData.user_name,
+              body: "Liked your post",
+            },
+            data: {
+              click_action: 'FLUTTER_NOTIFICATION_CLICK',
+              id: userData.user_id,
+              status: 'done',
+              type: 'status',
+              statusId: this.postData.id,
+              userName: userData.user_name
+            },
+            registration_ids: this.FCMtoken,
+            priority: "high",
+          }
+          this.userservice.sendNotification(reqObj).subscribe((res) => {
+            this.FCMtoken = [];
+          });
         }
-        this.userservice.sendNotification(reqObj).subscribe((res) => {
-          this.FCMtoken = [];
-        });
       }
-    }
     } else {
       let likes: number = this.postData.likeCount;
       const totalLikes = likes ? likes + 1 : 1;
@@ -220,7 +231,6 @@ export class RealuserComponent implements OnInit {
         return Object.assign({ id: e.payload.doc.id }, e.payload.doc.data());
       });
       this.postsList.sort((a, b) => b.time.toDate() - a.time.toDate());
-      this.isUserPost = true;
     });
     this.postData = this.postsList.filter((post) => post.id == this.postData.id)[0];
 
@@ -256,35 +266,35 @@ export class RealuserComponent implements OnInit {
 
         this.toastr.success("Comment added!");
         //Send comment notification
-      if (!this.postData.isBotUser /* Do not send notification for bot user's post */) {
-        const test = this.realUser.filter(
-          (selectedUser) => selectedUser.id === this.postData.uid
-        );
-        if (test && test.length > 0) {
-          this.FCMtoken.push(test[0].token);
-        } else this.FCMtoken = [];
-        let reqObj = {
-          content_available: true,
-          mutable_content: true,
-          notification: {
-            title: commentUserObj.commented_user_name,
-            body: "Commented on your post :" + commentUserObj.comment_message,
-          },
-          data: {
-            click_action: 'FLUTTER_NOTIFICATION_CLICK',
-            id: commentUserObj.commented_user_id,
-            status: 'done',
-            type: 'status',
-            statusId: this.postData.id,
-            userName: commentUserObj.commented_user_name
-          },
-          registration_ids: this.FCMtoken,
-          priority: "high",
-        };
-        this.userservice.sendNotification(reqObj).subscribe((res) => {
-          this.FCMtoken = [];
-        });
-      }
+        if (!this.postData.isBotUser /* Do not send notification for bot user's post */) {
+          const test = this.realUser.filter(
+            (selectedUser) => selectedUser.id === this.postData.uid
+          );
+          if (test && test.length > 0) {
+            this.FCMtoken.push(test[0].token);
+          } else this.FCMtoken = [];
+          let reqObj = {
+            content_available: true,
+            mutable_content: true,
+            notification: {
+              title: commentUserObj.commented_user_name,
+              body: "Commented on your post :" + commentUserObj.comment_message,
+            },
+            data: {
+              click_action: 'FLUTTER_NOTIFICATION_CLICK',
+              id: commentUserObj.commented_user_id,
+              status: 'done',
+              type: 'status',
+              statusId: this.postData.id,
+              userName: commentUserObj.commented_user_name
+            },
+            registration_ids: this.FCMtoken,
+            priority: "high",
+          };
+          this.userservice.sendNotification(reqObj).subscribe((res) => {
+            this.FCMtoken = [];
+          });
+        }
       } else {
         this.toastr.warning('Comment for this post has been disabled');
       }
