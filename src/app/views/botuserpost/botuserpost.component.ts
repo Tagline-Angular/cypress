@@ -19,7 +19,9 @@ export class BotuserpostComponent implements OnInit {
   public botPostsList: any = [];
   public botUserData: any
   public currentUserId: string = "";
-  public buttonname: string = "Delete"
+  public buttonname: string = "Delete";
+  public isSubmitting: boolean = false;
+
   constructor(
     private userservice: UserService,
     private toastr: ToastrService
@@ -35,6 +37,7 @@ export class BotuserpostComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmitting = true;
     this.botUserData = this.botLists.filter(
       (e) => e.id === this.botUserPostForm.value?.selectBotUser
     );
@@ -64,6 +67,7 @@ export class BotuserpostComponent implements OnInit {
             this.toastr.success("Post added!");
             this.botUserPostForm.reset();
             this.getAllPosts();
+            this.isSubmitting = false;
           }
         });
       }

@@ -23,15 +23,16 @@
             <textarea rows="2" type="text" class="form-control" id="comment" name="comment" formControlName="comment"
               placeholder="Add Post Content" autocomplete=""></textarea>
             <div *ngIf="botUserPostForm.get('comment')?.touched && botUserPostForm.get('comment')?.invalid">
-              <small class="text-danger m-1">Please enter Comment</small>
+              <small class="text-danger m-1">Please enter content</small>
             </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="col-md-3">
             <div class="add-btn">
-              <button type="submit" class="btn btn-primary" [disabled]="!botUserPostForm.valid" (click)="onSubmit()">
-                {{ submit }}
+              <button type="submit" class="btn btn-primary" [ngClass]="{'d-flex justify-content-between': isSubmitting}" id="addPost" [disabled]="!botUserPostForm.valid || isSubmitting" (click)="onSubmit()">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm submit-icon" role="status" aria-hidden="true"></span>
+                <span [ngClass]="{'submit-button' : isSubmitting}">{{ isSubmitting ? 'Adding' :  submit }} </span>
               </button>
             </div>
           </div>
