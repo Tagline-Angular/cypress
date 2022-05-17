@@ -49,7 +49,7 @@ export class UserService {
   }
 
   public getAllUserList() {
-    return this.firestore.collection("DummyUser").snapshotChanges();
+    return this.firestore.collection("Users").snapshotChanges();
   }
 
   //like and comments update in firebase
