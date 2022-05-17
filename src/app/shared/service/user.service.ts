@@ -8,12 +8,14 @@ import { AngularFirestore } from "@angular/fire/firestore";
 export class UserService {
   public basepath = this.firestore.collection("/botuser");
   public basepath1 = this.firestore.collection("/Users");
-  public basepath2 = this.firestore.collection("/Status")
+  public basepath2 = this.firestore.collection("/Status");
 
-  constructor(private firestore: AngularFirestore, private http: HttpClient) { }
+  constructor(private firestore: AngularFirestore, private http: HttpClient) {}
 
   public addUser(userDetails: any): any {
-    return this.firestore.collection("botuser", (ref) => ref.orderBy("date", "desc")).add(userDetails)
+    return this.firestore
+      .collection("botuser", (ref) => ref.orderBy("date", "desc"))
+      .add(userDetails);
   }
 
   public addBotUserPost(botUserDetails: any): any {
@@ -44,6 +46,10 @@ export class UserService {
     return this.firestore
       .collection("Users", (ref) => ref.orderBy("user_name", "asc"))
       .snapshotChanges();
+  }
+
+  public getAllUserList() {
+    return this.firestore.collection("Users").snapshotChanges();
   }
 
   //like and comments update in firebase
@@ -79,27 +85,30 @@ export class UserService {
 
   public deleteBotComments(post) {
     post.filteredComments.forEach((e) => {
-      const basePath = this.firestore.collection("Status").doc(post.id).collection("comments").doc(e.commentId);
+      const basePath = this.firestore
+        .collection("Status")
+        .doc(post.id)
+        .collection("comments")
+        .doc(e.commentId);
       basePath.ref.delete();
-    })
+    });
   }
 
   public decreaseBotCommentCount(post) {
-
     this.firestore.collection("Status").doc(post.statusId).update(post);
   }
 
   public removeBotUserPost(id: any) {
-    const userPostDelete = this.firestore.collection("Status").doc(id)
-    userPostDelete.ref.delete()
+    const userPostDelete = this.firestore.collection("Status").doc(id);
+    userPostDelete.ref.delete();
   }
 
   public sendNotification(reqObj) {
-    return this.http.post('https://fcm.googleapis.com/fcm/send', reqObj,
-      {
-        headers: new HttpHeaders().append("Authorization", "key=AAAAUJoQN4A:APA91bEsQ6EplIuQV3nyNnsVNgMRZX0vJVJbr89zr0DBPpye0EhNKpTEOjznLSHShIaXYfTPdUPFMbeKf0jjpCLOPa-k6AA6ucAqbN7Nib1NfDxT0IY_BeGJjTTrOgNpMWBWI4sJ0SNq"),
-      }
-    );
+    return this.http.post("https://fcm.googleapis.com/fcm/send", reqObj, {
+      headers: new HttpHeaders().append(
+        "Authorization",
+        "key=AAAAUJoQN4A:APA91bEsQ6EplIuQV3nyNnsVNgMRZX0vJVJbr89zr0DBPpye0EhNKpTEOjznLSHShIaXYfTPdUPFMbeKf0jjpCLOPa-k6AA6ucAqbN7Nib1NfDxT0IY_BeGJjTTrOgNpMWBWI4sJ0SNq"
+      ),
+    });
   }
-
 }

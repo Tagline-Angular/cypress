@@ -186,6 +186,7 @@ export class RealuserComponent implements OnInit {
             registration_ids: this.FCMtoken,
             priority: "high",
           }
+          
           this.userservice.sendNotification(reqObj).subscribe((res) => {
             this.FCMtoken = [];
           });

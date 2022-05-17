@@ -52,6 +52,7 @@ import { BotuserpostComponent } from './views/botuserpost/botuserpost.component'
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MessagingService } from './shared/service/messaging.service';
+import { AnnouncementComponent } from './views/announcement/announcement.component';
 
 @NgModule({
   imports: [
@@ -84,6 +85,7 @@ import { MessagingService } from './shared/service/messaging.service';
     ViewbotuserComponent,
     EditUserComponent,
     BotuserpostComponent,
+    AnnouncementComponent,
     
   ],
   providers: [{

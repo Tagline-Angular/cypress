@@ -1,3 +1,4 @@
+import { AnnouncementComponent } from './../announcement/announcement.component';
 import { BotuserpostComponent } from './../botuserpost/botuserpost.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: "bot-post",
     component: BotuserpostComponent,
+  },
+  {
+    path: "announcement",
+    component: AnnouncementComponent,
   },
 ];
 
