@@ -20,8 +20,8 @@ export class AnnouncementComponent implements OnInit {
 
   ngOnInit(): void {
     this.announcementForm = new FormGroup({
-      title: new FormControl(null, [Validators.required, UsernameValidator.noWhiteSpace]),
-      description: new FormControl(null, [Validators.required, UsernameValidator.noWhiteSpace]),
+      title: new FormControl(null, [Validators.required]),
+      description: new FormControl(null, [Validators.required]),
     });
     this.getAllUsers();
   }
@@ -42,6 +42,20 @@ export class AnnouncementComponent implements OnInit {
   }
 
   onSend() {
+    if (!this.announcementForm.get("title").value.trim()) {
+      this.announcementForm
+        .get("title")
+        .setValue(this.announcementForm.get("title").value.trim());
+    }
+    if (!this.announcementForm.get("description").value.trim()) {
+      this.announcementForm
+        .get("description")
+        .setValue(this.announcementForm.get("description").value.trim());
+    }
+    if (this.announcementForm.invalid) {
+      return;
+    }
+
     let userSubscription = this.users.map((user: any) => {
       if (!this.FCMtoken.includes(user.token)) {
         this.FCMtoken.push(user.token);
@@ -55,6 +69,7 @@ export class AnnouncementComponent implements OnInit {
     if (user) {
       this.chunk(this.FCMtoken, 500);
       const announcemnetData = this.announcementForm.value;
+
       let reqObj = {
         content_available: true,
         mutable_content: true,

@@ -21,12 +21,6 @@
           >
             <small class="text-danger">Please enter the title</small>
           </div>
-          <div
-            *ngIf="announcementForm.get('title').errors?.noWhiteSpace"
-            class="text-danger"
-          >
-            <small class="text-danger">White spaces are not allowed</small>
-          </div>
         </div>
       </div>
       <div class="col-md-3">
@@ -48,9 +42,6 @@
             "
           >
             <small class="text-danger">Please enter the description</small>
-          </div>
-          <div *ngIf="announcementForm.get('description').errors?.noWhiteSpace">
-            <small class="text-danger">White spaces are not allowed</small>
           </div>
         </div>
       </div>
