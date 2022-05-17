@@ -1,36 +1,73 @@
 <div>
-    <form [formGroup]="announcementForm">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" formControlName="title"
-                        placeholder="Add title" autocomplete=""/>
-                    <div *ngIf="announcementForm.get('title').touched && announcementForm.get('title').invalid">
-                        <small class="text-danger">Please enter the title</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea type="text" class="form-control" id="description" name="description"
-                        formControlName="description" placeholder="Add description" autocomplete=""></textarea>
-                    <div *ngIf="announcementForm.get('description').touched && announcementForm.get('description').invalid">
-                        <small class="text-danger">Please enter the description</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="col-md-3">
-                    <div class="add-btn">
-                        <button type="submit" class="btn btn-primary" [disabled]="!announcementForm.valid"
-                            (click)="onSend()">
-                            Send
-                        </button>
-                    </div>
-                </div>
-            </div>
+  <form [formGroup]="announcementForm">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            formControlName="title"
+            placeholder="Add title"
+            autocomplete=""
+          />
+          <div
+            *ngIf="
+              announcementForm.get('title').touched &&
+              announcementForm.get('title').errors?.required
+            "
+          >
+            <small class="text-danger">Please enter the title</small>
+          </div>
+          <div
+            *ngIf="announcementForm.get('title').errors?.noWhiteSpace"
+            class="text-danger"
+          >
+            <small class="text-danger">White spaces are not allowed</small>
+          </div>
         </div>
-    </form>
+      </div>
+      <div class="col-md-3">
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            type="text"
+            class="form-control"
+            id="description"
+            name="description"
+            formControlName="description"
+            placeholder="Add description"
+            autocomplete=""
+          ></textarea>
+          <div
+            *ngIf="
+              announcementForm.get('description').touched &&
+              announcementForm.get('description').errors?.required
+            "
+          >
+            <small class="text-danger">Please enter the description</small>
+          </div>
+          <div *ngIf="announcementForm.get('description').errors?.noWhiteSpace">
+            <small class="text-danger">White spaces are not allowed</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="col-md-3">
+          <div class="add-btn">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!announcementForm.valid"
+              (click)="onSend()"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

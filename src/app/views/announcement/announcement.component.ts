@@ -2,6 +2,7 @@ import { UserService } from "./../../shared/service/user.service";
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
+import { UsernameValidator } from "../addbotuser/username.validator";
 
 @Component({
   selector: "app-announcement",
@@ -19,8 +20,8 @@ export class AnnouncementComponent implements OnInit {
 
   ngOnInit(): void {
     this.announcementForm = new FormGroup({
-      title: new FormControl(null, [Validators.required]),
-      description: new FormControl(null, [Validators.required]),
+      title: new FormControl(null, [Validators.required, UsernameValidator.noWhiteSpace]),
+      description: new FormControl(null, [Validators.required, UsernameValidator.noWhiteSpace]),
     });
     this.getAllUsers();
   }
