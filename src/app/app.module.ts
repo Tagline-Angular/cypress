@@ -53,6 +53,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MessagingService } from './shared/service/messaging.service';
 import { AnnouncementComponent } from './views/announcement/announcement.component';
+import { InfluencersComponent } from './views/influencers/influencers.component';
 
 @NgModule({
   imports: [
@@ -86,7 +87,7 @@ import { AnnouncementComponent } from './views/announcement/announcement.compone
     EditUserComponent,
     BotuserpostComponent,
     AnnouncementComponent,
-    
+    InfluencersComponent
   ],
   providers: [{
     provide: LocationStrategy,

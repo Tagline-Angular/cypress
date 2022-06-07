@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import { Router } from '@angular/router';
 import { navItems } from '../../_nav';
 
 @Component({
@@ -7,10 +8,16 @@ import { navItems } from '../../_nav';
  
 })
 export class DefaultLayoutComponent {
+  constructor(private router:Router){}
   public sidebarMinimized = false;
   public navItems = navItems;
 
   toggleMinimize(e) {
     this.sidebarMinimized = e;
+  }
+
+  public logout(){
+    localStorage.removeItem('token');
+    this.router.navigate([''])
   }
 }

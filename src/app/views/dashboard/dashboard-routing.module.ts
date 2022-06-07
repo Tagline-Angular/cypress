@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AddbotuserComponent } from '../addbotuser/addbotuser.component';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { RealuserComponent } from '../realuser/realuser.component';
+import { InfluencersComponent } from '../influencers/influencers.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
     path: "announcement",
     component: AnnouncementComponent,
   },
+  {
+    path: "influencers",
+    component: InfluencersComponent,
+  }
 ];
 
 

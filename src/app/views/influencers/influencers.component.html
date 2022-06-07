@@ -1,0 +1,50 @@
+<div class="user-box">
+  <div class="col-12">
+    <h4>{{ 'Add Influencer' }}</h4>
+    <form [formGroup]="influencerForm" (ngSubmit)="onSubmit()">
+      <div class="row mb-3">
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Enter influencer name" formControlName="name">
+        </div>
+        <div class="col-md-5">
+          <button class="btn btn-primary" [disabled]="influencerForm.invalid || addButton!=='Add'">{{addButton}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<ng-container *ngIf="influencerList?.length">
+  <h4 class="label-text">List of all posts</h4>
+  <div class="user-box my-0 py-0">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table text-dark" *ngIf="influencerList?.length">
+            <thead>
+              <tr class="text-center">
+                <th class="border-0" scope="col">No</th>
+                <th class="border-0" scope="col">Name</th>
+                <th class="border-0" scope="col">Downloads</th>
+                <th class="border-0" scope="col">URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let influencer of influencerList; let i = index" class="text-center">
+                <td scope="row">{{ i + 1 }}</td>
+                <td scope="row">{{ influencer?.name }} </td>
+                <td class="text-center">{{ influencer.downloadCount}} &nbsp; &nbsp;
+                  <i class="fa fa-download"></i>
+                </td>
+                <td class="text-center">
+                   <i class="fa fa-clone cursor-pointer" *ngIf="influencer.url" aria-hidden="true" (click)="copyText(influencer.url)"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
