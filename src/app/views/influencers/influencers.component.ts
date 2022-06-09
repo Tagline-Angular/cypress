@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { InfluencerService } from '../../shared/service/influencer.service';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
+import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { UsernameValidator } from '../addbotuser/username.validator';
+
 @Component({
   selector: 'app-influencers',
   templateUrl: './influencers.component.html',
@@ -13,7 +17,8 @@ export class InfluencersComponent implements OnInit {
   public influencerForm!: FormGroup;
   public influencerList: any = [];
   public addButton: string = 'Add';
-
+  public influencerToDelete: string;
+  public isDeleting: boolean = false
 
   constructor(
     private influencerService: InfluencerService,
@@ -23,11 +28,15 @@ export class InfluencersComponent implements OnInit {
 
   ngOnInit(): void {
     this.influencerForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, UsernameValidator.noWhiteSpace]],
       downloadCount: [0],
       createdDate: ['']
     })
     this.getAllInfluencers();
+  }
+
+  get f() {
+    return this.influencerForm.controls;
   }
 
   onSubmit() {
@@ -36,10 +45,31 @@ export class InfluencersComponent implements OnInit {
       createdDate: new Date() //store exact current time
     })
     this.influencerService.addInfluencer(this.influencerForm.value).then((res: any) => {
-      this.createInfluencerLink(res.id);
+      this.getNewInfluencer(res.id);
     }).catch(e => {
       console.log('Add influencer :>> ', e);
     });
+  }
+
+
+  addStaticLink(id: string, data: any) {
+    const url = window.location.href.split('#')[0] + '#/download/' + id;
+    const details = {
+      ...data,
+      staticUrl: url
+    }
+    this.influencerService.addInfluencerLink(id, details).then((res) => {
+      this.createInfluencerLink(id);
+    })
+  }
+
+  getNewInfluencer(id) {
+    this.influencerService.getInfluencer(id).subscribe((res) => {
+      const data: any = res.map((e) => {
+        return e.payload.doc.data();
+      })
+      if (!data[0]?.staticUrl) this.addStaticLink(id, data[0]);
+    })
   }
 
   getAllInfluencers() {
@@ -86,8 +116,8 @@ export class InfluencersComponent implements OnInit {
       this.influencerForm.patchValue({
         name: ''
       })
-      this.addButton = 'Add';
       this.toastr.success("Influencer added");
+      this.addButton = 'Add';
     })
   }
 
@@ -114,6 +144,19 @@ export class InfluencersComponent implements OnInit {
       if (res) {
         this.getInfluencerDetails(id, res.shortLink);
       }
+    })
+  }
+
+  handleDeleteModal(id: string) {
+    this.influencerToDelete = id;
+  }
+
+  deleteInfluencer() {
+    this.isDeleting = true
+    this.influencerService.deleteInfluencer(this.influencerToDelete).then(() => {
+      this.toastr.success("Influencer deleted");
+      this.influencerToDelete = '';
+      this.isDeleting = false;
     })
   }
 }

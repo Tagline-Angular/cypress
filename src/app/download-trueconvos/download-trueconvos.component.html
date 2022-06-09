@@ -1,0 +1,33 @@
+<div class="container view-box" *ngIf="showDownload || showError">
+    <section class="download-app-view">
+        <div>
+            <nav class="app-logo" *ngIf="showDownload">
+                <img src="assets/img/app-logo.webp" />
+            </nav>
+            <h2 class="msg-404" *ngIf="!showDownload && showError">404</h2>
+            <p *ngIf="showDownload">Trueconvos is a social network where like-minded people support and comfort each
+                other through every
+                aspect
+                of daily life</p>
+            <h3 *ngIf="!showDownload && showError">Page Not Found</h3>
+            <div *ngIf="showDownload">
+                <a class="btn btn-primary" target="_blank" [href]="influencerDetails[0]?.url">Download App</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container view-box" *ngIf="!showDownload && !showError">
+    <section class="loader-background">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </section>
+</div>

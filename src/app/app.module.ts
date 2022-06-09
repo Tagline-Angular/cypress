@@ -54,6 +54,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MessagingService } from './shared/service/messaging.service';
 import { AnnouncementComponent } from './views/announcement/announcement.component';
 import { InfluencersComponent } from './views/influencers/influencers.component';
+import { DownloadTrueconvosComponent } from './download-trueconvos/download-trueconvos.component';
 
 @NgModule({
   imports: [
@@ -87,7 +88,8 @@ import { InfluencersComponent } from './views/influencers/influencers.component'
     EditUserComponent,
     BotuserpostComponent,
     AnnouncementComponent,
-    InfluencersComponent
+    InfluencersComponent,
+    DownloadTrueconvosComponent
   ],
   providers: [{
     provide: LocationStrategy,

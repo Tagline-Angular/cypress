@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,15 @@ export class InfluencerService {
   }
 
   public createInfluencerLink(data: any) {
-    const api_key = 'AIzaSyCht2cuEWE7xzpsQgQWeNkepBL-V-NsBgA';
+    const api_key = environment.firebaseConfig.apiKey;
     return this.http.post(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${api_key}`,
       {
         dynamicLinkInfo: data.dynamicLinkInfo, suffix: data.suffix
       })
+  }
+
+  public deleteInfluencer(id:string){
+    const basePath = this.firestore.collection("Influencers").doc(id);
+    return basePath.ref.delete();
   }
 }

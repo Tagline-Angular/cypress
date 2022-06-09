@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 
 // Import Containers
 import { DefaultLayoutComponent } from './containers';
+import { DownloadTrueconvosComponent } from './download-trueconvos/download-trueconvos.component';
 import { AuthGuard } from './guard/auth.guard';
 import { AddbotuserComponent } from './views/addbotuser/addbotuser.component';
 
@@ -24,11 +25,15 @@ export const routes: Routes = [
       }
     ]
   },
-  // {
-  //   path: '',
-  //   redirectTo: '',
-  //   pathMatch: 'full',
-  // },
+  {
+    path:'download/:id',
+    component:DownloadTrueconvosComponent
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
   
 ];
 
