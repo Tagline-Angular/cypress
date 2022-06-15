@@ -1,0 +1,10 @@
+{
+    "baseUrl": "http://localhost:4200",
+    "experimentalStudio": true,
+    "viewportWidth": 1000,
+    "viewportHeight": 880,
+    "video": false,
+    "videoUploadOnPasses": false,
+    "defaultCommandTimeout": 10000
+  }
+  

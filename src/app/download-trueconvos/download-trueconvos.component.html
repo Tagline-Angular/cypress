@@ -11,7 +11,7 @@
                 of daily life</p>
             <h3 *ngIf="!showDownload && showError">Page Not Found</h3>
             <div *ngIf="showDownload">
-                <a class="btn btn-primary" target="_blank" [href]="influencerDetails[0]?.url">Download App</a>
+                <a class="btn btn-primary" [target]="influencerDetails[0]?.url ? '_blank' : ''" [href]="influencerDetails[0]?.url || reloadPage()">Download App</a>
             </div>
         </div>
     </section>

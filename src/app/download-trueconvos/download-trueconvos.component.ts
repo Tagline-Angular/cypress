@@ -33,6 +33,10 @@ export class DownloadTrueconvosComponent implements OnInit {
     })
   }
 
+  public reloadPage(){
+    window.location.reload()
+  }
+
   public redirectToDownload() {
     window.location.href = this.influencerDetails[0].url;
   }
